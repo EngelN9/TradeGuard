@@ -1,0 +1,503 @@
+{
+  "$defs": {
+    "AlertingSettings": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "minimum_severity": {
+          "enum": [
+            "info",
+            "warning",
+            "error",
+            "critical"
+          ],
+          "title": "Minimum Severity",
+          "type": "string"
+        }
+      },
+      "required": [
+        "enabled",
+        "minimum_severity"
+      ],
+      "title": "AlertingSettings",
+      "type": "object"
+    },
+    "BaseSettings": {
+      "additionalProperties": false,
+      "properties": {
+        "application_name": {
+          "const": "TradeGuard",
+          "default": "TradeGuard",
+          "title": "Application Name",
+          "type": "string"
+        },
+        "default_environment": {
+          "const": "research",
+          "default": "research",
+          "title": "Default Environment",
+          "type": "string"
+        },
+        "timezone": {
+          "const": "UTC",
+          "default": "UTC",
+          "title": "Timezone",
+          "type": "string"
+        }
+      },
+      "title": "BaseSettings",
+      "type": "object"
+    },
+    "CostSettings": {
+      "additionalProperties": false,
+      "properties": {
+        "commission_rate": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Commission Rate"
+        },
+        "model_version": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Model Version",
+          "type": "string"
+        },
+        "slippage_rate": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Slippage Rate"
+        },
+        "unmodeled_cost_warning": {
+          "const": true,
+          "default": true,
+          "title": "Unmodeled Cost Warning",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "model_version",
+        "commission_rate",
+        "slippage_rate"
+      ],
+      "title": "CostSettings",
+      "type": "object"
+    },
+    "DataSettings": {
+      "additionalProperties": false,
+      "properties": {
+        "fail_on_quality_error": {
+          "const": true,
+          "default": true,
+          "title": "Fail On Quality Error",
+          "type": "boolean"
+        },
+        "max_staleness_seconds": {
+          "minimum": 0,
+          "title": "Max Staleness Seconds",
+          "type": "integer"
+        },
+        "schema_version": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source",
+        "schema_version",
+        "max_staleness_seconds"
+      ],
+      "title": "DataSettings",
+      "type": "object"
+    },
+    "EnvironmentSettings": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/RuntimeEnvironment"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "EnvironmentSettings",
+      "type": "object"
+    },
+    "MarketSettings": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_class": {
+          "enum": [
+            "equity",
+            "crypto"
+          ],
+          "title": "Asset Class",
+          "type": "string"
+        },
+        "quote_asset": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Quote Asset"
+        },
+        "session_calendar": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Session Calendar"
+        },
+        "timezone": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Timezone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "asset_class",
+        "timezone"
+      ],
+      "title": "MarketSettings",
+      "type": "object"
+    },
+    "MonitoringSettings": {
+      "additionalProperties": false,
+      "properties": {
+        "data_freshness_seconds": {
+          "exclusiveMinimum": 0,
+          "title": "Data Freshness Seconds",
+          "type": "integer"
+        },
+        "health_interval_seconds": {
+          "exclusiveMinimum": 0,
+          "title": "Health Interval Seconds",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "health_interval_seconds",
+        "data_freshness_seconds"
+      ],
+      "title": "MonitoringSettings",
+      "type": "object"
+    },
+    "PortfolioSettings": {
+      "additionalProperties": false,
+      "properties": {
+        "base_currency": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Base Currency",
+          "type": "string"
+        },
+        "initial_cash": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "gt": 0,
+          "title": "Initial Cash"
+        },
+        "max_leverage": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "le": 1,
+          "title": "Max Leverage"
+        }
+      },
+      "required": [
+        "base_currency",
+        "initial_cash",
+        "max_leverage"
+      ],
+      "title": "PortfolioSettings",
+      "type": "object"
+    },
+    "RiskSettings": {
+      "additionalProperties": false,
+      "properties": {
+        "fail_closed": {
+          "const": true,
+          "default": true,
+          "title": "Fail Closed",
+          "type": "boolean"
+        },
+        "max_gross_exposure": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "le": 1,
+          "title": "Max Gross Exposure"
+        },
+        "max_single_asset_exposure": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "le": 1,
+          "title": "Max Single Asset Exposure"
+        },
+        "stale_data_seconds": {
+          "exclusiveMinimum": 0,
+          "title": "Stale Data Seconds",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "max_gross_exposure",
+        "max_single_asset_exposure",
+        "stale_data_seconds"
+      ],
+      "title": "RiskSettings",
+      "type": "object"
+    },
+    "RuntimeEnvironment": {
+      "description": "The complete v0.1.0 environment allowlist.",
+      "enum": [
+        "research",
+        "backtest",
+        "replay",
+        "paper",
+        "shadow"
+      ],
+      "title": "RuntimeEnvironment",
+      "type": "string"
+    },
+    "SecretSettings": {
+      "additionalProperties": false,
+      "description": "Optional credentials excluded from hashes by deterministic redaction.",
+      "properties": {
+        "account_read_token": {
+          "anyOf": [
+            {
+              "format": "password",
+              "type": "string",
+              "writeOnly": true
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Account Read Token"
+        },
+        "provider_api_key": {
+          "anyOf": [
+            {
+              "format": "password",
+              "type": "string",
+              "writeOnly": true
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provider Api Key"
+        }
+      },
+      "title": "SecretSettings",
+      "type": "object"
+    },
+    "StrategySettings": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "default": false,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "parameters": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Parameters",
+          "type": "object"
+        },
+        "strategy_id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Strategy Id",
+          "type": "string"
+        },
+        "strategy_version": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Strategy Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "strategy_id",
+        "strategy_version"
+      ],
+      "title": "StrategySettings",
+      "type": "object"
+    },
+    "VenueSettings": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "read_only": {
+          "const": true,
+          "default": true,
+          "title": "Read Only",
+          "type": "boolean"
+        },
+        "supports_order_submission": {
+          "const": false,
+          "default": false,
+          "title": "Supports Order Submission",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "VenueSettings",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Complete merged configuration inspected before any process starts.",
+  "properties": {
+    "alerting": {
+      "$ref": "#/$defs/AlertingSettings"
+    },
+    "base": {
+      "$ref": "#/$defs/BaseSettings"
+    },
+    "cost": {
+      "$ref": "#/$defs/CostSettings"
+    },
+    "data": {
+      "$ref": "#/$defs/DataSettings"
+    },
+    "environment": {
+      "$ref": "#/$defs/EnvironmentSettings"
+    },
+    "market": {
+      "$ref": "#/$defs/MarketSettings"
+    },
+    "monitoring": {
+      "$ref": "#/$defs/MonitoringSettings"
+    },
+    "portfolio": {
+      "$ref": "#/$defs/PortfolioSettings"
+    },
+    "risk": {
+      "$ref": "#/$defs/RiskSettings"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "secrets": {
+      "$ref": "#/$defs/SecretSettings"
+    },
+    "strategy": {
+      "$ref": "#/$defs/StrategySettings"
+    },
+    "venue": {
+      "$ref": "#/$defs/VenueSettings"
+    }
+  },
+  "required": [
+    "base",
+    "environment",
+    "market",
+    "venue",
+    "data",
+    "strategy",
+    "portfolio",
+    "risk",
+    "cost",
+    "monitoring",
+    "alerting"
+  ],
+  "title": "TradeGuardConfig",
+  "type": "object"
+}

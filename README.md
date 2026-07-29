@@ -20,12 +20,14 @@ TradeGuard 不以「保證獲利」為產品目標，而是提供一套更可靠
 
 ## **專案狀態**
 
-BOOTSTRAP / NOT TRADABLE
+CORE CONTRACTS / NOT TRADABLE
 
-目前專案已完成可執行的 repository bootstrap，尚未進入策略、回測或外部資料接入階段。
+目前專案已完成 repository bootstrap 與 Prompt 2 核心資料合約，尚未進入策略、
+回測或外部資料接入階段。
 
 * 已建立 typed Python package、FastAPI health endpoints、worker、mock market-data、deterministic paper broker skeleton 與唯讀 dashboard placeholder。
 * 已建立鎖定依賴、測試、靜態檢查、GitHub Actions、Dockerfile、Docker Compose 與 bootstrap evidence 骨架。
+* 已建立 immutable domain events、canonical checksum、versioned configuration、secret redaction、RunManifest 與 JSON Schema snapshots。
 * 尚未提供任何策略、投資建議或可供投資判斷的驗證結果。
 * 尚未連接正式券商、交易所帳戶或外部市場資料服務。
 * 執行環境只接受 `research`、`backtest`、`replay`、`paper`、`shadow`；其他值會 fail closed。
@@ -668,6 +670,8 @@ make test-e2e
 make test-connected
 
 make evidence
+
+make schemas
 
 make dev-up
 

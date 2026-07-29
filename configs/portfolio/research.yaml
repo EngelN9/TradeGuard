@@ -1,0 +1,4 @@
+portfolio:
+  base_currency: USD
+  initial_cash: "100000"
+  max_leverage: "1"

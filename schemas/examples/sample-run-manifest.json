@@ -1,0 +1,37 @@
+{
+  "completed_at": "2024-01-02T00:01:00.000000Z",
+  "config_hash": "2222222222222222222222222222222222222222222222222222222222222222",
+  "cost_model_version": "conservative-bootstrap-v1",
+  "dataset_manifests": [
+    {
+      "checksum": "3333333333333333333333333333333333333333333333333333333333333333",
+      "dataset_id": "synthetic-equity-bars",
+      "dataset_version": "1.0.0"
+    }
+  ],
+  "date_range": {
+    "end_utc": "2024-02-01T00:00:00.000000Z",
+    "start_utc": "2024-01-02T00:00:00.000000Z"
+  },
+  "dependency_lock_hash": "4444444444444444444444444444444444444444444444444444444444444444",
+  "dirty_worktree": false,
+  "execution_model_version": "none",
+  "git_sha": "1111111111111111111111111111111111111111",
+  "platform": "linux-x86_64",
+  "python_version": "3.12.0",
+  "random_seed": 7,
+  "result_checksum": "5555555555555555555555555555555555555555555555555555555555555555",
+  "run_id": "00000000-0000-4000-8000-000000000010",
+  "run_type": "research",
+  "schema_version": "1.0.0",
+  "started_at": "2024-01-02T00:00:00.000000Z",
+  "strategy_id": "disabled",
+  "strategy_version": "0.0.0",
+  "universe": [
+    "SPY"
+  ],
+  "validation_failures": [],
+  "warnings": [
+    "synthetic fixture only"
+  ]
+}

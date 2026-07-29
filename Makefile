@@ -2,7 +2,7 @@ UV ?= uv
 
 .PHONY: setup format lint typecheck test test-unit test-property test-integration
 .PHONY: test-contract test-replay test-e2e test-connected evidence dev-up dev-down
-.PHONY: api worker web build
+.PHONY: api worker web build schemas
 
 setup:
 	$(UV) sync --locked
@@ -52,6 +52,9 @@ test-connected:
 
 evidence:
 	$(UV) run python scripts/collect_evidence.py
+
+schemas:
+	$(UV) run python scripts/export_schemas.py
 
 dev-up:
 	docker compose up --build -d

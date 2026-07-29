@@ -1,0 +1,5 @@
+cost:
+  model_version: conservative-bootstrap-v1
+  commission_rate: "0.001"
+  slippage_rate: "0.001"
+  unmodeled_cost_warning: true

@@ -1,0 +1,4 @@
+venue:
+  name: mock
+  read_only: true
+  supports_order_submission: false

@@ -1,0 +1,5 @@
+market:
+  asset_class: equity
+  timezone: America/New_York
+  session_calendar: XNYS
+  quote_asset: USD

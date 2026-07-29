@@ -45,6 +45,7 @@ def test_makefile_has_required_targets_and_no_live_target() -> None:
         "test-replay",
         "test-connected",
         "evidence",
+        "schemas",
         "dev-up",
         "dev-down",
     }

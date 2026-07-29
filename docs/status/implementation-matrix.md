@@ -4,7 +4,7 @@ Assessment date: `2026-07-29`
 
 Base Git SHA: `65d3c6f8499a189685c7c21e722c8ff6bf498cdb`
 
-Overall status: `BOOTSTRAP / NOT TRADABLE`
+Overall status: `CORE CONTRACTS / NOT TRADABLE`
 
 Status vocabulary:
 
@@ -28,6 +28,12 @@ Python and dashboard dependencies, tests, local tooling, CI workflow
 definitions, container definitions, service skeletons, a dashboard placeholder,
 and bootstrap evidence generation. It does not add a strategy, external adapter,
 account connection, or order-submission route.
+
+Prompt 2 on `agent/prompt-2-domain-config` adds immutable domain events,
+canonical serialization and checksums, fail-closed schema parsing, layered
+configuration with redaction and audit events, reproducible run manifests, and
+versioned JSON Schema snapshots. It does not add market-data connectivity,
+strategy execution, account access, or order submission.
 
 The local checkout initially lacked Git metadata. It was safely reattached to
 remote commit `65d3c6f` after all four local blob hashes matched the remote.
@@ -62,14 +68,14 @@ Prompt 0 work occurs on `agent/prompt-0-contract`.
 | Database | PostgreSQL and migrations | PARTIAL | PostgreSQL Compose service exists | Migrations are deferred to TG-015 |
 | Health | Liveness and readiness skeleton | COMPLETE | Integration tests and actual localhost probe pass | Container probe pending |
 | Evidence | Bootstrap evidence skeleton | COMPLETE | `scripts/collect_evidence.py`, checksum index, evidence documentation | Container metadata remains explicitly unpopulated |
-| Domain | Versioned immutable events | MISSING | None | TG-002 |
-| Domain | Canonical serialization/checksums | MISSING | None | TG-002 |
-| Domain | UTC and Decimal validation | MISSING | None | TG-002 |
-| Config | Allowed environment validation | MISSING | None | TG-002 |
-| Config | Redaction, effective config, config hash | MISSING | None | TG-002 |
-| Config | Configuration audit event | MISSING | None | TG-002 |
-| Reproducibility | Complete RunManifest | MISSING | None | TG-002 |
-| Schema | JSON/OpenAPI-compatible domain schemas | MISSING | None | TG-002 |
+| Domain | Versioned immutable events | COMPLETE | 23 strict event models, discriminated schema, parser policy | Extend only with reviewed schema migration |
+| Domain | Canonical serialization/checksums | COMPLETE | Canonical JSON, SHA-256 event checksum, tamper tests | Preserve snapshot compatibility |
+| Domain | UTC and Decimal validation | COMPLETE | UTC normalization, naive-time rejection, binary-float rejection | Data models extend this boundary in TG-003 |
+| Config | Allowed environment validation | COMPLETE | Five allowlisted environments and property tests | No canary/live configuration |
+| Config | Redaction, effective config, config hash | COMPLETE | Ordered safe-YAML layers, redacted inspection, deterministic hash | Secret providers remain future adapter work |
+| Config | Configuration audit event | COMPLETE | Checksummed `ConfigurationChanged` event with before/after hashes | Persistence remains TG-015 |
+| Reproducibility | Complete RunManifest | COMPLETE | Immutable manifest, dataset references, clean/dirty qualification gate | Run producers arrive in later prompts |
+| Schema | JSON/OpenAPI-compatible domain schemas | COMPLETE | Three JSON Schema snapshots and synthetic sample manifest | Regenerate with `make schemas` |
 | Data | Canonical equity and crypto models | MISSING | None | TG-003 |
 | Data | Instrument point-in-time metadata | MISSING | None | TG-003 |
 | Data | Dataset manifest and lineage | MISSING | None | TG-003 |
@@ -142,20 +148,15 @@ Prompt 0 work occurs on `agent/prompt-0-contract`.
 
 ## Critical gaps
 
-1. Domain events, versioned configuration, data, backtesting, strategies,
-   validation, risk, monitoring, and complete API/dashboard functionality remain
-   future sequential prompts.
-2. An independent clean clone passed locked Python/npm installation, static
-   checks, offline tests, and both production builds. The strict bootstrap
-   verification subsequently passed with Docker Desktop 4.83.0, Linux Engine
-   29.6.2, and Compose 5.3.1. GNU Make is unavailable, but every Make target's
-   direct command equivalent passed.
-3. Prompt 1 does not permit push. Remote GitHub Actions therefore have not run;
+1. Data ingestion and quality gates, backtesting, strategies, validation, risk,
+   monitoring, and complete API/dashboard functionality remain future
+   sequential prompts.
+2. Prompt 1 does not permit push. Remote GitHub Actions therefore have not run;
    GitHub CLI authentication for `EngelN9` was also invalid during assessment
    and must be repaired before the later authorized publication stage.
-4. No connected qualification can be claimed; no provider, account, or broker
+3. No connected qualification can be claimed; no provider, account, or broker
    connection was attempted.
-5. The repository remains non-tradable and has no order-submission, withdrawal,
+4. The repository remains non-tradable and has no order-submission, withdrawal,
    transfer, canary, or live path.
 
 ## Prompt 0 promotion result
@@ -197,4 +198,37 @@ Verified locally:
   `research` status.
 - Bootstrap evidence and its checksum index are generated.
 
-Prompt 2 is authorized after human review of this PASS result.
+Prompt 2 was authorized by the maintainer on 2026-07-29.
+
+## Prompt 2 promotion result
+
+`PASS`
+
+Verified locally:
+
+- Ruff format and lint pass.
+- mypy strict mode passes for 26 source files.
+- 74 offline Python tests pass and one connected test is safely deselected.
+- Coverage is 96.30%, above the 90% gate.
+- All 23 required event types share a strict immutable envelope and generated
+  discriminated JSON Schema.
+- Canonical JSON and SHA-256 checksums are deterministic; binary floats,
+  naive datetimes, tampered events, and unregistered schema versions fail
+  closed.
+- All five allowed environments load successfully; unallowlisted environments
+  fail property-based validation.
+- Effective configuration inspection is redacted, configuration hashes are
+  credential-independent, and no secret value appears in schema snapshots or
+  generated evidence.
+- Clean run manifests qualify deterministically; dirty worktrees and validation
+  failures are recorded and rejected for release qualification.
+- Domain event, configuration, and run-manifest schemas reproduce exactly from
+  `scripts/export_schemas.py`; the synthetic sample manifest validates.
+- Workflow permission/SHA validation, the redacted secret scan, and repository
+  diff checks pass.
+- The Python dependency audit reports no known vulnerabilities, and the wheel
+  and source distribution build successfully.
+- No external provider, account, credential, strategy, adapter, order route,
+  canary environment, or live-trading capability was added or exercised.
+
+Prompt 3 may begin only after maintainer review of this promotion evidence.

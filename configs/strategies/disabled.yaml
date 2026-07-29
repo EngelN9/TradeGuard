@@ -1,0 +1,5 @@
+strategy:
+  strategy_id: disabled
+  strategy_version: "0.0.0"
+  enabled: false
+  parameters: {}

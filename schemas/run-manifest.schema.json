@@ -1,0 +1,237 @@
+{
+  "$defs": {
+    "DatasetManifestReference": {
+      "additionalProperties": false,
+      "properties": {
+        "checksum": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Checksum",
+          "type": "string"
+        },
+        "dataset_id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Dataset Id",
+          "type": "string"
+        },
+        "dataset_version": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Dataset Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "dataset_id",
+        "dataset_version",
+        "checksum"
+      ],
+      "title": "DatasetManifestReference",
+      "type": "object"
+    },
+    "RunDateRange": {
+      "additionalProperties": false,
+      "properties": {
+        "end_utc": {
+          "format": "date-time",
+          "title": "End Utc",
+          "type": "string"
+        },
+        "start_utc": {
+          "format": "date-time",
+          "title": "Start Utc",
+          "type": "string"
+        }
+      },
+      "required": [
+        "start_utc",
+        "end_utc"
+      ],
+      "title": "RunDateRange",
+      "type": "object"
+    },
+    "RunType": {
+      "enum": [
+        "research",
+        "backtest",
+        "replay",
+        "validation",
+        "paper",
+        "shadow"
+      ],
+      "title": "RunType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Complete, immutable run identity and reproducibility record.",
+  "properties": {
+    "completed_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Completed At"
+    },
+    "config_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Config Hash",
+      "type": "string"
+    },
+    "cost_model_version": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Cost Model Version",
+      "type": "string"
+    },
+    "dataset_manifests": {
+      "items": {
+        "$ref": "#/$defs/DatasetManifestReference"
+      },
+      "minItems": 1,
+      "title": "Dataset Manifests",
+      "type": "array"
+    },
+    "date_range": {
+      "$ref": "#/$defs/RunDateRange"
+    },
+    "dependency_lock_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Dependency Lock Hash",
+      "type": "string"
+    },
+    "dirty_worktree": {
+      "title": "Dirty Worktree",
+      "type": "boolean"
+    },
+    "execution_model_version": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Execution Model Version",
+      "type": "string"
+    },
+    "git_sha": {
+      "pattern": "^[0-9a-f]{40}$",
+      "title": "Git Sha",
+      "type": "string"
+    },
+    "platform": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Platform",
+      "type": "string"
+    },
+    "python_version": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Python Version",
+      "type": "string"
+    },
+    "random_seed": {
+      "minimum": 0,
+      "title": "Random Seed",
+      "type": "integer"
+    },
+    "result_checksum": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Result Checksum"
+    },
+    "run_id": {
+      "format": "uuid",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "run_type": {
+      "$ref": "#/$defs/RunType"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "started_at": {
+      "format": "date-time",
+      "title": "Started At",
+      "type": "string"
+    },
+    "strategy_id": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Strategy Id",
+      "type": "string"
+    },
+    "strategy_version": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Strategy Version",
+      "type": "string"
+    },
+    "universe": {
+      "items": {
+        "maxLength": 512,
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Universe",
+      "type": "array"
+    },
+    "validation_failures": {
+      "default": [],
+      "items": {
+        "maxLength": 512,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Validation Failures",
+      "type": "array"
+    },
+    "warnings": {
+      "default": [],
+      "items": {
+        "maxLength": 512,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    }
+  },
+  "required": [
+    "run_id",
+    "run_type",
+    "strategy_id",
+    "strategy_version",
+    "git_sha",
+    "dirty_worktree",
+    "config_hash",
+    "dataset_manifests",
+    "date_range",
+    "universe",
+    "random_seed",
+    "python_version",
+    "platform",
+    "dependency_lock_hash",
+    "cost_model_version",
+    "execution_model_version",
+    "started_at"
+  ],
+  "title": "RunManifest",
+  "type": "object"
+}

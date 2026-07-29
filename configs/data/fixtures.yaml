@@ -1,0 +1,5 @@
+data:
+  source: deterministic-fixtures
+  schema_version: "1.0.0"
+  max_staleness_seconds: 86400
+  fail_on_quality_error: true
