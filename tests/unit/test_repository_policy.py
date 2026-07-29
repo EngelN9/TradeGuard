@@ -66,6 +66,13 @@ def test_backend_container_runs_as_non_root() -> None:
 
 
 @pytest.mark.unit
+def test_dashboard_build_context_excludes_generated_and_sensitive_files() -> None:
+    dockerignore = (REPOSITORY_ROOT / "web" / ".dockerignore").read_text(encoding="utf-8")
+
+    assert {"node_modules", ".next", ".env", ".env.*"} <= set(dockerignore.splitlines())
+
+
+@pytest.mark.unit
 def test_example_environment_contains_only_safe_defaults() -> None:
     example = (REPOSITORY_ROOT / ".env.example").read_text(encoding="utf-8")
 
