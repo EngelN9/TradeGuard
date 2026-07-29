@@ -8,6 +8,7 @@ from collections.abc import Sequence
 import uvicorn
 
 from tradeguard import __version__
+from tradeguard.data.cli import configure_data_parser, run_data_command
 from tradeguard.workers.service import run_worker
 
 _SERVICES = {
@@ -29,6 +30,7 @@ def build_parser() -> argparse.ArgumentParser:
     for command in _SERVICES:
         subcommands.add_parser(command)
     subcommands.add_parser("worker")
+    configure_data_parser(subcommands)
     return parser
 
 
@@ -36,6 +38,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     """Run a selected bootstrap service."""
 
     arguments = build_parser().parse_args(argv)
+    if arguments.command == "data":
+        return run_data_command(arguments)
     if arguments.command == "worker":
         return run_worker()
 

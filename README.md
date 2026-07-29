@@ -20,14 +20,15 @@ TradeGuard 不以「保證獲利」為產品目標，而是提供一套更可靠
 
 ## **專案狀態**
 
-CORE CONTRACTS / NOT TRADABLE
+DATA FOUNDATION / NOT TRADABLE
 
-目前專案已完成 repository bootstrap 與 Prompt 2 核心資料合約，尚未進入策略、
-回測或外部資料接入階段。
+目前專案已完成 repository bootstrap、Prompt 2 核心資料合約與 Prompt 3
+離線資料基礎；尚未進入策略、回測或外部資料接入階段。
 
 * 已建立 typed Python package、FastAPI health endpoints、worker、mock market-data、deterministic paper broker skeleton 與唯讀 dashboard placeholder。
 * 已建立鎖定依賴、測試、靜態檢查、GitHub Actions、Dockerfile、Docker Compose 與 bootstrap evidence 骨架。
 * 已建立 immutable domain events、canonical checksum、versioned configuration、secret redaction、RunManifest 與 JSON Schema snapshots。
+* 已建立 canonical equity/crypto records、point-in-time metadata、DatasetManifest、content-addressed storage、品質閘門、synthetic fixtures、lineage 與離線 data CLI。
 * 尚未提供任何策略、投資建議或可供投資判斷的驗證結果。
 * 尚未連接正式券商、交易所帳戶或外部市場資料服務。
 * 執行環境只接受 `research`、`backtest`、`replay`、`paper`、`shadow`；其他值會 fail closed。
@@ -41,6 +42,7 @@ CORE CONTRACTS / NOT TRADABLE
 * [`PROMPTS.md`](PROMPTS.md)：依序執行的交付階段與人工審查閘門。
 * [`SECURITY.md`](SECURITY.md)：安全政策與私密通報方式。
 * [`CONTRIBUTING.md`](CONTRIBUTING.md)：開發、測試與 Pull Request 規範。
+* [`docs/data/data-foundation.md`](docs/data/data-foundation.md)：資料模型、manifest、lineage 與品質閘門。
 * [`docs/release/connected-release-v1.md`](docs/release/connected-release-v1.md)：Connected Release v1 合約。
 * [`docs/status/implementation-matrix.md`](docs/status/implementation-matrix.md)：逐項實作狀態與缺口。
 
@@ -672,6 +674,10 @@ make test-connected
 make evidence
 
 make schemas
+
+make data-fixtures
+
+make prompt3-evidence
 
 make dev-up
 

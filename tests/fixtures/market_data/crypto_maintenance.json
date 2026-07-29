@@ -1,0 +1,120 @@
+{
+  "corporate_actions": [],
+  "expected_quality_status": "FAIL",
+  "instrument_metadata": [
+    {
+      "active_from": "2020-01-01T00:00:00.000000Z",
+      "active_to": null,
+      "asset_class": "crypto",
+      "canonical_symbol": "BTC/USD",
+      "currency": null,
+      "known_at": "2020-01-01T00:00:00.000000Z",
+      "lot_size": "0.0001",
+      "metadata_version": "synthetic-v1",
+      "minimum_notional": "10",
+      "minimum_quantity": "0.0001",
+      "quote_asset": "USD",
+      "schema_version": "1.0.0",
+      "session_calendar": null,
+      "source": "synthetic",
+      "step_size": "0.0001",
+      "symbol": "BTC-USD",
+      "tick_size": "0.01",
+      "timezone": "UTC",
+      "venue": "SYNTH-CRYPTO"
+    }
+  ],
+  "maintenance_intervals": [
+    {
+      "end_utc": "2024-01-02T00:04:30.000000Z",
+      "known_at": "2024-01-01T00:00:00.000000Z",
+      "reason": "synthetic maintenance",
+      "start_utc": "2024-01-02T00:03:00.000000Z",
+      "venue": "SYNTH-CRYPTO"
+    }
+  ],
+  "manifest": {
+    "asset_class": "crypto",
+    "checksums": {
+      "canonical_records_sha256": "5e7d3f48773c4271cb7b0ae102f424001c441681e35316ac8e7a02af579ec8af"
+    },
+    "corrections": [],
+    "created_at": "2024-01-02T00:05:00.000000Z",
+    "dataset_id": "synthetic-crypto_maintenance",
+    "dataset_version": "1.0.0",
+    "date_range": {
+      "end_utc": "2024-01-02T00:04:00.000000Z",
+      "start_utc": "2024-01-02T00:03:00.000000Z"
+    },
+    "ingested_at": "2024-01-02T00:05:00.000000Z",
+    "licensing_notes": "Synthetic fixture; Apache-2.0; no external market data.",
+    "missing_intervals": [],
+    "parent_dataset": {
+      "dataset_id": "synthetic-crypto_maintenance-raw",
+      "manifest_checksum": "55438c34a6d54ef52f34a1a50f4fde24f8a77eed3f6500863458e728b4321617"
+    },
+    "partition_information": [
+      {
+        "checksum": "5e7d3f48773c4271cb7b0ae102f424001c441681e35316ac8e7a02af579ec8af",
+        "date_range": {
+          "end_utc": "2024-01-02T00:04:00.000000Z",
+          "start_utc": "2024-01-02T00:03:00.000000Z"
+        },
+        "partition_id": "part-0000",
+        "relative_path": "crypto_maintenance/part-0000.json",
+        "row_count": 1
+      }
+    ],
+    "row_count": 1,
+    "schema_version": "1.0.0",
+    "source": "synthetic-fixture-generator",
+    "symbols": [
+      "BTC-USD"
+    ],
+    "transformation_graph": {
+      "steps": [
+        {
+          "implementation_version": "1.0.0",
+          "input_dataset_ids": [
+            "synthetic-crypto_maintenance-raw"
+          ],
+          "operation": "canonicalize_synthetic_fixture",
+          "output_dataset_id": "synthetic-crypto_maintenance",
+          "parameters_hash": "efbb43ac7f1d4e1df0d2fa3e2ad2173adc02446a2ce41fd453cb3b9baaa3debd",
+          "transformation_id": "normalize-crypto_maintenance"
+        }
+      ]
+    }
+  },
+  "market_sessions": [],
+  "policy": {
+    "evaluated_at": "2024-01-02T00:05:00.000000Z",
+    "expected_bar_interval_seconds": 60,
+    "expected_record_schema_version": "1.0.0",
+    "knowledge_time_utc": "2024-01-02T00:05:00.000000Z",
+    "max_price_jump_ratio": "0.25",
+    "max_spread_ratio": "0.05",
+    "max_staleness_seconds": 300,
+    "split_tolerance_ratio": "0.1"
+  },
+  "records": [
+    {
+      "asset_class": "crypto",
+      "close_price": "100",
+      "event_time_utc": "2024-01-02T00:04:00.000000Z",
+      "high_price": "101",
+      "ingest_time_utc": "2024-01-02T00:04:00.000000Z",
+      "interval_end_utc": "2024-01-02T00:04:00.000000Z",
+      "interval_start_utc": "2024-01-02T00:03:00.000000Z",
+      "low_price": "99",
+      "open_price": "100",
+      "record_type": "bar",
+      "schema_version": "1.0.0",
+      "sequence_number": 1,
+      "source": "synthetic",
+      "symbol": "BTC-USD",
+      "venue": "SYNTH-CRYPTO",
+      "volume": "1"
+    }
+  ]
+}

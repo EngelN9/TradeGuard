@@ -5,8 +5,11 @@ from pathlib import Path
 
 import pytest
 from scripts.collect_evidence import build_index, sha256_file, write_json
+from scripts.collect_prompt3_evidence import evidence_documents
 from scripts.scan_secrets import candidate_files, scan_file
 from scripts.validate_workflows import validate_workflow
+
+from tradeguard.domain.serialization import canonical_json
 
 
 @pytest.mark.unit
@@ -82,3 +85,21 @@ jobs:
     assert "pull_request_target is prohibited" in errors
     assert "top-level permissions must be exactly contents: read" in errors
     assert "action is not pinned to a full SHA: actions/checkout" in errors
+
+
+@pytest.mark.unit
+def test_prompt3_evidence_is_complete_synthetic_and_redacted() -> None:
+    documents = evidence_documents()
+
+    assert set(documents) == {
+        "fixture-manifests.json",
+        "quality-reports.json",
+        "quarantined-dataset.json",
+        "transformed-dataset-checksum.json",
+        "lineage-graph.json",
+    }
+    serialized = canonical_json(documents)
+    assert "synthetic-bad_tick" in serialized
+    assert '"validation_evidence_eligible":false' in serialized
+    assert "security@your-domain.example" not in serialized
+    assert "access_token" not in serialized

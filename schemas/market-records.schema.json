@@ -1,0 +1,419 @@
+{
+  "$defs": {
+    "OHLCVBar": {
+      "additionalProperties": false,
+      "description": "Time-bounded OHLCV observation.",
+      "properties": {
+        "asset_class": {
+          "enum": [
+            "equity",
+            "crypto"
+          ],
+          "title": "Asset Class",
+          "type": "string"
+        },
+        "close_price": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Close Price"
+        },
+        "event_time_utc": {
+          "format": "date-time",
+          "title": "Event Time Utc",
+          "type": "string"
+        },
+        "high_price": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "High Price"
+        },
+        "ingest_time_utc": {
+          "format": "date-time",
+          "title": "Ingest Time Utc",
+          "type": "string"
+        },
+        "interval_end_utc": {
+          "format": "date-time",
+          "title": "Interval End Utc",
+          "type": "string"
+        },
+        "interval_start_utc": {
+          "format": "date-time",
+          "title": "Interval Start Utc",
+          "type": "string"
+        },
+        "low_price": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Low Price"
+        },
+        "open_price": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Open Price"
+        },
+        "record_type": {
+          "const": "bar",
+          "default": "bar",
+          "title": "Record Type",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sequence_number": {
+          "minimum": 0,
+          "title": "Sequence Number",
+          "type": "integer"
+        },
+        "source": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "symbol": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Symbol",
+          "type": "string"
+        },
+        "venue": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Venue",
+          "type": "string"
+        },
+        "volume": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Volume"
+        }
+      },
+      "required": [
+        "source",
+        "asset_class",
+        "venue",
+        "symbol",
+        "event_time_utc",
+        "ingest_time_utc",
+        "sequence_number",
+        "interval_start_utc",
+        "interval_end_utc",
+        "open_price",
+        "high_price",
+        "low_price",
+        "close_price",
+        "volume"
+      ],
+      "title": "OHLCVBar",
+      "type": "object"
+    },
+    "Quote": {
+      "additionalProperties": false,
+      "description": "Best bid and ask observation.\n\nCrossed quotes and invalid numeric values remain representable so the\nquality gate can quarantine the original observation without rewriting it.",
+      "properties": {
+        "ask_price": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Ask Price"
+        },
+        "ask_quantity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Ask Quantity"
+        },
+        "asset_class": {
+          "enum": [
+            "equity",
+            "crypto"
+          ],
+          "title": "Asset Class",
+          "type": "string"
+        },
+        "bid_price": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Bid Price"
+        },
+        "bid_quantity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Bid Quantity"
+        },
+        "event_time_utc": {
+          "format": "date-time",
+          "title": "Event Time Utc",
+          "type": "string"
+        },
+        "ingest_time_utc": {
+          "format": "date-time",
+          "title": "Ingest Time Utc",
+          "type": "string"
+        },
+        "quote_asset": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Quote Asset"
+        },
+        "record_type": {
+          "const": "quote",
+          "default": "quote",
+          "title": "Record Type",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sequence_number": {
+          "minimum": 0,
+          "title": "Sequence Number",
+          "type": "integer"
+        },
+        "source": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "symbol": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Symbol",
+          "type": "string"
+        },
+        "venue": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Venue",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source",
+        "asset_class",
+        "venue",
+        "symbol",
+        "event_time_utc",
+        "ingest_time_utc",
+        "sequence_number",
+        "bid_price",
+        "ask_price",
+        "bid_quantity",
+        "ask_quantity"
+      ],
+      "title": "Quote",
+      "type": "object"
+    },
+    "Trade": {
+      "additionalProperties": false,
+      "description": "Individual trade observation.",
+      "properties": {
+        "asset_class": {
+          "enum": [
+            "equity",
+            "crypto"
+          ],
+          "title": "Asset Class",
+          "type": "string"
+        },
+        "event_time_utc": {
+          "format": "date-time",
+          "title": "Event Time Utc",
+          "type": "string"
+        },
+        "ingest_time_utc": {
+          "format": "date-time",
+          "title": "Ingest Time Utc",
+          "type": "string"
+        },
+        "price": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Price"
+        },
+        "quantity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Quantity"
+        },
+        "quote_asset": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Quote Asset"
+        },
+        "record_type": {
+          "const": "trade",
+          "default": "trade",
+          "title": "Record Type",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sequence_number": {
+          "minimum": 0,
+          "title": "Sequence Number",
+          "type": "integer"
+        },
+        "source": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "symbol": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Symbol",
+          "type": "string"
+        },
+        "trade_id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Trade Id",
+          "type": "string"
+        },
+        "venue": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Venue",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source",
+        "asset_class",
+        "venue",
+        "symbol",
+        "event_time_utc",
+        "ingest_time_utc",
+        "sequence_number",
+        "trade_id",
+        "price",
+        "quantity"
+      ],
+      "title": "Trade",
+      "type": "object"
+    }
+  },
+  "discriminator": {
+    "mapping": {
+      "bar": "#/$defs/OHLCVBar",
+      "quote": "#/$defs/Quote",
+      "trade": "#/$defs/Trade"
+    },
+    "propertyName": "record_type"
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/Quote"
+    },
+    {
+      "$ref": "#/$defs/Trade"
+    },
+    {
+      "$ref": "#/$defs/OHLCVBar"
+    }
+  ]
+}

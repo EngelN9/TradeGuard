@@ -6,6 +6,9 @@ from pathlib import Path
 import pytest
 from scripts.export_schemas import SCHEMA_ROOT, schema_documents
 
+from tradeguard.data.fixtures import FIXTURE_SCENARIOS, build_fixture
+from tradeguard.data.package import DatasetPackage
+from tradeguard.domain.serialization import canonicalize
 from tradeguard.experiments.manifest import RunManifest
 
 EXPECTED_EVENT_MODELS = {
@@ -88,3 +91,43 @@ def test_schema_artifacts_contain_no_absolute_local_paths() -> None:
         content = path.read_text(encoding="utf-8")
         assert "C:\\Users\\" not in content
         assert "/home/" not in content
+
+
+@pytest.mark.contract
+def test_committed_prompt3_fixtures_match_generators() -> None:
+    fixture_root = Path(__file__).resolve().parents[1] / "fixtures" / "market_data"
+    for scenario in FIXTURE_SCENARIOS:
+        path = fixture_root / f"{scenario}.json"
+        assert path.exists()
+        committed = DatasetPackage.model_validate_json(path.read_text(encoding="utf-8"))
+        assert canonicalize(committed) == canonicalize(build_fixture(scenario))
+
+
+@pytest.mark.contract
+def test_prompt3_schemas_expose_required_contracts() -> None:
+    documents = schema_documents()
+
+    assert {
+        "market-records.schema.json",
+        "instrument-metadata.schema.json",
+        "dataset-manifest.schema.json",
+        "quality-report.schema.json",
+        "dataset-package.schema.json",
+    } <= set(documents)
+    metadata_schema = documents["instrument-metadata.schema.json"]
+    assert isinstance(metadata_schema, dict)
+    assert {
+        "asset_class",
+        "venue",
+        "symbol",
+        "canonical_symbol",
+        "tick_size",
+        "step_size",
+        "lot_size",
+        "minimum_quantity",
+        "minimum_notional",
+        "active_from",
+        "active_to",
+        "known_at",
+        "metadata_version",
+    } <= set(metadata_schema["properties"])

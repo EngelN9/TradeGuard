@@ -46,6 +46,8 @@ def test_makefile_has_required_targets_and_no_live_target() -> None:
         "test-connected",
         "evidence",
         "schemas",
+        "data-fixtures",
+        "prompt3-evidence",
         "dev-up",
         "dev-down",
     }
@@ -90,3 +92,15 @@ def test_security_policy_has_private_report_channel_without_placeholder() -> Non
     assert "https://github.com/EngelN9/TradeGuard/security/advisories/new" in security
     assert "請替換為專案安全聯絡信箱" not in security
     assert "security@your-domain.example" not in security
+
+
+@pytest.mark.unit
+def test_public_status_documents_share_the_current_non_tradable_stage() -> None:
+    expected_status = "DATA FOUNDATION / NOT TRADABLE"
+    readme = (REPOSITORY_ROOT / "README.md").read_text(encoding="utf-8")
+    security = (REPOSITORY_ROOT / "SECURITY.md").read_text(encoding="utf-8")
+
+    assert expected_status in readme
+    assert expected_status in security
+    assert "CORE CONTRACTS / NOT TRADABLE" not in readme
+    assert "CORE CONTRACTS / NOT TRADABLE" not in security

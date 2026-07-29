@@ -33,6 +33,7 @@ npm-debug.log*
 
 # Runtime and generated evidence
 artifacts/evidence/bootstrap/
+artifacts/evidence/prompt3/
 reports/generated/
 *.log
 

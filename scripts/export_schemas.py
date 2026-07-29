@@ -10,6 +10,10 @@ from uuid import UUID
 from pydantic import TypeAdapter
 
 from tradeguard.config.models import TradeGuardConfig
+from tradeguard.data.manifest import DatasetManifest
+from tradeguard.data.models import AnyMarketRecord, InstrumentMetadata
+from tradeguard.data.package import DatasetPackage
+from tradeguard.data.quality import QualityReport
 from tradeguard.domain.events import AnyDomainEvent
 from tradeguard.domain.serialization import canonicalize
 from tradeguard.experiments.manifest import (
@@ -68,6 +72,11 @@ def schema_documents() -> dict[str, object]:
         "domain-events.schema.json": TypeAdapter(AnyDomainEvent).json_schema(),
         "tradeguard-config.schema.json": TradeGuardConfig.model_json_schema(),
         "run-manifest.schema.json": RunManifest.model_json_schema(),
+        "market-records.schema.json": TypeAdapter(AnyMarketRecord).json_schema(),
+        "instrument-metadata.schema.json": InstrumentMetadata.model_json_schema(),
+        "dataset-manifest.schema.json": DatasetManifest.model_json_schema(),
+        "quality-report.schema.json": QualityReport.model_json_schema(),
+        "dataset-package.schema.json": DatasetPackage.model_json_schema(),
         "examples/sample-run-manifest.json": canonicalize(sample_run_manifest()),
     }
 

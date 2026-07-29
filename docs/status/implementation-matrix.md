@@ -4,7 +4,7 @@ Assessment date: `2026-07-29`
 
 Base Git SHA: `65d3c6f8499a189685c7c21e722c8ff6bf498cdb`
 
-Overall status: `CORE CONTRACTS / NOT TRADABLE`
+Overall status: `DATA FOUNDATION / NOT TRADABLE`
 
 Status vocabulary:
 
@@ -34,6 +34,11 @@ canonical serialization and checksums, fail-closed schema parsing, layered
 configuration with redaction and audit events, reproducible run manifests, and
 versioned JSON Schema snapshots. It does not add market-data connectivity,
 strategy execution, account access, or order submission.
+
+Prompt 3 on `codex/prompt-3-data-foundation` adds canonical equity and crypto
+records, point-in-time reference data, content-addressed raw storage, complete
+dataset manifests and lineage, deterministic quality gates, synthetic fixtures,
+and an offline data CLI. It does not connect to a real provider or account.
 
 The local checkout initially lacked Git metadata. It was safely reattached to
 remote commit `65d3c6f` after all four local blob hashes matched the remote.
@@ -75,16 +80,16 @@ Prompt 0 work occurs on `agent/prompt-0-contract`.
 | Config | Redaction, effective config, config hash | COMPLETE | Ordered safe-YAML layers, redacted inspection, deterministic hash | Secret providers remain future adapter work |
 | Config | Configuration audit event | COMPLETE | Checksummed `ConfigurationChanged` event with before/after hashes | Persistence remains TG-015 |
 | Reproducibility | Complete RunManifest | COMPLETE | Immutable manifest, dataset references, clean/dirty qualification gate | Run producers arrive in later prompts |
-| Schema | JSON/OpenAPI-compatible domain schemas | COMPLETE | Three JSON Schema snapshots and synthetic sample manifest | Regenerate with `make schemas` |
-| Data | Canonical equity and crypto models | MISSING | None | TG-003 |
-| Data | Instrument point-in-time metadata | MISSING | None | TG-003 |
-| Data | Dataset manifest and lineage | MISSING | None | TG-003 |
-| Data | Append-only/content-addressed raw storage | MISSING | None | TG-003 |
-| Data | Shared quality gates | MISSING | None | TG-003 |
-| Data | Equity-specific quality gates | MISSING | None | TG-003 |
-| Data | Crypto-specific quality gates | MISSING | None | TG-003 |
-| Data | Quarantine enforcement | MISSING | None | TG-003 |
-| Data | Synthetic fixtures and CLI | MISSING | None | TG-003 |
+| Schema | JSON/OpenAPI-compatible domain schemas | COMPLETE | Eight generated JSON Schema snapshots and synthetic examples | Regenerate with `make schemas` |
+| Data | Canonical equity and crypto models | COMPLETE | Strict immutable Quote, Trade, OHLCV, session, action, and metadata models | Connected provider normalization remains TG-004/TG-005 |
+| Data | Instrument point-in-time metadata | COMPLETE | Effective-time and knowledge-time validation with market-specific identity | Provider histories remain TG-004/TG-005 |
+| Data | Dataset manifest and lineage | COMPLETE | Checksummed partitions, corrections, parents, and acyclic transformation graph | Persistent catalog remains later work |
+| Data | Append-only/content-addressed raw storage | COMPLETE | Write-once SHA-256 store with idempotency and tamper tests | Backup/retention remains TG-015 |
+| Data | Shared quality gates | COMPLETE | Ten shared checks plus manifest row-count/checksum binding | Provider calibration remains TG-004/TG-005 |
+| Data | Equity-specific quality gates | COMPLETE | Sessions, half days, corporate actions, splits, delisting, PIT universe | Real calendar/action feeds remain TG-004 |
+| Data | Crypto-specific quality gates | COMPLETE | 24/7 gaps, precision, notional, maintenance, quote/spread/asset checks | Real venue semantics remain TG-005 |
+| Data | Quarantine enforcement | COMPLETE | FAIL/QUARANTINED reports cannot enter validation evidence | Persistence and operator workflow remain later work |
+| Data | Synthetic fixtures and CLI | COMPLETE | Eleven committed fixtures; validate/manifest/inspect commands; evidence bundle | No external data is claimed |
 | Equity adapter | Provider decision | COMPLETE | Twelve Data approved 2026-07-29 | Terms recheck before TG-004 |
 | Equity adapter | Protocol and implementation | BLOCKED | None | TG-004 after decision |
 | Equity adapter | Offline/connected/schema-drift tests | BLOCKED | None | TG-004 after decision |
@@ -148,12 +153,13 @@ Prompt 0 work occurs on `agent/prompt-0-contract`.
 
 ## Critical gaps
 
-1. Data ingestion and quality gates, backtesting, strategies, validation, risk,
+1. Connected data adapters, backtesting, strategies, validation, risk,
    monitoring, and complete API/dashboard functionality remain future
    sequential prompts.
-2. Prompt 1 does not permit push. Remote GitHub Actions therefore have not run;
-   GitHub CLI authentication for `EngelN9` was also invalid during assessment
-   and must be repaired before the later authorized publication stage.
+2. Prompt 1 through Prompt 3 do not authorize publishing their implementation
+   branches, so remote GitHub Actions have not run for those changes. The
+   `gh` CLI token remains invalid even though the Git remote credential and
+   GitHub App successfully synchronized the public `main` security policy.
 3. No connected qualification can be claimed; no provider, account, or broker
    connection was attempted.
 4. The repository remains non-tradable and has no order-submission, withdrawal,
@@ -231,4 +237,36 @@ Verified locally:
 - No external provider, account, credential, strategy, adapter, order route,
   canary environment, or live-trading capability was added or exercised.
 
-Prompt 3 may begin only after maintainer review of this promotion evidence.
+Prompt 3 was authorized by the maintainer on 2026-07-29.
+
+## Prompt 3 promotion result
+
+`PASS`
+
+Verified locally:
+
+- Ruff format and lint pass.
+- mypy strict mode passes for 35 source files.
+- 128 offline Python tests pass and one connected test is safely deselected.
+- Coverage is 94.26%, above the 90% gate.
+- All required canonical records and point-in-time metadata use immutable,
+  strict UTC/Decimal contracts.
+- Dataset manifests bind sorted symbols, date ranges, row counts, partitions,
+  licensing, gaps, corrections, parent identity, checksums, and an acyclic
+  transformation graph.
+- Content-addressed raw storage is write-once through its API, idempotent for
+  identical bytes, and detects altered blobs.
+- Every required shared, equity, and crypto quality code is implemented.
+- Quality evaluation validates record count and checksum against the manifest;
+  unknown or future-known reference data fails closed.
+- `FAIL` and `QUARANTINED` reports cannot support validation evidence.
+- Eleven committed synthetic fixtures reproduce exact manifests and reports,
+  including stale-content-with-fresh-ingest and quarantined examples.
+- `tradeguard data validate`, `manifest`, and `inspect` operate offline and
+  return non-zero status for unsafe inputs.
+- JSON Schema snapshots, fixture manifests, quality reports, transformed data
+  checksums, lineage graphs, and evidence checksums regenerate deterministically.
+- No external provider, account, credential, strategy, adapter, order route,
+  canary environment, or live-trading capability was added or exercised.
+
+Prompt 4 may begin only after maintainer review of this promotion evidence.

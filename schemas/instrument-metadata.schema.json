@@ -1,0 +1,198 @@
+{
+  "additionalProperties": false,
+  "description": "Point-in-time instrument definition.",
+  "properties": {
+    "active_from": {
+      "format": "date-time",
+      "title": "Active From",
+      "type": "string"
+    },
+    "active_to": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Active To"
+    },
+    "asset_class": {
+      "enum": [
+        "equity",
+        "crypto"
+      ],
+      "title": "Asset Class",
+      "type": "string"
+    },
+    "canonical_symbol": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Canonical Symbol",
+      "type": "string"
+    },
+    "currency": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Currency"
+    },
+    "known_at": {
+      "format": "date-time",
+      "title": "Known At",
+      "type": "string"
+    },
+    "lot_size": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "gt": 0,
+      "title": "Lot Size"
+    },
+    "metadata_version": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Metadata Version",
+      "type": "string"
+    },
+    "minimum_notional": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "ge": 0,
+      "title": "Minimum Notional"
+    },
+    "minimum_quantity": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "ge": 0,
+      "title": "Minimum Quantity"
+    },
+    "quote_asset": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Quote Asset"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "session_calendar": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Session Calendar"
+    },
+    "source": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Source",
+      "type": "string"
+    },
+    "step_size": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "gt": 0,
+      "title": "Step Size"
+    },
+    "symbol": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Symbol",
+      "type": "string"
+    },
+    "tick_size": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "gt": 0,
+      "title": "Tick Size"
+    },
+    "timezone": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Timezone",
+      "type": "string"
+    },
+    "venue": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Venue",
+      "type": "string"
+    }
+  },
+  "required": [
+    "source",
+    "asset_class",
+    "venue",
+    "symbol",
+    "canonical_symbol",
+    "tick_size",
+    "step_size",
+    "lot_size",
+    "minimum_quantity",
+    "minimum_notional",
+    "timezone",
+    "active_from",
+    "known_at",
+    "metadata_version"
+  ],
+  "title": "InstrumentMetadata",
+  "type": "object"
+}
