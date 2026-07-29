@@ -146,10 +146,11 @@ Prompt 0 work occurs on `agent/prompt-0-contract`.
    validation, risk, monitoring, and complete API/dashboard functionality remain
    future sequential prompts.
 2. An independent clean clone passed locked Python/npm installation, static
-   checks, offline tests, and both production builds. Docker, Docker Compose,
-   GNU Make, and Bash are unavailable on the local host. Static container policy
-   checks pass, but Compose build/start and the strict shell verification script
-   cannot be truthfully claimed as executed.
+   checks, offline tests, and both production builds. GNU Make is unavailable,
+   so its direct command equivalents were used. Git Bash is available and the
+   strict verification script correctly fails closed at its prerequisite gate
+   because Docker and Docker Compose are unavailable. Compose build/start cannot
+   be truthfully claimed as executed.
 3. Prompt 1 does not permit push. Remote GitHub Actions therefore have not run;
    GitHub CLI authentication for `EngelN9` was also invalid during assessment
    and must be repaired before the later authorized publication stage.
@@ -183,14 +184,16 @@ Verified locally:
   installation, Ruff, mypy, 39 offline Python tests, dashboard checks/tests,
   dashboard production build, and Python package build; the temporary clone was
   removed after verification.
+- `scripts/verify_clean_bootstrap.sh` was invoked with Git Bash and returned its
+  expected `BLOCKED` result for the unavailable Docker prerequisite.
 - Actual localhost `/health/live` and `/health/ready` probes return healthy
   `research` status.
 - Bootstrap evidence and its checksum index are generated.
 
 Minimum unblock:
 
-1. Run `scripts/verify_clean_bootstrap.sh` from a clean clone on a host with
-   Git, Python 3.12, uv, Node.js, npm, Bash, Docker, and Docker Compose.
-2. Confirm `docker compose up --build -d`, all health probes, and cleanup pass.
-3. Attach the container results to the Prompt 1 review before authorizing
+1. Install or provide Docker with Docker Compose on the qualification host.
+2. Run `scripts/verify_clean_bootstrap.sh` from a clean clone.
+3. Confirm `docker compose up --build -d`, all health probes, and cleanup pass.
+4. Attach the container results to the Prompt 1 review before authorizing
    Prompt 2.
