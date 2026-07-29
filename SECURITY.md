@@ -53,7 +53,10 @@ TradeGuard 不會因開發速度、操作便利性或績效展示而降低安全
 
 目前 TradeGuard 尚處於：
 
-BOOTSTRAP / NOT TRADABLE
+CORE CONTRACTS / NOT TRADABLE
+
+目前已完成 repository bootstrap 與 Prompt 2 核心資料合約；尚未進入策略、
+回測或外部資料接入階段，也沒有正式下單、提款或轉帳能力。
 
 在第一個正式版本發布前，安全修正原則上只會套用至預設分支：
 
@@ -111,14 +114,14 @@ TradeGuard 第一版不得：
 
 請不要使用公開 GitHub Issue 回報尚未修復的安全漏洞。
 
-請使用下列方式私下聯絡維護者：
+主要私密通報管道：
 
-Security contact:
 [GitHub Private Vulnerability Reporting](https://github.com/EngelN9/TradeGuard/security/advisories/new)
 
-如果 repository 的 Private Vulnerability Reporting 尚未啟用，請透過
-repository 擁有者公開個人檔案中列出的私人聯絡方式，僅傳送簡短通知，
-不要在公開頁面張貼漏洞細節。
+如果 Private Vulnerability Reporting 暫時不可用，請勿透過公開 Issue、
+Pull Request 或公開個人檔案傳送漏洞細節。可以使用 repository 擁有者公開
+個人檔案中列出的私人聯絡方式，僅通知維護者恢復上述私密通報管道；在管道
+恢復前，不得傳送可利用細節或敏感資料。
 
 ### **回報標題**
 
@@ -1564,8 +1567,6 @@ https://github.com/EngelN9/TradeGuard/security/advisories/new
 Repository：
 
 https://github.com/EngelN9/TradeGuard
-
-若實際 repository URL 不同，請更新此欄位。
 
 ---
 
