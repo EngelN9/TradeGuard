@@ -56,9 +56,9 @@ Prompt 0 work occurs on `agent/prompt-0-contract`.
 | Bootstrap | Safe opt-in connected test target | COMPLETE | `make test-connected`, safe-skip test | No adapter or credentials used |
 | Bootstrap | `.gitignore` and fake `.env.example` | COMPLETE | Files and policy tests | Keep placeholders non-sensitive |
 | CI | Format/lint/type/test workflows | COMPLETE | `.github/workflows/ci.yml`, workflow validator | Remote execution pending later push |
-| CI | Secret/dependency/container/workflow scans | PARTIAL | Local secret, Python, npm, workflow scans pass; security workflow exists | Container scan cannot run without Docker or remote CI |
+| CI | Secret/dependency/container/workflow scans | COMPLETE | Local secret, Python, npm, and workflow scans pass; container scan workflow is validated; Docker images build locally | Execute pinned Trivy Action after later authorized push |
 | CI | Minimal permissions and SHA-pinned Actions | COMPLETE | Workflow validator passes for two workflows | Recheck pins before release |
-| Container | Secure Dockerfile and Compose | PARTIAL | Non-root/read-only definitions and static policy tests pass | Docker unavailable; Compose build/start is unverified |
+| Container | Secure Dockerfile and Compose | COMPLETE | Docker Desktop build/start, health probes, non-root/read-only/cap-drop inspection, and cleanup pass | Re-run in remote CI after later authorized push |
 | Database | PostgreSQL and migrations | PARTIAL | PostgreSQL Compose service exists | Migrations are deferred to TG-015 |
 | Health | Liveness and readiness skeleton | COMPLETE | Integration tests and actual localhost probe pass | Container probe pending |
 | Evidence | Bootstrap evidence skeleton | COMPLETE | `scripts/collect_evidence.py`, checksum index, evidence documentation | Container metadata remains explicitly unpopulated |
@@ -125,7 +125,7 @@ Prompt 0 work occurs on `agent/prompt-0-contract`.
 | Container | Non-root/read-only/minimal/pinned | MISSING | None | TG-015 |
 | Database | Least privilege/backup/restore test | MISSING | None | TG-015 |
 | Security | Regression suite | MISSING | None | TG-015 |
-| Build | Package/container/dashboard/checksums | PARTIAL | Python wheel/sdist, dashboard production build, evidence checksums pass | Container build is unverified |
+| Build | Package/container/dashboard/checksums | COMPLETE | Python wheel/sdist, dashboard production build, Docker images, and evidence checksums pass | Release artifact signing remains TG-015/TG-018 |
 | Qualification | Two clean environments | MISSING | None | TG-016 |
 | Qualification | Offline full matrix | MISSING | None | TG-016 |
 | Qualification | Connected equity E2E | BLOCKED | No approved adapter | TG-017 |
@@ -146,11 +146,10 @@ Prompt 0 work occurs on `agent/prompt-0-contract`.
    validation, risk, monitoring, and complete API/dashboard functionality remain
    future sequential prompts.
 2. An independent clean clone passed locked Python/npm installation, static
-   checks, offline tests, and both production builds. GNU Make is unavailable,
-   so its direct command equivalents were used. Git Bash is available and the
-   strict verification script correctly fails closed at its prerequisite gate
-   because Docker and Docker Compose are unavailable. Compose build/start cannot
-   be truthfully claimed as executed.
+   checks, offline tests, and both production builds. The strict bootstrap
+   verification subsequently passed with Docker Desktop 4.83.0, Linux Engine
+   29.6.2, and Compose 5.3.1. GNU Make is unavailable, but every Make target's
+   direct command equivalent passed.
 3. Prompt 1 does not permit push. Remote GitHub Actions therefore have not run;
    GitHub CLI authentication for `EngelN9` was also invalid during assessment
    and must be repaired before the later authorized publication stage.
@@ -168,13 +167,13 @@ no connected/trading claim is made. Prompt 1 implementation is authorized.
 
 ## Prompt 1 promotion result
 
-`BLOCKED`
+`PASS`
 
 Verified locally:
 
 - Ruff format and lint pass.
 - mypy passes.
-- 39 offline Python tests pass and one connected test is safely deselected.
+- 40 offline Python tests pass and one connected test is safely deselected.
 - Coverage is 95.86%, above the 90% gate.
 - Dashboard typecheck, two safety tests, and production build pass.
 - Python and production npm dependency audits report no known vulnerabilities.
@@ -185,15 +184,17 @@ Verified locally:
   dashboard production build, and Python package build; the temporary clone was
   removed after verification.
 - `scripts/verify_clean_bootstrap.sh` was invoked with Git Bash and returned its
-  expected `BLOCKED` result for the unavailable Docker prerequisite.
+  final `PASS: clean bootstrap verified` result.
+- Docker Compose built and started PostgreSQL, API, worker, mock market data,
+  deterministic paper broker skeleton, and dashboard. All probes passed.
+- Application containers were verified read-only, non-root, capability-dropped,
+  and configured with `no-new-privileges`.
+- Paper broker capabilities remained non-external and non-live; its order route
+  returned HTTP 404.
+- Verification removed its containers, network, and volume. The pre-existing
+  `freqtrade` container remained running and unchanged.
 - Actual localhost `/health/live` and `/health/ready` probes return healthy
   `research` status.
 - Bootstrap evidence and its checksum index are generated.
 
-Minimum unblock:
-
-1. Install or provide Docker with Docker Compose on the qualification host.
-2. Run `scripts/verify_clean_bootstrap.sh` from a clean clone.
-3. Confirm `docker compose up --build -d`, all health probes, and cleanup pass.
-4. Attach the container results to the Prompt 1 review before authorizing
-   Prompt 2.
+Prompt 2 is authorized after human review of this PASS result.
