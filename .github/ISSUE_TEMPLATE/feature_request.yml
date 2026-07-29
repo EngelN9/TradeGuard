@@ -1,0 +1,26 @@
+name: Feature request
+description: Propose a bounded research or non-live capability.
+title: "[Feature]: "
+labels: ["enhancement", "needs-review"]
+body:
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: What research, validation, risk, or monitoring need does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: boundaries
+    attributes:
+      label: Safety boundaries
+      description: Explain why this cannot introduce live, transfer, withdrawal, or risk bypass.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Acceptance evidence
+      description: Tests, manifests, checksums, and rollback expected.
+    validations:
+      required: true

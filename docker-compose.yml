@@ -1,0 +1,100 @@
+name: tradeguard
+
+x-app-security: &app-security
+  read_only: true
+  tmpfs:
+    - /tmp
+  security_opt:
+    - no-new-privileges:true
+  cap_drop:
+    - ALL
+  restart: "no"
+
+x-app-resources: &app-resources
+  deploy:
+    resources:
+      limits:
+        cpus: "1.0"
+        memory: 512M
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${TRADEGUARD_POSTGRES_DB:-tradeguard}
+      POSTGRES_USER: ${TRADEGUARD_POSTGRES_USER:-tradeguard_app}
+      POSTGRES_PASSWORD: ${TRADEGUARD_POSTGRES_PASSWORD:-local-development-only}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5432:5432"
+    restart: "no"
+
+  api:
+    <<: [*app-security, *app-resources]
+    build:
+      context: .
+    environment:
+      TRADEGUARD_ENV: research
+    command: ["uvicorn", "tradeguard.api.app:app", "--host", "0.0.0.0", "--port", "8000"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8000:8000"
+
+  worker:
+    <<: [*app-security, *app-resources]
+    build:
+      context: .
+    environment:
+      TRADEGUARD_ENV: research
+    command: ["python", "-m", "tradeguard.workers"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  mock-market-data:
+    <<: [*app-security, *app-resources]
+    build:
+      context: .
+    environment:
+      TRADEGUARD_ENV: research
+    command:
+      ["uvicorn", "tradeguard.mock_market_data.app:app", "--host", "0.0.0.0", "--port", "8001"]
+    ports:
+      - "127.0.0.1:8001:8001"
+
+  paper-broker:
+    <<: [*app-security, *app-resources]
+    build:
+      context: .
+    environment:
+      TRADEGUARD_ENV: paper
+    command:
+      ["uvicorn", "tradeguard.paper_broker.app:app", "--host", "0.0.0.0", "--port", "8002"]
+    ports:
+      - "127.0.0.1:8002:8002"
+
+  dashboard:
+    <<: [*app-security, *app-resources]
+    build:
+      context: web
+    environment:
+      NEXT_PUBLIC_TRADEGUARD_ENV: research
+    tmpfs:
+      - /tmp
+      - /app/.next/cache
+    depends_on:
+      api:
+        condition: service_started
+    ports:
+      - "127.0.0.1:3000:3000"
+
+volumes:
+  postgres-data:

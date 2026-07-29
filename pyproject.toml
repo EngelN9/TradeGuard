@@ -1,0 +1,121 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tradeguard"
+version = "0.1.0.dev0"
+description = "Safety-first research, backtest, paper, and shadow monitoring platform"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.12"
+authors = [
+  { name = "EngelN9" },
+]
+keywords = ["backtesting", "risk", "research", "paper-trading"]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Framework :: FastAPI",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12",
+  "Typing :: Typed",
+]
+dependencies = [
+  "fastapi>=0.116,<1",
+  "pydantic>=2.11,<3",
+  "uvicorn>=0.35,<1",
+]
+
+[project.scripts]
+tradeguard = "tradeguard.cli:main"
+
+[dependency-groups]
+dev = [
+  "detect-secrets>=1.5,<2",
+  "httpx2>=2.9,<3",
+  "hypothesis>=6.135,<7",
+  "mypy>=1.17,<2",
+  "pip-audit>=2.9,<3",
+  "pre-commit>=4.3,<5",
+  "pytest>=9.0.3,<10",
+  "pytest-cov>=6.2,<7",
+  "pyyaml>=6.0,<7",
+  "ruff>=0.12,<1",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tradeguard"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["src", "tests", "scripts"]
+
+[tool.ruff.lint]
+select = [
+  "A",
+  "ANN",
+  "ASYNC",
+  "B",
+  "C4",
+  "DTZ",
+  "E",
+  "F",
+  "FA",
+  "I",
+  "N",
+  "PERF",
+  "PIE",
+  "PL",
+  "PTH",
+  "RET",
+  "RUF",
+  "S",
+  "SIM",
+  "T20",
+  "UP",
+  "W",
+]
+ignore = ["S101"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["ANN", "PLR2004"]
+"scripts/**/*.py" = ["T201"]
+"src/tradeguard/**/__main__.py" = ["S104"]
+"src/tradeguard/cli.py" = ["S104"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["tradeguard"]
+mypy_path = "src"
+warn_unused_configs = true
+
+[tool.pytest.ini_options]
+addopts = [
+  "--basetemp=.pytest-tmp",
+  "--strict-config",
+  "--strict-markers",
+  "-ra",
+]
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = [
+  "unit: isolated unit tests",
+  "property: property-based tests",
+  "integration: component integration tests",
+  "contract: API and adapter contract tests",
+  "replay: deterministic replay tests",
+  "connected: opt-in tests that may access approved external systems",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["tradeguard"]
+omit = ["src/tradeguard/**/__main__.py"]
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+skip_covered = true

@@ -20,28 +20,27 @@ TradeGuard 不以「保證獲利」為產品目標，而是提供一套更可靠
 
 ## **專案狀態**
 
-PLANNING / NOT TRADABLE
+BOOTSTRAP / NOT TRADABLE
 
-目前專案處於規劃與初始開發階段。
+目前專案已完成可執行的 repository bootstrap，尚未進入策略、回測或外部資料接入階段。
 
-* 尚未完成第一個可執行版本。  
-* 尚未提供正式交易功能。  
-* 尚未連接正式券商或交易所帳戶。  
-* 尚未完成任何可供投資判斷的策略驗證。  
-* 目前最高允許環境為 `research`。  
-* 不需要，也不得提交正式 API key。
+* 已建立 typed Python package、FastAPI health endpoints、worker、mock market-data、deterministic paper broker skeleton 與唯讀 dashboard placeholder。
+* 已建立鎖定依賴、測試、靜態檢查、GitHub Actions、Dockerfile、Docker Compose 與 bootstrap evidence 骨架。
+* 尚未提供任何策略、投資建議或可供投資判斷的驗證結果。
+* 尚未連接正式券商、交易所帳戶或外部市場資料服務。
+* 執行環境只接受 `research`、`backtest`、`replay`、`paper`、`shadow`；其他值會 fail closed。
+* `shadow` 只代表允許的唯讀設計上限，不表示目前已有帳戶連線。
+* 專案沒有 `live`、正式下單、提款或轉帳能力。
+* 不需要，也不得提交真實 API key。
 
-目前文件：
+重要文件：
 
-* [`AGENTS.md`](https://chatgpt.com/c/AGENTS.md)：最高層級工程、安全、研究與風險規格。  
-* `README.md`：專案定位、架構、開發方式與里程碑。  
-* 未來將新增：  
-  * `SECURITY.md`  
-  * `CONTRIBUTING.md`  
-  * 策略規格模板  
-  * 研究報告模板  
-  * 事故處理文件  
-  * 架構決策紀錄
+* [`AGENTS.md`](AGENTS.md)：最高層級工程、安全、研究與風險規格。
+* [`PROMPTS.md`](PROMPTS.md)：依序執行的交付階段與人工審查閘門。
+* [`SECURITY.md`](SECURITY.md)：安全政策與私密通報方式。
+* [`CONTRIBUTING.md`](CONTRIBUTING.md)：開發、測試與 Pull Request 規範。
+* [`docs/release/connected-release-v1.md`](docs/release/connected-release-v1.md)：Connected Release v1 合約。
+* [`docs/status/implementation-matrix.md`](docs/status/implementation-matrix.md)：逐項實作狀態與缺口。
 
 ---
 
@@ -592,11 +591,12 @@ tradeguard/
 
 ## **開發環境**
 
-以下指令是預定介面。Milestone 0 完成前，部分指令可能尚不可用。
+以下指令已由 Prompt 1 bootstrap 提供。Windows 沒有 GNU Make 時，可以直接執行
+Makefile 中對應的 `uv`、`npm` 或 `docker compose` 指令。
 
 ### **必要工具**
 
-預計需要：
+需要：
 
 * Git  
 * Python 3.12+  
@@ -604,15 +604,13 @@ tradeguard/
 * Docker  
 * Docker Compose  
 * Node.js  
-* npm、pnpm 或其他經專案決定的套件管理工具
+* npm
 
 ### **取得程式碼**
 
 git clone https://github.com/EngelN9/TradeGuard.git
 
 cd TradeGuard
-
-若實際 repository 名稱或擁有者不同，請修改上述 URL。
 
 ### **安裝後端依賴**
 
@@ -628,13 +626,13 @@ cp .env.example .env
 
 make dev-up
 
-預定啟動：
+啟動的本機 skeleton：
 
 * PostgreSQL  
 * FastAPI  
 * 後端 worker  
 * Mock market-data service  
-* Mock paper adapter  
+* Deterministic paper broker skeleton
 * Web dashboard
 
 停止服務：
@@ -645,7 +643,7 @@ make dev-down
 
 ## **常用開發指令**
 
-以下為預定 Makefile 介面：
+已提供的 Makefile 介面：
 
 make setup
 
@@ -667,13 +665,17 @@ make test-replay
 
 make test-e2e
 
+make test-connected
+
+make evidence
+
 make dev-up
 
 make dev-down
 
-make migrate
-
 make api
+
+make worker
 
 make web
 
@@ -685,7 +687,7 @@ make live
 
 ## **設定環境**
 
-預定環境：
+允許環境：
 
 | 環境 | 用途 | 外部資料 | 帳戶資料 | 下單 |
 | ----- | ----- | ----- | ----- | ----- |
@@ -889,9 +891,8 @@ validation\_failures
 5. 評估帳戶影響。  
 6. 新增防止重發的測試或掃描規則。
 
-安全問題請依未來的 [`SECURITY.md`](https://chatgpt.com/c/SECURITY.md) 回報。
-
-在 `SECURITY.md` 建立前，請勿在公開 Issue 張貼任何：
+安全問題請依 [`SECURITY.md`](SECURITY.md) 使用 GitHub Private Vulnerability
+Reporting 私密回報。請勿在公開 Issue 張貼任何：
 
 * API key。  
 * 帳戶資訊。  
@@ -1110,12 +1111,12 @@ MVP 不需要：
 
 ## **貢獻方式**
 
-TradeGuard 尚在初期開發階段。
+TradeGuard 尚在早期開發階段；目前只有 repository bootstrap，尚無策略或外部服務 adapter。
 
 提交變更前，請先閱讀：
 
-1. [`AGENTS.md`](https://chatgpt.com/c/AGENTS.md)  
-2. 未來的 `CONTRIBUTING.md`  
+1. [`AGENTS.md`](AGENTS.md)
+2. [`CONTRIBUTING.md`](CONTRIBUTING.md)
 3. 目標目錄內較具體的 `AGENTS.md`  
 4. 相關測試與文件
 
@@ -1137,7 +1138,7 @@ Pull Request 必須：
 
 ## **AI 程式設計代理**
 
-本 repository 可以使用 Codex 或其他 AI 程式設計代理協助開發，但代理必須遵守 [`AGENTS.md`](https://chatgpt.com/c/AGENTS.md)。
+本 repository 可以使用 Codex 或其他 AI 程式設計代理協助開發，但代理必須遵守 [`AGENTS.md`](AGENTS.md)。
 
 AI 代理不得：
 
@@ -1201,22 +1202,7 @@ TradeGuard 僅供：
 
 ## **授權**
 
-目前尚未選定正式開源授權。
-
-NO LICENSE SELECTED
-
-公開 repository 不代表自動授予他人複製、修改、散布或商業使用權。
-
-在選定授權前，請勿假設本專案採用 MIT、Apache 2.0、GPL 或其他開源授權。
-
-未來可能評估：
-
-* Apache License 2.0  
-* GNU Affero General Public License v3.0  
-* Open-core 模式  
-* Source-available 授權
-
-最終授權將依專案的商業模式、社群策略及第三方依賴授權決定。
+本專案採用 [Apache License 2.0](LICENSE)。
 
 ---
 
@@ -1240,4 +1226,3 @@ TradeGuard 的成功標準是：
 * 維運可靠性。  
 * 稽核能力。  
 * 決策品質。
-

@@ -4,7 +4,7 @@ Assessment date: `2026-07-29`
 
 Base Git SHA: `65d3c6f8499a189685c7c21e722c8ff6bf498cdb`
 
-Overall status: `PLANNING / NOT TRADABLE`
+Overall status: `BOOTSTRAP / NOT TRADABLE`
 
 Status vocabulary:
 
@@ -16,17 +16,18 @@ Status vocabulary:
 
 ## Repository inventory
 
-At assessment time the remote `main` tree contains exactly:
+At Prompt 0 assessment time the remote `main` tree contained exactly:
 
 - `AGENTS.md`
 - `PROMPTS.md`
 - `README.md`
 - `SECURITY.md`
 
-There is no application code, dependency manifest, lockfile, test, CI workflow,
-container definition, configuration, schema, database migration, API, dashboard,
-adapter, artifact, or release evidence. `CONTRIBUTING.md`, `LICENSE`, and
-`CODEOWNERS` are also absent.
+Prompt 1 on `agent/prompt-1-bootstrap` now adds the typed Python package, locked
+Python and dashboard dependencies, tests, local tooling, CI workflow
+definitions, container definitions, service skeletons, a dashboard placeholder,
+and bootstrap evidence generation. It does not add a strategy, external adapter,
+account connection, or order-submission route.
 
 The local checkout initially lacked Git metadata. It was safely reattached to
 remote commit `65d3c6f` after all four local blob hashes matched the remote.
@@ -38,29 +39,29 @@ Prompt 0 work occurs on `agent/prompt-0-contract`.
 | --- | --- | --- | --- | --- |
 | Governance | Highest-level safety specification | COMPLETE | `AGENTS.md` | Keep synchronized |
 | Governance | Prompted delivery stages and gates | COMPLETE | `PROMPTS.md` | Execute sequentially |
-| Governance | Product positioning and safety boundary | PARTIAL | `README.md`, `SECURITY.md` | Update as implementation becomes real |
-| Governance | Contribution guide | MISSING | None | TG-001 |
-| Governance | Public software license | COMPLETE | Apache-2.0 approved on 2026-07-29 | Add `LICENSE` in TG-001 |
-| Governance | CODEOWNERS | MISSING | None | TG-001 |
+| Governance | Product positioning and safety boundary | COMPLETE | `README.md`, `SECURITY.md`, runtime policy tests | Keep synchronized |
+| Governance | Contribution guide | COMPLETE | `CONTRIBUTING.md` | Maintain with tooling |
+| Governance | Public software license | COMPLETE | `LICENSE`, Apache-2.0 approved on 2026-07-29 | Recheck dependency licenses before release |
+| Governance | CODEOWNERS | COMPLETE | `CODEOWNERS` | Verify repository team/user resolution after push |
 | Governance | Private security contact | COMPLETE | GitHub Private Vulnerability Reporting approved | Verify repository feature before release |
 | Release | Connected Release contract | COMPLETE | `docs/release/connected-release-v1.md` | Human approval required |
 | Release | Implementation matrix | COMPLETE | This file | Maintain per issue |
 | Architecture | System context | COMPLETE | `docs/architecture/system-context.md` | Human review |
 | Architecture | Scope ADR | COMPLETE | `docs/adr/0001-connected-release-scope.md` | Accepted 2026-07-29 |
-| Bootstrap | Python 3.12 typed package | MISSING | None | TG-001 |
-| Bootstrap | `pyproject.toml` and `uv.lock` | MISSING | None | TG-001 |
-| Bootstrap | Ruff, mypy, pytest, Hypothesis, coverage | MISSING | None | TG-001 |
-| Bootstrap | Pre-commit | MISSING | None | TG-001 |
-| Bootstrap | Required Make targets | MISSING | None | TG-001 |
-| Bootstrap | Safe opt-in connected test target | MISSING | None | TG-001 |
-| Bootstrap | `.gitignore` and fake `.env.example` | MISSING | None | TG-001 |
-| CI | Format/lint/type/test workflows | MISSING | None | TG-001 |
-| CI | Secret/dependency/container/workflow scans | MISSING | None | TG-001/TG-015 |
-| CI | Minimal permissions and SHA-pinned Actions | MISSING | None | TG-001 |
-| Container | Secure Dockerfile and Compose | MISSING | None | TG-001/TG-015 |
-| Database | PostgreSQL and migrations | MISSING | None | TG-001/TG-015 |
-| Health | Liveness and readiness skeleton | MISSING | None | TG-001 |
-| Evidence | Bootstrap evidence skeleton | MISSING | None | TG-001 |
+| Bootstrap | Python 3.12 typed package | COMPLETE | `pyproject.toml`, `src/tradeguard/`, package build | Domain implementation begins in TG-002 |
+| Bootstrap | `pyproject.toml` and `uv.lock` | COMPLETE | Locked sync used for local validation | Revalidate on Python 3.12 CI |
+| Bootstrap | Ruff, mypy, pytest, Hypothesis, coverage | COMPLETE | 39 offline tests pass; 95.86% coverage | Re-run in CI |
+| Bootstrap | Pre-commit | COMPLETE | `.pre-commit-config.yaml` with local deterministic hooks | Installation not exercised because GNU Make is unavailable |
+| Bootstrap | Required Make targets | COMPLETE | `Makefile`, repository policy tests | GNU Make unavailable locally; direct equivalents passed |
+| Bootstrap | Safe opt-in connected test target | COMPLETE | `make test-connected`, safe-skip test | No adapter or credentials used |
+| Bootstrap | `.gitignore` and fake `.env.example` | COMPLETE | Files and policy tests | Keep placeholders non-sensitive |
+| CI | Format/lint/type/test workflows | COMPLETE | `.github/workflows/ci.yml`, workflow validator | Remote execution pending later push |
+| CI | Secret/dependency/container/workflow scans | PARTIAL | Local secret, Python, npm, workflow scans pass; security workflow exists | Container scan cannot run without Docker or remote CI |
+| CI | Minimal permissions and SHA-pinned Actions | COMPLETE | Workflow validator passes for two workflows | Recheck pins before release |
+| Container | Secure Dockerfile and Compose | PARTIAL | Non-root/read-only definitions and static policy tests pass | Docker unavailable; Compose build/start is unverified |
+| Database | PostgreSQL and migrations | PARTIAL | PostgreSQL Compose service exists | Migrations are deferred to TG-015 |
+| Health | Liveness and readiness skeleton | COMPLETE | Integration tests and actual localhost probe pass | Container probe pending |
+| Evidence | Bootstrap evidence skeleton | COMPLETE | `scripts/collect_evidence.py`, checksum index, evidence documentation | Container metadata remains explicitly unpopulated |
 | Domain | Versioned immutable events | MISSING | None | TG-002 |
 | Domain | Canonical serialization/checksums | MISSING | None | TG-002 |
 | Domain | UTC and Decimal validation | MISSING | None | TG-002 |
@@ -105,17 +106,17 @@ Prompt 0 work occurs on `agent/prompt-0-contract`.
 | Experiments | Experiment model/store | MISSING | None | TG-010 |
 | Reports | Complete balanced research report | MISSING | None | TG-010 |
 | Evidence | Collect/verify/index and tamper detection | MISSING | None | TG-010 |
-| Paper | Deterministic paper broker | MISSING | None | TG-011 |
+| Paper | Deterministic paper broker | PARTIAL | Non-ordering deterministic broker skeleton and negative route test | State machine and fills remain TG-011 |
 | Paper | Order state machine/idempotency/recovery | MISSING | None | TG-011 |
 | External adapter | Adapter decision | COMPLETE | Coinbase static sandbox approved 2026-07-29 | Static behavior is a known limitation |
 | External adapter | Non-live implementation/tests | BLOCKED | None | TG-012 after decision |
 | Monitoring | Paper/shadow event ingestion | MISSING | None | TG-013 |
 | Reconciliation | Five-state reconciliation | MISSING | None | TG-013 |
 | Drift | Required drift and alerts | MISSING | None | TG-013 |
-| API | FastAPI resource endpoints | MISSING | None | TG-014 |
+| API | FastAPI resource endpoints | PARTIAL | Root and health skeleton only | Resource APIs remain TG-014 |
 | API | Authz/audit/idempotent writes | MISSING | None | TG-014 |
-| API | Fixed OpenAPI contract | MISSING | None | TG-014 |
-| Dashboard | Required pages and environment labels | MISSING | None | TG-014 |
+| API | Fixed OpenAPI contract | PARTIAL | Bootstrap OpenAPI contract tests | Versioned resource contract remains TG-014 |
+| Dashboard | Required pages and environment labels | PARTIAL | Responsive non-tradable placeholder with environment label | Required operational pages remain TG-014 |
 | Dashboard | Unknown/stale/accessibility/E2E tests | MISSING | None | TG-014 |
 | Security | Threat model | MISSING | None | TG-015 |
 | Security | Structured logs/redaction/correlation | MISSING | None | TG-015 |
@@ -124,7 +125,7 @@ Prompt 0 work occurs on `agent/prompt-0-contract`.
 | Container | Non-root/read-only/minimal/pinned | MISSING | None | TG-015 |
 | Database | Least privilege/backup/restore test | MISSING | None | TG-015 |
 | Security | Regression suite | MISSING | None | TG-015 |
-| Build | Package/container/dashboard/checksums | MISSING | None | TG-015 |
+| Build | Package/container/dashboard/checksums | PARTIAL | Python wheel/sdist, dashboard production build, evidence checksums pass | Container build is unverified |
 | Qualification | Two clean environments | MISSING | None | TG-016 |
 | Qualification | Offline full matrix | MISSING | None | TG-016 |
 | Qualification | Connected equity E2E | BLOCKED | No approved adapter | TG-017 |
@@ -141,13 +142,19 @@ Prompt 0 work occurs on `agent/prompt-0-contract`.
 
 ## Critical gaps
 
-1. The repository has no executable or testable implementation.
-2. There is no dependency lock, CI, security scanning, or release evidence.
-3. Provider, external non-live adapter, license, and security-contact decisions
-   are unapproved.
-4. No connected or offline qualification can yet be claimed.
-5. GitHub CLI authentication for `EngelN9` was invalid during assessment; this
-   blocks future push/PR/release work until the maintainer reauthenticates.
+1. Domain events, versioned configuration, data, backtesting, strategies,
+   validation, risk, monitoring, and complete API/dashboard functionality remain
+   future sequential prompts.
+2. Docker, Docker Compose, GNU Make, and Bash are unavailable on the local
+   host. Static container policy checks pass, but Compose build/start and the
+   strict fresh-clone shell script cannot be truthfully claimed as executed.
+3. Prompt 1 does not permit push. Remote GitHub Actions therefore have not run;
+   GitHub CLI authentication for `EngelN9` was also invalid during assessment
+   and must be repaired before the later authorized publication stage.
+4. No connected qualification can be claimed; no provider, account, or broker
+   connection was attempted.
+5. The repository remains non-tradable and has no order-submission, withdrawal,
+   transfer, canary, or live path.
 
 ## Prompt 0 promotion result
 
@@ -155,3 +162,28 @@ Prompt 0 work occurs on `agent/prompt-0-contract`.
 
 The documentation deliverables exist, the required decisions are recorded, and
 no connected/trading claim is made. Prompt 1 implementation is authorized.
+
+## Prompt 1 promotion result
+
+`BLOCKED`
+
+Verified locally:
+
+- Ruff format and lint pass.
+- mypy passes.
+- 39 offline Python tests pass and one connected test is safely deselected.
+- Coverage is 95.86%, above the 90% gate.
+- Dashboard typecheck, two safety tests, and production build pass.
+- Python and production npm dependency audits report no known vulnerabilities.
+- Workflow permission/SHA validation and the redacted secret scan pass.
+- Python wheel and source distribution build successfully.
+- Actual localhost `/health/live` and `/health/ready` probes return healthy
+  `research` status.
+- Bootstrap evidence and its checksum index are generated.
+
+Minimum unblock:
+
+1. Run `scripts/verify_clean_bootstrap.sh` from a clean clone on a host with
+   Git, Python 3.12, uv, Node.js, npm, GNU Make, Bash, Docker, and Docker Compose.
+2. Confirm `docker compose up --build -d`, all health probes, and cleanup pass.
+3. Attach those results to the Prompt 1 review before authorizing Prompt 2.
