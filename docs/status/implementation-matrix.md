@@ -49,7 +49,7 @@ Prompt 0 work occurs on `agent/prompt-0-contract`.
 | Architecture | System context | COMPLETE | `docs/architecture/system-context.md` | Human review |
 | Architecture | Scope ADR | COMPLETE | `docs/adr/0001-connected-release-scope.md` | Accepted 2026-07-29 |
 | Bootstrap | Python 3.12 typed package | COMPLETE | `pyproject.toml`, `src/tradeguard/`, package build | Domain implementation begins in TG-002 |
-| Bootstrap | `pyproject.toml` and `uv.lock` | COMPLETE | Locked sync used for local validation | Revalidate on Python 3.12 CI |
+| Bootstrap | `pyproject.toml` and `uv.lock` | COMPLETE | Locked sync succeeded in the working tree and an independent clean clone | Revalidate on Python 3.12 CI |
 | Bootstrap | Ruff, mypy, pytest, Hypothesis, coverage | COMPLETE | 39 offline tests pass; 95.86% coverage | Re-run in CI |
 | Bootstrap | Pre-commit | COMPLETE | `.pre-commit-config.yaml` with local deterministic hooks | Installation not exercised because GNU Make is unavailable |
 | Bootstrap | Required Make targets | COMPLETE | `Makefile`, repository policy tests | GNU Make unavailable locally; direct equivalents passed |
@@ -145,9 +145,11 @@ Prompt 0 work occurs on `agent/prompt-0-contract`.
 1. Domain events, versioned configuration, data, backtesting, strategies,
    validation, risk, monitoring, and complete API/dashboard functionality remain
    future sequential prompts.
-2. Docker, Docker Compose, GNU Make, and Bash are unavailable on the local
-   host. Static container policy checks pass, but Compose build/start and the
-   strict fresh-clone shell script cannot be truthfully claimed as executed.
+2. An independent clean clone passed locked Python/npm installation, static
+   checks, offline tests, and both production builds. Docker, Docker Compose,
+   GNU Make, and Bash are unavailable on the local host. Static container policy
+   checks pass, but Compose build/start and the strict shell verification script
+   cannot be truthfully claimed as executed.
 3. Prompt 1 does not permit push. Remote GitHub Actions therefore have not run;
    GitHub CLI authentication for `EngelN9` was also invalid during assessment
    and must be repaired before the later authorized publication stage.
@@ -177,6 +179,10 @@ Verified locally:
 - Python and production npm dependency audits report no known vulnerabilities.
 - Workflow permission/SHA validation and the redacted secret scan pass.
 - Python wheel and source distribution build successfully.
+- An independent local clone at commit `ae8c0d5` completed locked Python/npm
+  installation, Ruff, mypy, 39 offline Python tests, dashboard checks/tests,
+  dashboard production build, and Python package build; the temporary clone was
+  removed after verification.
 - Actual localhost `/health/live` and `/health/ready` probes return healthy
   `research` status.
 - Bootstrap evidence and its checksum index are generated.
@@ -184,6 +190,7 @@ Verified locally:
 Minimum unblock:
 
 1. Run `scripts/verify_clean_bootstrap.sh` from a clean clone on a host with
-   Git, Python 3.12, uv, Node.js, npm, GNU Make, Bash, Docker, and Docker Compose.
+   Git, Python 3.12, uv, Node.js, npm, Bash, Docker, and Docker Compose.
 2. Confirm `docker compose up --build -d`, all health probes, and cleanup pass.
-3. Attach those results to the Prompt 1 review before authorizing Prompt 2.
+3. Attach the container results to the Prompt 1 review before authorizing
+   Prompt 2.
