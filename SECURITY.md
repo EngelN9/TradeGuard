@@ -53,7 +53,7 @@ TradeGuard 不會因開發速度、操作便利性或績效展示而降低安全
 
 目前 TradeGuard 尚處於：
 
-PLANNING / NOT TRADABLE
+BOOTSTRAP / NOT TRADABLE
 
 在第一個正式版本發布前，安全修正原則上只會套用至預設分支：
 
@@ -113,13 +113,12 @@ TradeGuard 第一版不得：
 
 請使用下列方式私下聯絡維護者：
 
-Security contact: \[請替換為專案安全聯絡信箱\]
+Security contact:
+[GitHub Private Vulnerability Reporting](https://github.com/EngelN9/TradeGuard/security/advisories/new)
 
-建議格式：
-
-security@your-domain.example
-
-在正式安全信箱建立前，可使用 GitHub 的 Private Vulnerability Reporting 功能；如果 repository 尚未啟用此功能，請透過 repository 擁有者公開個人檔案中列出的私人聯絡方式，僅傳送簡短通知，不要在公開頁面張貼漏洞細節。
+如果 repository 的 Private Vulnerability Reporting 尚未啟用，請透過
+repository 擁有者公開個人檔案中列出的私人聯絡方式，僅傳送簡短通知，
+不要在公開頁面張貼漏洞細節。
 
 ### **回報標題**
 

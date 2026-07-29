@@ -80,3 +80,12 @@ def test_example_environment_contains_only_safe_defaults() -> None:
     assert "TRADEGUARD_RUN_CONNECTED=0" in example
     assert "local-development-only" in example
     assert "live" not in example.lower()
+
+
+@pytest.mark.unit
+def test_security_policy_has_private_report_channel_without_placeholder() -> None:
+    security = (REPOSITORY_ROOT / "SECURITY.md").read_text(encoding="utf-8")
+
+    assert "https://github.com/EngelN9/TradeGuard/security/advisories/new" in security
+    assert "請替換為專案安全聯絡信箱" not in security
+    assert "security@your-domain.example" not in security
