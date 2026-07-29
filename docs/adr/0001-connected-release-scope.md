@@ -1,8 +1,8 @@
 # ADR 0001: Connected Release v0.1.0 Scope
 
-- Status: Proposed — human approval required
+- Status: Accepted
 - Date: 2026-07-29
-- Decision owners: Unassigned
+- Decision owner: EngelN9
 - Target release: v0.1.0
 
 ## Context
@@ -22,7 +22,7 @@ Provider and credential choices introduce licensing, entitlement, regional,
 rate-limit, schema, endpoint-confusion, and evidence-retention risks. Those
 choices require explicit human approval and cannot be inferred from convenience.
 
-## Proposed decision
+## Decision
 
 Build v0.1.0 as a modular monolith for a trusted single-user or small-team
 deployment with:
@@ -50,17 +50,19 @@ Strategies are trusted local packages registered through an allowlist. They may
 only emit `Signal`, `TargetPosition`, or `TradeProposal`. They cannot access
 provider clients, credentials, risk configuration, or direct order APIs.
 
-## Decisions deliberately deferred
+## Recorded selections
 
-- Equity public-data provider.
-- Crypto public REST/WebSocket provider.
-- External non-live adapter.
-- Credential scopes and endpoint allowlists for those providers.
-- Software license.
-- Security contact.
-- Owners and accepted provider terms.
+- Equity public-data provider: Twelve Data.
+- Crypto public REST/WebSocket provider: Coinbase Advanced Trade public API.
+- External non-live adapter: Coinbase Advanced Trade static sandbox.
+- Credential policy: public/data-only where possible; reject trading, transfer,
+  withdrawal, sub-account, and key-management scope.
+- Software license: Apache License 2.0.
+- Security contact: GitHub Private Vulnerability Reporting.
+- Dashboard: trusted single-user deployment.
+- Initial gate owner: `EngelN9`.
 
-The candidate matrix and decision record requirements are in
+The complete decision record and review triggers are in
 `docs/release/connected-release-v1.md`.
 
 ## Alternatives considered
@@ -127,13 +129,14 @@ new manifests, and evidence.
 
 ## Acceptance criteria
 
-This ADR may become `Accepted` only when a maintainer:
+This ADR was accepted after maintainer `EngelN9`:
 
-1. approves the release contract and non-goals;
-2. selects the three required adapter categories and records terms review;
-3. approves hostname/environment allowlists and least-privilege scopes;
-4. selects a software license and security contact;
-5. assigns data, risk, security, release, and connected-test owners.
+1. approved the release contract and non-goals;
+2. selected the three required adapter categories;
+3. approved explicit hostname/environment allowlists and least privilege;
+4. selected the software license and security-reporting channel;
+5. accepted initial ownership of data, risk, security, release, and connected
+   tests.
 
 Implementation promotion still follows every later Prompt and human review gate.
 Acceptance of this ADR is not approval to publish, tag, connect credentials, or

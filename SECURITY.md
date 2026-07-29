@@ -1553,7 +1553,12 @@ live
 
 安全回報：
 
-\[請替換為安全聯絡信箱\]
+請使用 GitHub 的私密漏洞回報：
+
+https://github.com/EngelN9/TradeGuard/security/advisories/new
+
+如果該功能暫時不可用，請勿建立包含漏洞細節的公開 Issue。維護者必須先
+恢復私密回報管道，再接收可利用細節或敏感資料。
 
 一般問題請使用 GitHub Issues，但請勿在公開 Issue 張貼漏洞細節或敏感資料。
 
@@ -1584,4 +1589,3 @@ TradeGuard 還必須防止：
 當系統狀態、資料完整性、權限或外部帳戶狀態無法確認時：
 
 > TradeGuard 必須停止高風險操作、保存證據並 fail closed，而不是猜測系統仍然安全。
-

@@ -40,13 +40,13 @@ Prompt 0 work occurs on `agent/prompt-0-contract`.
 | Governance | Prompted delivery stages and gates | COMPLETE | `PROMPTS.md` | Execute sequentially |
 | Governance | Product positioning and safety boundary | PARTIAL | `README.md`, `SECURITY.md` | Update as implementation becomes real |
 | Governance | Contribution guide | MISSING | None | TG-001 |
-| Governance | Public software license | BLOCKED | None | Maintainer selects license before bootstrap approval |
+| Governance | Public software license | COMPLETE | Apache-2.0 approved on 2026-07-29 | Add `LICENSE` in TG-001 |
 | Governance | CODEOWNERS | MISSING | None | TG-001 |
-| Governance | Private security contact | BLOCKED | Placeholder in `SECURITY.md` | Maintainer supplies monitored address/channel |
+| Governance | Private security contact | COMPLETE | GitHub Private Vulnerability Reporting approved | Verify repository feature before release |
 | Release | Connected Release contract | COMPLETE | `docs/release/connected-release-v1.md` | Human approval required |
 | Release | Implementation matrix | COMPLETE | This file | Maintain per issue |
 | Architecture | System context | COMPLETE | `docs/architecture/system-context.md` | Human review |
-| Architecture | Scope ADR | COMPLETE | `docs/adr/0001-connected-release-scope.md` | Status remains Proposed |
+| Architecture | Scope ADR | COMPLETE | `docs/adr/0001-connected-release-scope.md` | Accepted 2026-07-29 |
 | Bootstrap | Python 3.12 typed package | MISSING | None | TG-001 |
 | Bootstrap | `pyproject.toml` and `uv.lock` | MISSING | None | TG-001 |
 | Bootstrap | Ruff, mypy, pytest, Hypothesis, coverage | MISSING | None | TG-001 |
@@ -78,10 +78,10 @@ Prompt 0 work occurs on `agent/prompt-0-contract`.
 | Data | Crypto-specific quality gates | MISSING | None | TG-003 |
 | Data | Quarantine enforcement | MISSING | None | TG-003 |
 | Data | Synthetic fixtures and CLI | MISSING | None | TG-003 |
-| Equity adapter | Provider decision | BLOCKED | Candidate matrix only | Human decision after Prompt 0 |
+| Equity adapter | Provider decision | COMPLETE | Twelve Data approved 2026-07-29 | Terms recheck before TG-004 |
 | Equity adapter | Protocol and implementation | BLOCKED | None | TG-004 after decision |
 | Equity adapter | Offline/connected/schema-drift tests | BLOCKED | None | TG-004 after decision |
-| Crypto adapter | Provider decision | BLOCKED | Candidate matrix only | Human decision after Prompt 0 |
+| Crypto adapter | Provider decision | COMPLETE | Coinbase public API approved 2026-07-29 | Terms recheck before TG-005 |
 | Crypto adapter | REST/WebSocket implementation | BLOCKED | None | TG-005 after decision |
 | Crypto adapter | Reconnect/sequence/connected tests | BLOCKED | None | TG-005 after decision |
 | Backtest | Deterministic event loop | MISSING | None | TG-006 |
@@ -107,7 +107,7 @@ Prompt 0 work occurs on `agent/prompt-0-contract`.
 | Evidence | Collect/verify/index and tamper detection | MISSING | None | TG-010 |
 | Paper | Deterministic paper broker | MISSING | None | TG-011 |
 | Paper | Order state machine/idempotency/recovery | MISSING | None | TG-011 |
-| External adapter | Adapter decision | BLOCKED | Candidate matrix only | Human decision after Prompt 0 |
+| External adapter | Adapter decision | COMPLETE | Coinbase static sandbox approved 2026-07-29 | Static behavior is a known limitation |
 | External adapter | Non-live implementation/tests | BLOCKED | None | TG-012 after decision |
 | Monitoring | Paper/shadow event ingestion | MISSING | None | TG-013 |
 | Reconciliation | Five-state reconciliation | MISSING | None | TG-013 |
@@ -151,8 +151,7 @@ Prompt 0 work occurs on `agent/prompt-0-contract`.
 
 ## Prompt 0 promotion result
 
-`BLOCKED — HUMAN REVIEW REQUIRED`
+`PASS`
 
-The documentation deliverables exist, and no connected/trading claim is made.
-Promotion to Prompt 1 requires the decisions listed in
-`docs/release/connected-release-v1.md` Section 18.
+The documentation deliverables exist, the required decisions are recorded, and
+no connected/trading claim is made. Prompt 1 implementation is authorized.

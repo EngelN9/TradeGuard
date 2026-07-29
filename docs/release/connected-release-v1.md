@@ -1,6 +1,6 @@
 # TradeGuard Connected Release v1 Contract
 
-Status: `DRAFT / HUMAN APPROVAL REQUIRED`
+Status: `APPROVED FOR IMPLEMENTATION`
 
 Target version: `v0.1.0`
 
@@ -16,8 +16,9 @@ This is a research, backtest, replay, paper, and shadow-monitoring release. It i
 not a production trading system, does not provide investment advice, does not
 guarantee profit, and must not be represented as capable of live trading.
 
-The release contract is not approved until a maintainer records the decisions in
-Section 18. No connected provider is approved by this draft.
+The release contract was approved by maintainer `EngelN9` on `2026-07-29`.
+Approval authorizes staged implementation through the mandatory review gates. It
+does not authorize credentials, a release tag, a GitHub Release, or live trading.
 
 ## 2. Supported scope
 
@@ -352,25 +353,32 @@ release deprecated as appropriate, preserving evidence, documenting impact, and
 returning users to the last verified version. It never enables a fallback live
 endpoint and never deletes adverse evidence.
 
-## 18. Human decisions required
+## 18. Human decision record
 
-Each decision must identify the maintainer, decision date, evidence/source, and
-review date.
+Decision owner: `EngelN9`
 
-- [ ] Approve or amend the `v0.1.0` scope and supported markets.
-- [ ] Select one equity public-data provider and accept its license, quota,
-      evidence-retention, and regional terms.
-- [ ] Select one crypto REST/WebSocket provider and accept its terms and
-      regional availability.
-- [ ] Select one external paper/sandbox/read-only adapter.
-- [ ] Decide whether the external adapter must exercise behavioral paper orders
-      or whether read-only reconciliation is acceptable.
-- [ ] Approve credential scopes and host allowlists; no secret is requested now.
-- [ ] Select the public repository software license.
-- [ ] Replace the placeholder security contact in `SECURITY.md` with a
-      maintainable private reporting channel before release.
-- [ ] Confirm dashboard scope: single-user trusted deployment for v0.1.0.
-- [ ] Assign owners for data, risk, security, release, and connected tests.
+Decision date: `2026-07-29`
+
+Review trigger: before each mandatory human gate and whenever provider terms,
+regional availability, permissions, or endpoints change.
+
+- [x] `v0.1.0` scope and supported markets approved as written.
+- [x] Equity public-data provider: Twelve Data. Only data-only credentials are
+      allowed; connected tests remain opt-in and license-compatible fixtures are
+      required for public CI.
+- [x] Crypto REST/WebSocket provider: Coinbase Advanced Trade public endpoints.
+      Public channels are preferred; no private credential is required for the
+      market-data adapter.
+- [x] External non-live adapter: Coinbase Advanced Trade static sandbox. Its
+      static behavior is a known limitation and does not replace the internal
+      deterministic paper broker.
+- [x] Credential and host policy approved: least privilege, explicit allowlists,
+      no trading/transfer/withdrawal scope, and no silent fallback.
+- [x] Public software license: Apache License 2.0.
+- [x] Security reporting: GitHub Private Vulnerability Reporting.
+- [x] Dashboard scope: trusted single-user deployment for v0.1.0.
+- [x] Initial data, risk, security, release, and connected-test owner:
+      `EngelN9`.
 
 ## 19. Work breakdown
 
@@ -685,14 +693,13 @@ flowchart TD
 
 ## 21. Connected Release exit criteria
 
-The contract exits Prompt 0 when:
+The contract exits Prompt 0 because:
 
-- this contract, implementation matrix, context document, and ADR are reviewed;
-- every external provider remains explicitly undecided or is approved by a
-  recorded maintainer decision;
+- this contract, implementation matrix, context document, and ADR were reviewed;
+- every external provider choice is recorded above;
 - the public repository license and security contact have owners;
-- the work breakdown is accepted;
-- the repository is still described as planning/not tradable;
+- the work breakdown was accepted;
+- the repository remains planning/not tradable;
 - no external connection, credential, runtime dependency, or application code
   was introduced by Prompt 0.
 
