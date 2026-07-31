@@ -9,6 +9,9 @@ from uuid import UUID
 
 from pydantic import TypeAdapter
 
+from tradeguard.adapters.equity.connected import ConnectedSmokeResult
+from tradeguard.adapters.equity.protocol import EquityAdapterCapabilities, HistoricalBarsRequest
+from tradeguard.adapters.equity.twelve_data import reviewed_time_series_schema
 from tradeguard.config.models import TradeGuardConfig
 from tradeguard.data.manifest import DatasetManifest
 from tradeguard.data.models import AnyMarketRecord, InstrumentMetadata
@@ -77,6 +80,14 @@ def schema_documents() -> dict[str, object]:
         "dataset-manifest.schema.json": DatasetManifest.model_json_schema(),
         "quality-report.schema.json": QualityReport.model_json_schema(),
         "dataset-package.schema.json": DatasetPackage.model_json_schema(),
+        "adapters/equity-capabilities.schema.json": (EquityAdapterCapabilities.model_json_schema()),
+        "adapters/equity-historical-bars-request.schema.json": (
+            HistoricalBarsRequest.model_json_schema()
+        ),
+        "adapters/twelve-data-time-series.schema.json": reviewed_time_series_schema(),
+        "adapters/equity-connected-smoke-result.schema.json": (
+            ConnectedSmokeResult.model_json_schema()
+        ),
         "examples/sample-run-manifest.json": canonicalize(sample_run_manifest()),
     }
 

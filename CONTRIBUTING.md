@@ -47,8 +47,9 @@ npm run build --prefix web
 ```
 
 Connected tests are never part of default CI. They require an explicit
-`TRADEGUARD_RUN_CONNECTED=1`, an approved provider, and the least privilege
-described in `docs/release/connected-release-v1.md`.
+`TRADEGUARD_RUN_CONNECTED_TESTS=1`, the applicable accepted ADR, a reviewed
+session/endpoint allowlist, and the least privilege described in
+`docs/release/connected-release-v1.md`.
 
 ## Pull requests
 

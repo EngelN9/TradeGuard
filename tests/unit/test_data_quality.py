@@ -46,6 +46,8 @@ EXPECTED_QUALITY_CODES = {
     "trading_session_violation",
     "half_day_handling",
     "corporate_action_mismatch",
+    "corporate_actions_unsupported",
+    "suspected_unmodeled_corporate_action",
     "split_discontinuity",
     "delisted_symbol_handling",
     "point_in_time_universe_violation",
@@ -231,6 +233,16 @@ def test_equity_session_half_day_and_corporate_action_checks() -> None:
     assert QualityCode.SPLIT_DISCONTINUITY in _codes(
         _evaluate("stock_split", records=tuple(discontinuous))
     )
+
+    unsupported_context = split.quality_context().model_copy(
+        update={"corporate_actions": (), "corporate_actions_supported": False}
+    )
+    unsupported = _evaluate("stock_split", context=unsupported_context)
+    assert {
+        QualityCode.CORPORATE_ACTIONS_UNSUPPORTED,
+        QualityCode.SUSPECTED_UNMODELED_CORPORATE_ACTION,
+    } <= _codes(unsupported)
+    assert unsupported.status is QualityStatus.QUARANTINED
 
 
 def _quote_document(

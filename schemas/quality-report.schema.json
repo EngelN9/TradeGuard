@@ -15,6 +15,8 @@
         "trading_session_violation",
         "half_day_handling",
         "corporate_action_mismatch",
+        "corporate_actions_unsupported",
+        "suspected_unmodeled_corporate_action",
         "split_discontinuity",
         "delisted_symbol_handling",
         "point_in_time_universe_violation",

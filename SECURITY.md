@@ -53,7 +53,7 @@ TradeGuard 不會因開發速度、操作便利性或績效展示而降低安全
 
 目前 TradeGuard 尚處於：
 
-DATA FOUNDATION / NOT TRADABLE
+EQUITY ADAPTER IMPLEMENTED / NOT TRADABLE
 
 目前已完成 repository bootstrap、Prompt 2 核心資料合約與 Prompt 3 離線
 資料基礎；尚未進入策略、回測或外部資料接入階段，也沒有正式下單、提款或

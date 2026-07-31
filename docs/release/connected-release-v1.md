@@ -365,7 +365,8 @@ regional availability, permissions, or endpoints change.
 - [x] `v0.1.0` scope and supported markets approved as written.
 - [x] Equity public-data provider: Twelve Data. Only data-only credentials are
       allowed; connected tests remain opt-in and license-compatible fixtures are
-      required for public CI.
+      required for public CI. Prompt 4 conditions and unresolved promotion
+      blockers are recorded in `docs/adr/0002-twelve-data-equity-adapter.md`.
 - [x] Crypto REST/WebSocket provider: Coinbase Advanced Trade public endpoints.
       Public channels are preferred; no private credential is required for the
       market-data adapter.

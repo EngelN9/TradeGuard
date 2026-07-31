@@ -1,0 +1,86 @@
+{
+  "capture": {
+    "adjustment": "none",
+    "fixture_schema_version": "1.0.0",
+    "license_reviewed_at": "2026-07-31",
+    "raw_payload_published": false,
+    "raw_payload_retained": false,
+    "redistribution_allowed": false,
+    "sanitized": true,
+    "source_window_end": "2024-01-10",
+    "source_window_start": "2024-01-02",
+    "terms_reviewed_version": "2026-01-01",
+    "usage_class": "internal_non_display",
+    "values_are_deterministic_synthetic": true
+  },
+  "response": {
+    "meta": {
+      "currency": "USD",
+      "exchange": "NASDAQ",
+      "exchange_timezone": "America/New_York",
+      "interval": "1day",
+      "mic_code": "XNAS",
+      "symbol": "AAPL",
+      "type": "Common Stock"
+    },
+    "status": "ok",
+    "values": [
+      {
+        "close": "106.25",
+        "datetime": "2024-01-10",
+        "high": "107.00",
+        "low": "104.75",
+        "open": "105.00",
+        "volume": "1060000"
+      },
+      {
+        "close": "105.25",
+        "datetime": "2024-01-09",
+        "high": "106.00",
+        "low": "103.75",
+        "open": "104.00",
+        "volume": "1050000"
+      },
+      {
+        "close": "104.25",
+        "datetime": "2024-01-08",
+        "high": "105.00",
+        "low": "102.75",
+        "open": "103.00",
+        "volume": "1040000"
+      },
+      {
+        "close": "103.25",
+        "datetime": "2024-01-05",
+        "high": "104.00",
+        "low": "101.75",
+        "open": "102.00",
+        "volume": "1030000"
+      },
+      {
+        "close": "102.25",
+        "datetime": "2024-01-04",
+        "high": "103.00",
+        "low": "100.75",
+        "open": "101.00",
+        "volume": "1020000"
+      },
+      {
+        "close": "101.25",
+        "datetime": "2024-01-03",
+        "high": "102.00",
+        "low": "99.75",
+        "open": "100.00",
+        "volume": "1010000"
+      },
+      {
+        "close": "100.25",
+        "datetime": "2024-01-02",
+        "high": "101.00",
+        "low": "98.75",
+        "open": "99.00",
+        "volume": "1000000"
+      }
+    ]
+  }
+}

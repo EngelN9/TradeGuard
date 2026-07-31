@@ -1,0 +1,141 @@
+{
+  "$defs": {
+    "ConnectedSmokeStatus": {
+      "enum": [
+        "SKIP_NOT_OPTED_IN",
+        "BLOCKED_MISSING_CREDENTIAL",
+        "BLOCKED_INVALID_CREDENTIAL",
+        "BLOCKED_ENTITLEMENT",
+        "BLOCKED_RATE_LIMIT",
+        "BLOCKED_PROVIDER_UNAVAILABLE",
+        "BLOCKED_MARKET_CALENDAR",
+        "FAIL",
+        "PASS"
+      ],
+      "title": "ConnectedSmokeStatus",
+      "type": "string"
+    },
+    "QualityStatus": {
+      "enum": [
+        "PASS",
+        "WARN",
+        "FAIL",
+        "QUARANTINED"
+      ],
+      "title": "QualityStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "No-secret, no-market-value connected qualification record.",
+  "properties": {
+    "manifest_checksum": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Manifest Checksum"
+    },
+    "observed_at": {
+      "format": "date-time",
+      "title": "Observed At",
+      "type": "string"
+    },
+    "passed": {
+      "title": "Passed",
+      "type": "boolean"
+    },
+    "promotion_blockers": {
+      "default": [
+        "exact subscription plan not recorded in ADR",
+        "account owner/use classification not recorded in ADR",
+        "public-display entitlement not confirmed; public display remains prohibited",
+        "release promotion requires a human-reviewed PASS connected observation"
+      ],
+      "items": {
+        "type": "string"
+      },
+      "title": "Promotion Blockers",
+      "type": "array"
+    },
+    "promotion_gate": {
+      "const": "BLOCKED",
+      "default": "BLOCKED",
+      "title": "Promotion Gate",
+      "type": "string"
+    },
+    "provider": {
+      "const": "twelve_data",
+      "default": "twelve_data",
+      "title": "Provider",
+      "type": "string"
+    },
+    "provider_contacted": {
+      "title": "Provider Contacted",
+      "type": "boolean"
+    },
+    "quality_status": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/QualityStatus"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "raw_payload_published": {
+      "const": false,
+      "default": false,
+      "title": "Raw Payload Published",
+      "type": "boolean"
+    },
+    "raw_payload_retained": {
+      "const": false,
+      "default": false,
+      "title": "Raw Payload Retained",
+      "type": "boolean"
+    },
+    "reason_code": {
+      "title": "Reason Code",
+      "type": "string"
+    },
+    "record_count": {
+      "minimum": 0,
+      "title": "Record Count",
+      "type": "integer"
+    },
+    "request_attempts": {
+      "maximum": 2,
+      "minimum": 0,
+      "title": "Request Attempts",
+      "type": "integer"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/ConnectedSmokeStatus"
+    }
+  },
+  "required": [
+    "status",
+    "reason_code",
+    "passed",
+    "provider_contacted",
+    "observed_at",
+    "request_attempts",
+    "record_count"
+  ],
+  "title": "ConnectedSmokeResult",
+  "type": "object"
+}

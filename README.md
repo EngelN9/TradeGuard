@@ -20,7 +20,7 @@ TradeGuard 不以「保證獲利」為產品目標，而是提供一套更可靠
 
 ## **專案狀態**
 
-DATA FOUNDATION / NOT TRADABLE
+EQUITY ADAPTER IMPLEMENTED / NOT TRADABLE
 
 目前專案已完成 repository bootstrap、Prompt 2 核心資料合約與 Prompt 3
 離線資料基礎；尚未進入策略、回測或外部資料接入階段。
@@ -678,6 +678,8 @@ make schemas
 make data-fixtures
 
 make prompt3-evidence
+
+make prompt4-evidence
 
 make dev-up
 

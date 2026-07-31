@@ -1,0 +1,7 @@
+{
+  "review_status": "BLOCKED_PENDING_SESSION_REVIEW",
+  "reviewed_at": null,
+  "reviewed_by": null,
+  "schema_version": "1.0.0",
+  "sessions": []
+}

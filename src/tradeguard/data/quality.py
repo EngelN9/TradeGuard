@@ -68,6 +68,8 @@ class QualityCode(StrEnum):
     TRADING_SESSION_VIOLATION = "trading_session_violation"
     HALF_DAY_HANDLING = "half_day_handling"
     CORPORATE_ACTION_MISMATCH = "corporate_action_mismatch"
+    CORPORATE_ACTIONS_UNSUPPORTED = "corporate_actions_unsupported"
+    SUSPECTED_UNMODELED_CORPORATE_ACTION = "suspected_unmodeled_corporate_action"
     SPLIT_DISCONTINUITY = "split_discontinuity"
     DELISTED_SYMBOL_HANDLING = "delisted_symbol_handling"
     POINT_IN_TIME_UNIVERSE_VIOLATION = "point_in_time_universe_violation"
@@ -173,6 +175,7 @@ class QualityContext(QualityModel):
     instrument_metadata: tuple[InstrumentMetadata, ...]
     market_sessions: tuple[MarketSession, ...] = ()
     corporate_actions: tuple[CorporateAction, ...] = ()
+    corporate_actions_supported: bool = True
     maintenance_intervals: tuple[MaintenanceInterval, ...] = ()
 
 
@@ -681,6 +684,49 @@ class QualityGate:
             issues,
         )
         self._check_corporate_actions(records, context, issues)
+        if not context.corporate_actions_supported:
+            issues.append(
+                _issue(
+                    QualityCode.CORPORATE_ACTIONS_UNSUPPORTED,
+                    QualityStatus.WARN,
+                    "corporate actions are unsupported; prices are unadjusted and total-return "
+                    "claims are prohibited",
+                )
+            )
+            self._check_suspected_unmodeled_corporate_actions(
+                records,
+                context.policy,
+                issues,
+            )
+
+    @staticmethod
+    def _check_suspected_unmodeled_corporate_actions(
+        records: Sequence[tuple[int, MarketDataRecord]],
+        policy: QualityPolicy,
+        issues: list[QualityIssue],
+    ) -> None:
+        bars_by_symbol: dict[tuple[str, str], list[tuple[int, OHLCVBar]]] = defaultdict(list)
+        for index, record in records:
+            if isinstance(record, OHLCVBar):
+                bars_by_symbol[(record.venue, record.symbol)].append((index, record))
+        for bars in bars_by_symbol.values():
+            ordered = sorted(bars, key=lambda item: item[1].event_time_utc)
+            for (left_index, left), (right_index, right) in pairwise(ordered):
+                if left.close_price <= 0:
+                    continue
+                discontinuity = abs(right.open_price - left.close_price) / left.close_price
+                if discontinuity > policy.max_price_jump_ratio:
+                    issues.append(
+                        _issue(
+                            QualityCode.SUSPECTED_UNMODELED_CORPORATE_ACTION,
+                            QualityStatus.QUARANTINED,
+                            "large unadjusted overnight discontinuity requires corporate-action "
+                            "review; no split ratio was inferred",
+                            left_index,
+                            right_index,
+                            context={"discontinuity_ratio": str(discontinuity)},
+                        )
+                    )
 
     @staticmethod
     def _record_in_session(record: MarketDataRecord, session: MarketSession) -> bool:

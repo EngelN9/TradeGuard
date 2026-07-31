@@ -1,10 +1,10 @@
 # TradeGuard v0.1.0 Implementation Matrix
 
-Assessment date: `2026-07-29`
+Assessment date: `2026-07-31`
 
-Base Git SHA: `65d3c6f8499a189685c7c21e722c8ff6bf498cdb`
+Base Git SHA before Prompt 4: `219fce6e75c07c05d3f6e662cac70db397316b3f`
 
-Overall status: `DATA FOUNDATION / NOT TRADABLE`
+Overall status: `EQUITY ADAPTER IMPLEMENTED / NOT TRADABLE`
 
 Status vocabulary:
 
@@ -39,6 +39,13 @@ Prompt 3 on `codex/prompt-3-data-foundation` adds canonical equity and crypto
 records, point-in-time reference data, content-addressed raw storage, complete
 dataset manifests and lineage, deterministic quality gates, synthetic fixtures,
 and an offline data CLI. It does not connect to a real provider or account.
+
+Prompt 4 on `codex/prompt-4-twelve-data-adapter` adds a provider-neutral equity
+data protocol, a tightly allowlisted Twelve Data daily-bar adapter, sanitized
+synthetic contract fixtures, strict UTC/session normalization, schema-drift and
+resilience tests, and an opt-in connected state machine. It adds no broker,
+account, order, fallback-provider, real-time, corporate-action, or live
+capability. Connected qualification was not attempted.
 
 The local checkout initially lacked Git metadata. It was safely reattached to
 remote commit `65d3c6f` after all four local blob hashes matched the remote.
@@ -90,9 +97,10 @@ Prompt 0 work occurs on `agent/prompt-0-contract`.
 | Data | Crypto-specific quality gates | COMPLETE | 24/7 gaps, precision, notional, maintenance, quote/spread/asset checks | Real venue semantics remain TG-005 |
 | Data | Quarantine enforcement | COMPLETE | FAIL/QUARANTINED reports cannot enter validation evidence | Persistence and operator workflow remain later work |
 | Data | Synthetic fixtures and CLI | COMPLETE | Eleven committed fixtures; validate/manifest/inspect commands; evidence bundle | No external data is claimed |
-| Equity adapter | Provider decision | COMPLETE | Twelve Data approved 2026-07-29 | Terms recheck before TG-004 |
-| Equity adapter | Protocol and implementation | BLOCKED | None | TG-004 after decision |
-| Equity adapter | Offline/connected/schema-drift tests | BLOCKED | None | TG-004 after decision |
+| Equity adapter | Provider decision | COMPLETE | ADR 0002, approved with conditions 2026-07-31 | Recheck terms and account entitlement before each connected RC |
+| Equity adapter | Protocol and implementation | COMPLETE | Provider-neutral protocol; exact host/path/symbol/MIC allowlists; UTC/session mapping | Corporate actions and fallback remain disabled |
+| Equity adapter | Offline/schema-drift tests | COMPLETE | 10 adapter contracts; status/error/redaction/calendar/quality tests | Preserve sanitized-only fixture policy |
+| Equity adapter | Connected smoke | BLOCKED | `SKIP_NOT_OPTED_IN`, `provider_contacted=false` | Exact plan/account/license/display rights, reviewed sessions, credential, and one RC observation |
 | Crypto adapter | Provider decision | COMPLETE | Coinbase public API approved 2026-07-29 | Terms recheck before TG-005 |
 | Crypto adapter | REST/WebSocket implementation | BLOCKED | None | TG-005 after decision |
 | Crypto adapter | Reconnect/sequence/connected tests | BLOCKED | None | TG-005 after decision |
@@ -153,15 +161,16 @@ Prompt 0 work occurs on `agent/prompt-0-contract`.
 
 ## Critical gaps
 
-1. Connected data adapters, backtesting, strategies, validation, risk,
-   monitoring, and complete API/dashboard functionality remain future
+1. Crypto/external connected adapters, backtesting, strategies, validation,
+   risk, monitoring, and complete API/dashboard functionality remain future
    sequential prompts.
 2. Prompt 1 through Prompt 3 do not authorize publishing their implementation
    branches, so remote GitHub Actions have not run for those changes. The
    `gh` CLI token remains invalid even though the Git remote credential and
    GitHub App successfully synchronized the public `main` security policy.
-3. No connected qualification can be claimed; no provider, account, or broker
-   connection was attempted.
+3. No connected qualification can be claimed; the Twelve Data result is
+   `SKIP_NOT_OPTED_IN`, no provider/account/broker connection was attempted, and
+   ADR 0002 promotion blockers remain unresolved.
 4. The repository remains non-tradable and has no order-submission, withdrawal,
    transfer, canary, or live path.
 
@@ -269,4 +278,41 @@ Verified locally:
 - No external provider, account, credential, strategy, adapter, order route,
   canary environment, or live-trading capability was added or exercised.
 
-Prompt 4 may begin only after maintainer review of this promotion evidence.
+Prompt 4 was authorized by the maintainer through the 2026-07-31 provider review.
+
+## Prompt 4 implementation result
+
+`IMPLEMENTED / PROMOTION BLOCKED`
+
+Verified locally:
+
+- The provider-neutral equity protocol covers reviewed metadata, historical
+  bars, latest completed bar, calendar, timezone, symbol normalization, and
+  explicit unsupported corporate actions.
+- The Twelve Data client permits only HTTPS GET to
+  `api.twelvedata.com/time_series`, sends credentials only by authorization
+  header, limits responses to 1 MiB, times out after 10 seconds, and retries
+  exactly once only after HTTP 429.
+- Only AAPL, NASDAQ, XNAS/XNGS, `1day`, `outputsize <= 10`, and `adjust=none`
+  pass the adapter scope boundary.
+- Strict provider schema, Decimal parsing, exchange-local session-date mapping,
+  reviewed UTC sessions, manifest/checksum creation, and the Prompt 3 quality
+  gate pass the sanitized contract.
+- Corporate actions remain unsupported; unadjusted data carries a warning and
+  suspected unmodeled discontinuities are quarantined without an inferred split.
+- Ten focused adapter contract tests pass. The complete offline suite has 145
+  passing tests, one connected test deselected, and 92.94% branch-aware coverage.
+- Ruff, strict mypy, schema snapshot reproduction, workflow validation, secret
+  scan, dashboard checks/tests/build, and package build pass.
+- Prompt 4 changes no dependency or lock entry. System-CA-enabled Python and
+  production npm audits report no known dependency vulnerabilities; the local
+  unpublished `tradeguard` package is correctly skipped by the PyPI audit.
+- Public Prompt 4 evidence contains only sanitized synthetic fixtures, schemas,
+  counts, dates, checksums, manifests, quality status, and licensing metadata.
+  It records `raw_payload_published=false`.
+- Connected evidence is `SKIP_NOT_OPTED_IN`, `passed=false`, and
+  `provider_contacted=false`.
+
+Promotion remains `BLOCKED` until the exact Twelve Data plan, account owner/use
+classification, license classification, public-display rights, connected
+session window, and one release-candidate connected `PASS` are human reviewed.

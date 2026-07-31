@@ -2,7 +2,7 @@ UV ?= uv
 
 .PHONY: setup format lint typecheck test test-unit test-property test-integration
 .PHONY: test-contract test-replay test-e2e test-connected evidence dev-up dev-down
-.PHONY: api worker web build schemas data-fixtures prompt3-evidence
+.PHONY: api worker web build schemas data-fixtures prompt3-evidence prompt4-evidence
 
 setup:
 	$(UV) sync --locked
@@ -44,9 +44,10 @@ test-e2e:
 	npm test --prefix web
 
 test-connected:
-	@if [ "$$TRADEGUARD_RUN_CONNECTED" != "1" ]; then \
-		echo "SKIP: set TRADEGUARD_RUN_CONNECTED=1 after provider approval"; \
+	@if [ "$$TRADEGUARD_RUN_CONNECTED_TESTS" != "1" ]; then \
+		echo "SKIP: set TRADEGUARD_RUN_CONNECTED_TESTS=1 after ADR 0002 prerequisites"; \
 	else \
+		$(UV) run python scripts/run_twelve_data_connected_smoke.py && \
 		$(UV) run pytest -m connected tests/connected; \
 	fi
 
@@ -61,6 +62,9 @@ data-fixtures:
 
 prompt3-evidence:
 	$(UV) run python scripts/collect_prompt3_evidence.py
+
+prompt4-evidence:
+	$(UV) run python scripts/collect_prompt4_evidence.py
 
 dev-up:
 	docker compose up --build -d

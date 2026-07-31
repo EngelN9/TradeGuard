@@ -1,12 +1,34 @@
-"""Connected-test placeholder kept separate from deterministic CI."""
+"""Manually opted-in Twelve Data smoke kept outside deterministic CI."""
 
 import os
 
 import pytest
+from scripts.run_twelve_data_connected_smoke import CALENDAR_PATH
+
+from tradeguard.adapters.equity.calendar import (
+    MarketCalendarUnavailableError,
+    ReviewedCalendarDocument,
+)
+from tradeguard.adapters.equity.connected import (
+    RUN_CONNECTED_VARIABLE,
+    ConnectedSmokeStatus,
+    run_connected_smoke,
+)
 
 
 @pytest.mark.connected
-def test_connected_adapters_are_not_implemented_in_prompt_1() -> None:
-    if os.getenv("TRADEGUARD_RUN_CONNECTED") != "1":
-        pytest.skip("connected tests require TRADEGUARD_RUN_CONNECTED=1")
-    pytest.skip("connected adapters are introduced only after their staged review gates")
+def test_twelve_data_connected_smoke_requires_explicit_opt_in_and_reviewed_calendar() -> None:
+    if os.getenv(RUN_CONNECTED_VARIABLE) != "1":
+        pytest.skip(f"connected tests require {RUN_CONNECTED_VARIABLE}=1")
+    document = ReviewedCalendarDocument.model_validate_json(
+        CALENDAR_PATH.read_text(encoding="utf-8")
+    )
+    try:
+        calendar_registry = document.to_registry()
+    except MarketCalendarUnavailableError as exc:
+        pytest.fail(str(exc))
+    result = run_connected_smoke(
+        environment=os.environ,
+        calendar_registry=calendar_registry,
+    )
+    assert result.status is ConnectedSmokeStatus.PASS, result.model_dump_json()

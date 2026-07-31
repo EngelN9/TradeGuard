@@ -48,6 +48,7 @@ def test_makefile_has_required_targets_and_no_live_target() -> None:
         "schemas",
         "data-fixtures",
         "prompt3-evidence",
+        "prompt4-evidence",
         "dev-up",
         "dev-down",
     }
@@ -55,7 +56,7 @@ def test_makefile_has_required_targets_and_no_live_target() -> None:
     for target in required_targets:
         assert f"\n{target}:" in f"\n{makefile}"
     assert "\nlive:" not in f"\n{makefile}"
-    assert 'TRADEGUARD_RUN_CONNECTED" != "1"' in makefile
+    assert 'TRADEGUARD_RUN_CONNECTED_TESTS" != "1"' in makefile
 
 
 @pytest.mark.unit
@@ -80,7 +81,8 @@ def test_example_environment_contains_only_safe_defaults() -> None:
     example = (REPOSITORY_ROOT / ".env.example").read_text(encoding="utf-8")
 
     assert "TRADEGUARD_ENV=research" in example
-    assert "TRADEGUARD_RUN_CONNECTED=0" in example
+    assert "TRADEGUARD_RUN_CONNECTED_TESTS=0" in example
+    assert "TRADEGUARD_TWELVE_DATA_API_KEY=" in example
     assert "local-development-only" in example
     assert "live" not in example.lower()
 
@@ -96,7 +98,7 @@ def test_security_policy_has_private_report_channel_without_placeholder() -> Non
 
 @pytest.mark.unit
 def test_public_status_documents_share_the_current_non_tradable_stage() -> None:
-    expected_status = "DATA FOUNDATION / NOT TRADABLE"
+    expected_status = "EQUITY ADAPTER IMPLEMENTED / NOT TRADABLE"
     readme = (REPOSITORY_ROOT / "README.md").read_text(encoding="utf-8")
     security = (REPOSITORY_ROOT / "SECURITY.md").read_text(encoding="utf-8")
 
@@ -104,3 +106,5 @@ def test_public_status_documents_share_the_current_non_tradable_stage() -> None:
     assert expected_status in security
     assert "CORE CONTRACTS / NOT TRADABLE" not in readme
     assert "CORE CONTRACTS / NOT TRADABLE" not in security
+    assert "DATA FOUNDATION / NOT TRADABLE" not in readme
+    assert "DATA FOUNDATION / NOT TRADABLE" not in security

@@ -1,0 +1,204 @@
+{
+  "$defs": {
+    "RateLimitDeclaration": {
+      "additionalProperties": false,
+      "description": "Documented limits; account dashboard remains authoritative.",
+      "properties": {
+        "authoritative_source": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Authoritative Source",
+          "type": "string"
+        },
+        "known_basic_api_credits_per_minute": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Known Basic Api Credits Per Minute"
+        },
+        "known_basic_daily_credits": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Known Basic Daily Credits"
+        },
+        "model": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Model",
+          "type": "string"
+        },
+        "reviewed_at": {
+          "format": "date",
+          "title": "Reviewed At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "model",
+        "authoritative_source",
+        "reviewed_at"
+      ],
+      "title": "RateLimitDeclaration",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Machine-readable declaration of enabled, not merely provider-offered, features.",
+  "properties": {
+    "approval_status": {
+      "const": "APPROVED_WITH_CONDITIONS",
+      "title": "Approval Status",
+      "type": "string"
+    },
+    "approved_mics": {
+      "items": {
+        "enum": [
+          "XNAS",
+          "XNGS"
+        ],
+        "type": "string"
+      },
+      "title": "Approved Mics",
+      "type": "array"
+    },
+    "approved_symbols": {
+      "items": {
+        "const": "AAPL",
+        "type": "string"
+      },
+      "title": "Approved Symbols",
+      "type": "array"
+    },
+    "authentication_required": {
+      "title": "Authentication Required",
+      "type": "boolean"
+    },
+    "corporate_actions": {
+      "title": "Corporate Actions",
+      "type": "boolean"
+    },
+    "delayed_or_end_of_day": {
+      "title": "Delayed Or End Of Day",
+      "type": "boolean"
+    },
+    "enabled_host": {
+      "const": "api.twelvedata.com",
+      "title": "Enabled Host",
+      "type": "string"
+    },
+    "enabled_paths": {
+      "items": {
+        "const": "/time_series",
+        "type": "string"
+      },
+      "title": "Enabled Paths",
+      "type": "array"
+    },
+    "historical_bars": {
+      "title": "Historical Bars",
+      "type": "boolean"
+    },
+    "latest_bar": {
+      "title": "Latest Bar",
+      "type": "boolean"
+    },
+    "latest_quote": {
+      "title": "Latest Quote",
+      "type": "boolean"
+    },
+    "licensing_constraints": {
+      "items": {
+        "maxLength": 2048,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Licensing Constraints",
+      "type": "array"
+    },
+    "limitations": {
+      "items": {
+        "maxLength": 2048,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    },
+    "market_calendar_source": {
+      "const": "internal_deterministic_registry",
+      "title": "Market Calendar Source",
+      "type": "string"
+    },
+    "provider": {
+      "maxLength": 2048,
+      "minLength": 1,
+      "title": "Provider",
+      "type": "string"
+    },
+    "public_market_data": {
+      "title": "Public Market Data",
+      "type": "boolean"
+    },
+    "rate_limits": {
+      "$ref": "#/$defs/RateLimitDeclaration"
+    },
+    "real_time": {
+      "title": "Real Time",
+      "type": "boolean"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "symbol_normalization": {
+      "title": "Symbol Normalization",
+      "type": "boolean"
+    },
+    "timezone_source": {
+      "const": "provider_validated_against_internal_registry",
+      "title": "Timezone Source",
+      "type": "string"
+    }
+  },
+  "required": [
+    "provider",
+    "approval_status",
+    "public_market_data",
+    "authentication_required",
+    "historical_bars",
+    "latest_quote",
+    "latest_bar",
+    "delayed_or_end_of_day",
+    "real_time",
+    "market_calendar_source",
+    "timezone_source",
+    "symbol_normalization",
+    "corporate_actions",
+    "enabled_host",
+    "enabled_paths",
+    "approved_symbols",
+    "approved_mics",
+    "rate_limits",
+    "licensing_constraints",
+    "limitations"
+  ],
+  "title": "EquityAdapterCapabilities",
+  "type": "object"
+}
