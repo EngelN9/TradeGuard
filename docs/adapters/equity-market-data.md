@@ -14,15 +14,19 @@ The binding decision and unresolved promotion blockers are in
 | --- | --- |
 | Provider | Twelve Data |
 | Approval | `APPROVED_WITH_CONDITIONS` |
+| Plan/account | Basic / individual |
+| Intended use | Approved `internal_non_display`, `internal_use_only` |
 | Authentication | Required, header only |
 | Historical bars | AAPL, `1day`, unadjusted, at most 10 |
 | Latest data | Latest completed daily bar |
 | Quote | Disabled |
-| Real-time/WebSocket | Disabled |
+| Real-time/delayed | Entitlement-dependent; not claimed as enabled |
 | Timezone | Provider metadata validated against `America/New_York` |
-| Calendar | Internal deterministic XNAS/XNGS registry |
+| Calendar | Internal human-approved XNAS/XNGS sessions only |
 | Corporate actions | Explicitly unsupported |
 | Fallback provider | None |
+| Consolidated/NBBO/full volume/execution grade | Unsupported |
+| Basic entitlement metadata | 8 credits/minute; 800/day |
 | Public raw values | Prohibited |
 
 The enabled endpoint is exactly:
@@ -51,9 +55,11 @@ The connected registry is:
 configs/markets/equities_connected_sessions.json
 ```
 
-It starts as `BLOCKED_PENDING_SESSION_REVIEW`. Unknown, unapproved, or missing
+It starts as `PENDING_REVIEW`. Unknown, unapproved, or missing
 sessions produce `BLOCKED_MARKET_CALENDAR`; weekdays and holidays are never
-guessed.
+guessed. A pending document cannot contain reviewer claims or session entries.
+Only an explicit human-reviewed top-level `status: APPROVED` can unlock the
+registry.
 
 ## Data quality and corporate actions
 
@@ -99,8 +105,8 @@ synthetic financial values. It explicitly states:
 ```text
 sanitized=true
 values_are_deterministic_synthetic=true
-raw_payload_retained=false
-raw_payload_published=false
+raw_market_values_persisted=false
+raw_market_values_published=false
 redistribution_allowed=false
 ```
 
@@ -115,10 +121,12 @@ No command above contacts Twelve Data.
 
 ## Connected qualification
 
-Connected tests are not part of default CI. Before opting in, the maintainer
-must update and approve the exact session registry, confirm the account plan,
-owner/use classification, license, and display rights, and provide the
-credential through the environment.
+Connected tests are not part of default CI. The Basic plan, individual
+account, internal non-display use, internal-use-only classification, no
+redistribution, and no public display decisions are recorded in
+`configs/adapters/twelve_data_equity.json`. Before opting in, the maintainer
+must update and approve the exact session registry and provide the credential
+through the environment.
 
 Run at most once per release candidate:
 
@@ -143,19 +151,23 @@ and `FAIL` are not promotion successes.
 | HTTP 429 after retry | `BLOCKED_RATE_LIMIT` |
 | Timeout or 5xx | `BLOCKED_PROVIDER_UNAVAILABLE` |
 | Unknown session date | `BLOCKED_MARKET_CALENDAR` |
-| Schema mismatch | `FAIL_SCHEMA_DRIFT` / connected `FAIL` |
-| Invalid timestamp/OHLC/data | `FAIL_DATA_QUALITY` / connected `FAIL` |
+| Schema mismatch | `FAIL_SCHEMA_DRIFT` |
+| Invalid timestamp/OHLC/data or fewer than five completed sessions | `FAIL_DATA_QUALITY` |
 
 Errors use fixed redacted messages. Provider request IDs may be logged; response
 bodies, request headers, and keys may not.
 
 ## Licensing and retention
 
-The current implementation classification is internal non-display only. Public
-display and redistribution are prohibited until an applicable plan/add-on or
-written agreement is recorded and approved. The account dashboard remains
-authoritative for plan entitlement and rate limits.
+The current implementation classification is approved individual,
+internal-use-only, non-display use. Public display and redistribution are
+prohibited. The reviewed Basic metadata is 8 API credits per minute and 800 per
+day; provider responses remain authoritative at runtime.
 
 Raw connected bytes may be validated and hashed in memory but are not retained
 or published by this adapter. The public repository contains only sanitized
 synthetic fixtures, schemas, metadata, and hashes.
+
+The public dashboard must not show actual Twelve Data market values. Any change
+to plan, ownership, intended use, licensing, retention, redistribution, or
+display mode requires a new human licensing review before use.

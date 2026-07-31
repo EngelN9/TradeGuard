@@ -1,6 +1,6 @@
 # ADR 0002: Twelve Data equity adapter with blocked promotion
 
-- Status: Accepted with conditions
+- Status: Provider and licensing decision approved; promotion blocked
 - Decision date: 2026-07-31
 - Decision owner: EngelN9
 - Implementation target: Prompt 4 / TG-004 / v0.1.0
@@ -26,6 +26,13 @@ commercial display to third parties. Therefore a public source repository may
 contain adapter code, schemas, hashes, and deterministic synthetic provider-shaped
 fixtures, but no captured Twelve Data market values.
 
+The maintainer has approved the Basic plan, an individual account,
+`internal_non_display` use, and the `internal_use_only` classification. The
+reviewed account metadata records 8 API credits per minute, 800 credits per day,
+and entitlement to `AAPL` daily historical bars through `/time_series`.
+Provider responses remain authoritative at runtime, and no successful connected
+observation has yet been made.
+
 ## Decision
 
 Implement Twelve Data as v0.1.0's only equity provider with
@@ -41,8 +48,10 @@ Enabled scope:
 - authenticated only by `TRADEGUARD_TWELVE_DATA_API_KEY` in the
   `Authorization` header;
 - one request with at most one retry, only after HTTP 429;
-- internal/personal non-display research use;
-- sanitized, deterministic, provider-shaped public fixtures only.
+- reviewed Basic metadata of 8 API credits per minute and 800 per day;
+- approved individual internal non-display research use;
+- sanitized non-reconstructable or deterministic synthetic provider-shaped
+  public fixtures only.
 
 Disabled scope:
 
@@ -54,6 +63,7 @@ Disabled scope:
 - broker/account/order/position/balance/OAuth capabilities;
 - provider fallback, stale-cache substitution, and synthetic connected PASS;
 - public display and redistribution of provider market values.
+- any display of actual Twelve Data market values on the public dashboard.
 
 Daily timestamps are interpreted as exchange-local session dates and are mapped
 to UTC only through TradeGuard's reviewed deterministic MIC registry. An unknown
@@ -71,18 +81,44 @@ The following fields are deliberately explicit rather than inferred:
 | Field | Current record |
 | --- | --- |
 | Execution jurisdiction | Taiwan |
-| Exact Twelve Data plan name | `UNCONFIRMED` |
-| Account owner type | `UNCONFIRMED` (`individual` or `business`) |
-| Intended use | `internal_non_display` |
-| License/use classification | `UNCONFIRMED_PENDING_ACCOUNT_REVIEW` |
-| Public display permission | `NOT_CONFIRMED`; prohibited by default |
+| Exact Twelve Data plan name | `Basic` |
+| Account owner type | `individual` |
+| Intended use | `internal_non_display`; `APPROVED` |
+| License/use classification | `individual internal-use-only` |
+| Reviewed API entitlement | 8 credits/minute; 800/day; `/time_series`; `AAPL`; `1day`; historical daily bars |
+| Runtime connected observation | `NOT_RUN` |
+| Public display permission | `FALSE`; prohibited |
 | Redistribution permission | `FALSE` |
-| Raw market values in public repository | `FALSE` |
+| Raw connected response publication | `PROHIBITED` |
+| Raw connected response retention | `transient_only` |
+| Sanitized non-reconstructable fixtures | `ALLOWED` |
+| Synthetic fixtures | `ALLOWED` |
+| Checksums/manifests without raw market values | `ALLOWED` |
 | Terms version reviewed | 2026-01-01 |
 | License review date | 2026-07-31 |
 
-These unresolved fields do not block offline implementation. They do block
-release promotion and any claim that the connected qualification has passed.
+The account/use, API-entitlement metadata, licensing, retention,
+redistribution, public-display, and fixture decisions are human-approved. They
+permit offline implementation and public-safe evidence under the restrictions
+above. They do not substitute for a successful connected qualification.
+
+## Connected-session review
+
+The release-candidate `XNAS`/`XNGS` dates and exact open/close instants remain
+pending human review. The machine-readable registry is deliberately:
+
+```json
+{
+  "status": "PENDING_REVIEW",
+  "reviewed_by": null,
+  "reviewed_at": null,
+  "sessions": []
+}
+```
+
+Only explicit human-reviewed content with top-level `status: APPROVED` is
+eligible for connected qualification. Provider responses, online calendars, or
+package calendars must never change that state automatically.
 
 ## Connected state machine
 
@@ -93,7 +129,9 @@ release promotion and any claim that the connected qualification has passed.
 - HTTP 429 after one retry: `BLOCKED_RATE_LIMIT`;
 - timeout or 5xx: `BLOCKED_PROVIDER_UNAVAILABLE`;
 - missing reviewed session: `BLOCKED_MARKET_CALENDAR`;
-- provider schema drift or invalid canonical data: `FAIL`;
+- provider schema drift: `FAIL_SCHEMA_DRIFT`;
+- invalid canonical data or fewer than five completed sessions:
+  `FAIL_DATA_QUALITY`;
 - at least five completed reviewed sessions with valid manifest and admissible
   quality report: `PASS`.
 
@@ -103,19 +141,22 @@ General CI may safely skip and record `passed=false` and
 
 ## Public fixture and evidence policy
 
-A connected capture may be validated and hashed in memory, but public evidence
-must contain only:
+A connected response may be retained transiently in memory only long enough to
+validate and hash it, after which the raw response must be discarded. Raw
+connected responses must never be published. Public evidence may contain only:
 
-- a deterministic sanitized provider-shaped response;
+- a sanitized non-reconstructable provider-shaped fixture;
+- a deterministic synthetic provider-shaped fixture;
 - schemas and field types;
 - counts, session dates, request template without a key, and checksums;
 - manifest and quality status;
 - terms/license review metadata;
-- `raw_payload_retained=false`;
-- `raw_payload_published=false`.
+- `raw_market_values_persisted=false`;
+- `raw_market_values_published=false`.
 
-Actual provider prices, volumes, credentials, request headers, account quota
-details, and private account data must not be committed.
+Actual provider prices, volumes, credentials, request headers, private account
+data, and private quota-consumption telemetry must not be committed. The
+human-reviewed 8-per-minute and 800-per-day release metadata may be recorded.
 
 ## Consequences
 
@@ -128,17 +169,25 @@ The adapter cannot support total-return research until a separately approved
 point-in-time corporate-action source is implemented. It cannot support
 execution-quality claims or automatically switch to another provider.
 
+If the plan, account type, intended use, license classification, retention
+policy, redistribution rights, display mode, or dashboard behavior changes,
+licensing review and this ADR must be repeated before use.
+
 ## Promotion blockers
 
 Prompt 4 implementation may complete while the promotion gate remains
 `BLOCKED`. Before promotion, a maintainer must:
 
-1. record the exact account plan;
-2. record whether the account is individual or business and confirm its use;
-3. confirm the applicable license/use classification;
-4. confirm whether any display is allowed (default remains no);
-5. approve the connected MIC session window;
-6. run the connected smoke once for the release candidate and obtain `PASS`.
+1. human-review exact release-candidate XNAS/XNGS sessions and mark the registry
+   `APPROVED`;
+2. locally set the data-only credential without persisting or disclosing it;
+3. explicitly opt in;
+4. run one minimal release-candidate connected smoke and obtain `PASS` with at
+   least five completed sessions;
+5. review the redacted connected evidence;
+6. explicitly approve promotion.
+
+Until every condition is satisfied, Prompt 4 promotion remains `BLOCKED`.
 
 ## Official sources reviewed
 

@@ -6,6 +6,7 @@ from pathlib import Path
 import pytest
 from scripts.collect_evidence import build_index, sha256_file, write_json
 from scripts.collect_prompt3_evidence import evidence_documents
+from scripts.collect_prompt4_evidence import FIXTURE_PATH, collect_evidence
 from scripts.scan_secrets import candidate_files, scan_file
 from scripts.validate_workflows import validate_workflow
 
@@ -103,3 +104,20 @@ def test_prompt3_evidence_is_complete_synthetic_and_redacted() -> None:
     assert '"validation_evidence_eligible":false' in serialized
     assert "security@your-domain.example" not in serialized
     assert "access_token" not in serialized
+
+
+@pytest.mark.unit
+def test_prompt4_public_evidence_excludes_credentials_and_raw_ohlcv(tmp_path: Path) -> None:
+    evidence_root = tmp_path / "prompt4"
+    collect_evidence(evidence_root)
+    serialized = "\n".join(
+        path.read_text(encoding="utf-8") for path in sorted(evidence_root.glob("*.json"))
+    )
+    fixture = json.loads(FIXTURE_PATH.read_text(encoding="utf-8"))
+
+    assert "fixture-credential" not in serialized
+    assert '"raw_market_values_persisted": false' in serialized
+    assert '"raw_market_values_published": false' in serialized
+    for row in fixture["response"]["values"]:
+        for field in ("open", "high", "low", "close", "volume"):
+            assert row[field] not in serialized

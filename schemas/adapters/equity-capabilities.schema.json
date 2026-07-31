@@ -1,62 +1,4 @@
 {
-  "$defs": {
-    "RateLimitDeclaration": {
-      "additionalProperties": false,
-      "description": "Documented limits; account dashboard remains authoritative.",
-      "properties": {
-        "authoritative_source": {
-          "maxLength": 2048,
-          "minLength": 1,
-          "title": "Authoritative Source",
-          "type": "string"
-        },
-        "known_basic_api_credits_per_minute": {
-          "anyOf": [
-            {
-              "exclusiveMinimum": 0,
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Known Basic Api Credits Per Minute"
-        },
-        "known_basic_daily_credits": {
-          "anyOf": [
-            {
-              "exclusiveMinimum": 0,
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Known Basic Daily Credits"
-        },
-        "model": {
-          "maxLength": 2048,
-          "minLength": 1,
-          "title": "Model",
-          "type": "string"
-        },
-        "reviewed_at": {
-          "format": "date",
-          "title": "Reviewed At",
-          "type": "string"
-        }
-      },
-      "required": [
-        "model",
-        "authoritative_source",
-        "reviewed_at"
-      ],
-      "title": "RateLimitDeclaration",
-      "type": "object"
-    }
-  },
   "additionalProperties": false,
   "description": "Machine-readable declaration of enabled, not merely provider-offered, features.",
   "properties": {
@@ -84,17 +26,25 @@
       "title": "Approved Symbols",
       "type": "array"
     },
-    "authentication_required": {
-      "title": "Authentication Required",
+    "authenticated": {
+      "const": true,
+      "title": "Authenticated",
+      "type": "boolean"
+    },
+    "consolidated_feed": {
+      "const": false,
+      "title": "Consolidated Feed",
       "type": "boolean"
     },
     "corporate_actions": {
+      "const": false,
       "title": "Corporate Actions",
       "type": "boolean"
     },
-    "delayed_or_end_of_day": {
-      "title": "Delayed Or End Of Day",
-      "type": "boolean"
+    "delayed": {
+      "const": "entitlement_dependent",
+      "title": "Delayed",
+      "type": "string"
     },
     "enabled_host": {
       "const": "api.twelvedata.com",
@@ -109,16 +59,29 @@
       "title": "Enabled Paths",
       "type": "array"
     },
+    "execution_grade": {
+      "const": false,
+      "title": "Execution Grade",
+      "type": "boolean"
+    },
+    "full_market_volume": {
+      "const": false,
+      "title": "Full Market Volume",
+      "type": "boolean"
+    },
     "historical_bars": {
+      "const": true,
       "title": "Historical Bars",
       "type": "boolean"
     },
-    "latest_bar": {
-      "title": "Latest Bar",
+    "instrument_metadata": {
+      "const": true,
+      "title": "Instrument Metadata",
       "type": "boolean"
     },
-    "latest_quote": {
-      "title": "Latest Quote",
+    "latest_bar_or_quote": {
+      "const": true,
+      "title": "Latest Bar Or Quote",
       "type": "boolean"
     },
     "licensing_constraints": {
@@ -140,25 +103,38 @@
       "type": "array"
     },
     "market_calendar_source": {
-      "const": "internal_deterministic_registry",
+      "const": "internal_approved_sessions",
       "title": "Market Calendar Source",
       "type": "string"
     },
+    "nbbo": {
+      "const": false,
+      "title": "Nbbo",
+      "type": "boolean"
+    },
     "provider": {
-      "maxLength": 2048,
-      "minLength": 1,
+      "const": "twelve_data",
       "title": "Provider",
       "type": "string"
     },
-    "public_market_data": {
-      "title": "Public Market Data",
+    "provider_fallback": {
+      "const": false,
+      "title": "Provider Fallback",
       "type": "boolean"
     },
-    "rate_limits": {
-      "$ref": "#/$defs/RateLimitDeclaration"
+    "public_display": {
+      "const": false,
+      "title": "Public Display",
+      "type": "boolean"
     },
     "real_time": {
+      "const": "entitlement_dependent",
       "title": "Real Time",
+      "type": "string"
+    },
+    "redistribution": {
+      "const": false,
+      "title": "Redistribution",
       "type": "boolean"
     },
     "schema_version": {
@@ -168,6 +144,7 @@
       "type": "string"
     },
     "symbol_normalization": {
+      "const": true,
       "title": "Symbol Normalization",
       "type": "boolean"
     },
@@ -180,22 +157,27 @@
   "required": [
     "provider",
     "approval_status",
-    "public_market_data",
-    "authentication_required",
+    "authenticated",
     "historical_bars",
-    "latest_quote",
-    "latest_bar",
-    "delayed_or_end_of_day",
+    "latest_bar_or_quote",
+    "instrument_metadata",
     "real_time",
+    "delayed",
+    "corporate_actions",
+    "consolidated_feed",
+    "nbbo",
+    "full_market_volume",
+    "execution_grade",
+    "public_display",
+    "redistribution",
     "market_calendar_source",
+    "provider_fallback",
     "timezone_source",
     "symbol_normalization",
-    "corporate_actions",
     "enabled_host",
     "enabled_paths",
     "approved_symbols",
     "approved_mics",
-    "rate_limits",
     "licensing_constraints",
     "limitations"
   ],

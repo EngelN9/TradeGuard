@@ -1,5 +1,6 @@
 """Provider-neutral equity market-data contracts and reviewed implementations."""
 
+from tradeguard.adapters.equity.configuration import TwelveDataReleaseConfiguration
 from tradeguard.adapters.equity.protocol import (
     EquityAdapterCapabilities,
     EquityDataset,
@@ -14,4 +15,5 @@ __all__ = [
     "EquityMarketDataAdapter",
     "HistoricalBarsRequest",
     "TwelveDataEquityAdapter",
+    "TwelveDataReleaseConfiguration",
 ]

@@ -21,38 +21,33 @@ class AdapterContractModel(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid", validate_default=True)
 
 
-class RateLimitDeclaration(AdapterContractModel):
-    """Documented limits; account dashboard remains authoritative."""
-
-    model: NonEmptyText
-    known_basic_api_credits_per_minute: Annotated[int, Field(gt=0)] | None = None
-    known_basic_daily_credits: Annotated[int, Field(gt=0)] | None = None
-    authoritative_source: NonEmptyText
-    reviewed_at: date
-
-
 class EquityAdapterCapabilities(AdapterContractModel):
     """Machine-readable declaration of enabled, not merely provider-offered, features."""
 
     schema_version: Literal["1.0.0"] = "1.0.0"
-    provider: NonEmptyText
+    provider: Literal["twelve_data"]
     approval_status: Literal["APPROVED_WITH_CONDITIONS"]
-    public_market_data: bool
-    authentication_required: bool
-    historical_bars: bool
-    latest_quote: bool
-    latest_bar: bool
-    delayed_or_end_of_day: bool
-    real_time: bool
-    market_calendar_source: Literal["internal_deterministic_registry"]
+    authenticated: Literal[True]
+    historical_bars: Literal[True]
+    latest_bar_or_quote: Literal[True]
+    instrument_metadata: Literal[True]
+    real_time: Literal["entitlement_dependent"]
+    delayed: Literal["entitlement_dependent"]
+    corporate_actions: Literal[False]
+    consolidated_feed: Literal[False]
+    nbbo: Literal[False]
+    full_market_volume: Literal[False]
+    execution_grade: Literal[False]
+    public_display: Literal[False]
+    redistribution: Literal[False]
+    market_calendar_source: Literal["internal_approved_sessions"]
+    provider_fallback: Literal[False]
     timezone_source: Literal["provider_validated_against_internal_registry"]
-    symbol_normalization: bool
-    corporate_actions: bool
+    symbol_normalization: Literal[True]
     enabled_host: Literal["api.twelvedata.com"]
     enabled_paths: tuple[Literal["/time_series"], ...]
     approved_symbols: tuple[Literal["AAPL"], ...]
     approved_mics: tuple[Literal["XNAS", "XNGS"], ...]
-    rate_limits: RateLimitDeclaration
     licensing_constraints: tuple[NonEmptyText, ...]
     limitations: tuple[NonEmptyText, ...]
 

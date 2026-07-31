@@ -1,0 +1,532 @@
+{
+  "$defs": {
+    "AccountDecision": {
+      "additionalProperties": false,
+      "properties": {
+        "account_type": {
+          "const": "individual",
+          "title": "Account Type",
+          "type": "string"
+        },
+        "plan_name": {
+          "const": "Basic",
+          "title": "Plan Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "plan_name",
+        "account_type"
+      ],
+      "title": "AccountDecision",
+      "type": "object"
+    },
+    "ApiEntitlement": {
+      "additionalProperties": false,
+      "description": "Reviewed account metadata; provider responses remain authoritative at runtime.",
+      "properties": {
+        "api_credits_per_minute": {
+          "exclusiveMinimum": 0,
+          "title": "Api Credits Per Minute",
+          "type": "integer"
+        },
+        "daily_credit_limit": {
+          "exclusiveMinimum": 0,
+          "title": "Daily Credit Limit",
+          "type": "integer"
+        },
+        "historical_daily_bars": {
+          "const": "allowed",
+          "title": "Historical Daily Bars",
+          "type": "string"
+        },
+        "interval_1day": {
+          "const": "allowed",
+          "title": "Interval 1Day",
+          "type": "string"
+        },
+        "symbol_AAPL": {
+          "const": "allowed",
+          "title": "Symbol Aapl",
+          "type": "string"
+        },
+        "time_series_endpoint": {
+          "const": "allowed",
+          "title": "Time Series Endpoint",
+          "type": "string"
+        }
+      },
+      "required": [
+        "api_credits_per_minute",
+        "daily_credit_limit",
+        "time_series_endpoint",
+        "symbol_AAPL",
+        "interval_1day",
+        "historical_daily_bars"
+      ],
+      "title": "ApiEntitlement",
+      "type": "object"
+    },
+    "ConnectedSmokeBoundary": {
+      "additionalProperties": false,
+      "properties": {
+        "adjustment": {
+          "const": "none",
+          "title": "Adjustment",
+          "type": "string"
+        },
+        "interval": {
+          "const": "1day",
+          "title": "Interval",
+          "type": "string"
+        },
+        "mic": {
+          "const": "XNAS",
+          "title": "Mic",
+          "type": "string"
+        },
+        "minimum_completed_sessions": {
+          "maximum": 10,
+          "minimum": 1,
+          "title": "Minimum Completed Sessions",
+          "type": "integer"
+        },
+        "outputsize": {
+          "maximum": 10,
+          "minimum": 1,
+          "title": "Outputsize",
+          "type": "integer"
+        },
+        "provider": {
+          "const": "twelve_data",
+          "title": "Provider",
+          "type": "string"
+        },
+        "symbol": {
+          "const": "AAPL",
+          "title": "Symbol",
+          "type": "string"
+        }
+      },
+      "required": [
+        "provider",
+        "symbol",
+        "mic",
+        "interval",
+        "outputsize",
+        "adjustment",
+        "minimum_completed_sessions"
+      ],
+      "title": "ConnectedSmokeBoundary",
+      "type": "object"
+    },
+    "CorporateActionDecision": {
+      "additionalProperties": false,
+      "properties": {
+        "bar_adjustment": {
+          "const": "none",
+          "title": "Bar Adjustment",
+          "type": "string"
+        },
+        "corporate_action_retrieval": {
+          "const": "unsupported",
+          "title": "Corporate Action Retrieval",
+          "type": "string"
+        },
+        "dividends_endpoint": {
+          "const": "disabled",
+          "title": "Dividends Endpoint",
+          "type": "string"
+        },
+        "splits_endpoint": {
+          "const": "disabled",
+          "title": "Splits Endpoint",
+          "type": "string"
+        }
+      },
+      "required": [
+        "corporate_action_retrieval",
+        "dividends_endpoint",
+        "splits_endpoint",
+        "bar_adjustment"
+      ],
+      "title": "CorporateActionDecision",
+      "type": "object"
+    },
+    "EquityAdapterCapabilities": {
+      "additionalProperties": false,
+      "description": "Machine-readable declaration of enabled, not merely provider-offered, features.",
+      "properties": {
+        "approval_status": {
+          "const": "APPROVED_WITH_CONDITIONS",
+          "title": "Approval Status",
+          "type": "string"
+        },
+        "approved_mics": {
+          "items": {
+            "enum": [
+              "XNAS",
+              "XNGS"
+            ],
+            "type": "string"
+          },
+          "title": "Approved Mics",
+          "type": "array"
+        },
+        "approved_symbols": {
+          "items": {
+            "const": "AAPL",
+            "type": "string"
+          },
+          "title": "Approved Symbols",
+          "type": "array"
+        },
+        "authenticated": {
+          "const": true,
+          "title": "Authenticated",
+          "type": "boolean"
+        },
+        "consolidated_feed": {
+          "const": false,
+          "title": "Consolidated Feed",
+          "type": "boolean"
+        },
+        "corporate_actions": {
+          "const": false,
+          "title": "Corporate Actions",
+          "type": "boolean"
+        },
+        "delayed": {
+          "const": "entitlement_dependent",
+          "title": "Delayed",
+          "type": "string"
+        },
+        "enabled_host": {
+          "const": "api.twelvedata.com",
+          "title": "Enabled Host",
+          "type": "string"
+        },
+        "enabled_paths": {
+          "items": {
+            "const": "/time_series",
+            "type": "string"
+          },
+          "title": "Enabled Paths",
+          "type": "array"
+        },
+        "execution_grade": {
+          "const": false,
+          "title": "Execution Grade",
+          "type": "boolean"
+        },
+        "full_market_volume": {
+          "const": false,
+          "title": "Full Market Volume",
+          "type": "boolean"
+        },
+        "historical_bars": {
+          "const": true,
+          "title": "Historical Bars",
+          "type": "boolean"
+        },
+        "instrument_metadata": {
+          "const": true,
+          "title": "Instrument Metadata",
+          "type": "boolean"
+        },
+        "latest_bar_or_quote": {
+          "const": true,
+          "title": "Latest Bar Or Quote",
+          "type": "boolean"
+        },
+        "licensing_constraints": {
+          "items": {
+            "maxLength": 2048,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Licensing Constraints",
+          "type": "array"
+        },
+        "limitations": {
+          "items": {
+            "maxLength": 2048,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Limitations",
+          "type": "array"
+        },
+        "market_calendar_source": {
+          "const": "internal_approved_sessions",
+          "title": "Market Calendar Source",
+          "type": "string"
+        },
+        "nbbo": {
+          "const": false,
+          "title": "Nbbo",
+          "type": "boolean"
+        },
+        "provider": {
+          "const": "twelve_data",
+          "title": "Provider",
+          "type": "string"
+        },
+        "provider_fallback": {
+          "const": false,
+          "title": "Provider Fallback",
+          "type": "boolean"
+        },
+        "public_display": {
+          "const": false,
+          "title": "Public Display",
+          "type": "boolean"
+        },
+        "real_time": {
+          "const": "entitlement_dependent",
+          "title": "Real Time",
+          "type": "string"
+        },
+        "redistribution": {
+          "const": false,
+          "title": "Redistribution",
+          "type": "boolean"
+        },
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "symbol_normalization": {
+          "const": true,
+          "title": "Symbol Normalization",
+          "type": "boolean"
+        },
+        "timezone_source": {
+          "const": "provider_validated_against_internal_registry",
+          "title": "Timezone Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "provider",
+        "approval_status",
+        "authenticated",
+        "historical_bars",
+        "latest_bar_or_quote",
+        "instrument_metadata",
+        "real_time",
+        "delayed",
+        "corporate_actions",
+        "consolidated_feed",
+        "nbbo",
+        "full_market_volume",
+        "execution_grade",
+        "public_display",
+        "redistribution",
+        "market_calendar_source",
+        "provider_fallback",
+        "timezone_source",
+        "symbol_normalization",
+        "enabled_host",
+        "enabled_paths",
+        "approved_symbols",
+        "approved_mics",
+        "licensing_constraints",
+        "limitations"
+      ],
+      "title": "EquityAdapterCapabilities",
+      "type": "object"
+    },
+    "LicensingDecision": {
+      "additionalProperties": false,
+      "properties": {
+        "classification": {
+          "const": "internal_use_only",
+          "title": "Classification",
+          "type": "string"
+        },
+        "public_raw_fixture_allowed": {
+          "const": false,
+          "title": "Public Raw Fixture Allowed",
+          "type": "boolean"
+        },
+        "redistribution_allowed": {
+          "const": false,
+          "title": "Redistribution Allowed",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "classification",
+        "redistribution_allowed",
+        "public_raw_fixture_allowed"
+      ],
+      "title": "LicensingDecision",
+      "type": "object"
+    },
+    "ProviderDecision": {
+      "additionalProperties": false,
+      "properties": {
+        "fallback": {
+          "const": "prohibited",
+          "title": "Fallback",
+          "type": "string"
+        },
+        "name": {
+          "const": "twelve_data",
+          "title": "Name",
+          "type": "string"
+        },
+        "status": {
+          "const": "approved_with_conditions",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "status",
+        "fallback"
+      ],
+      "title": "ProviderDecision",
+      "type": "object"
+    },
+    "PublicDisplayDecision": {
+      "additionalProperties": false,
+      "properties": {
+        "allowed": {
+          "const": false,
+          "title": "Allowed",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "allowed"
+      ],
+      "title": "PublicDisplayDecision",
+      "type": "object"
+    },
+    "RetentionDecision": {
+      "additionalProperties": false,
+      "properties": {
+        "checksum_and_manifest_allowed": {
+          "const": true,
+          "title": "Checksum And Manifest Allowed",
+          "type": "boolean"
+        },
+        "raw_connected_response": {
+          "const": "transient_only",
+          "title": "Raw Connected Response",
+          "type": "string"
+        },
+        "raw_response_publication": {
+          "const": "prohibited",
+          "title": "Raw Response Publication",
+          "type": "string"
+        },
+        "raw_response_release_evidence": {
+          "const": "prohibited",
+          "title": "Raw Response Release Evidence",
+          "type": "string"
+        },
+        "sanitized_contract_fixture_allowed": {
+          "const": true,
+          "title": "Sanitized Contract Fixture Allowed",
+          "type": "boolean"
+        },
+        "synthetic_fixture_allowed": {
+          "const": true,
+          "title": "Synthetic Fixture Allowed",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "raw_connected_response",
+        "raw_response_publication",
+        "raw_response_release_evidence",
+        "sanitized_contract_fixture_allowed",
+        "synthetic_fixture_allowed",
+        "checksum_and_manifest_allowed"
+      ],
+      "title": "RetentionDecision",
+      "type": "object"
+    },
+    "UsageDecision": {
+      "additionalProperties": false,
+      "properties": {
+        "approved": {
+          "const": true,
+          "title": "Approved",
+          "type": "boolean"
+        },
+        "intended_use": {
+          "const": "internal_non_display",
+          "title": "Intended Use",
+          "type": "string"
+        }
+      },
+      "required": [
+        "intended_use",
+        "approved"
+      ],
+      "title": "UsageDecision",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Complete reviewed decision record used by adapter and connected tooling.",
+  "properties": {
+    "account": {
+      "$ref": "#/$defs/AccountDecision"
+    },
+    "api_entitlement": {
+      "$ref": "#/$defs/ApiEntitlement"
+    },
+    "capabilities": {
+      "$ref": "#/$defs/EquityAdapterCapabilities"
+    },
+    "connected_smoke": {
+      "$ref": "#/$defs/ConnectedSmokeBoundary"
+    },
+    "corporate_actions": {
+      "$ref": "#/$defs/CorporateActionDecision"
+    },
+    "licensing": {
+      "$ref": "#/$defs/LicensingDecision"
+    },
+    "provider": {
+      "$ref": "#/$defs/ProviderDecision"
+    },
+    "public_display": {
+      "$ref": "#/$defs/PublicDisplayDecision"
+    },
+    "retention": {
+      "$ref": "#/$defs/RetentionDecision"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "usage": {
+      "$ref": "#/$defs/UsageDecision"
+    }
+  },
+  "required": [
+    "provider",
+    "account",
+    "usage",
+    "licensing",
+    "retention",
+    "public_display",
+    "api_entitlement",
+    "connected_smoke",
+    "corporate_actions",
+    "capabilities"
+  ],
+  "title": "TwelveDataReleaseConfiguration",
+  "type": "object"
+}

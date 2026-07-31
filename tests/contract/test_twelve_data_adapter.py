@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import logging
+import traceback
 from collections.abc import Iterable
 from datetime import UTC, date, datetime
 from pathlib import Path
@@ -12,6 +13,7 @@ import pytest
 from pydantic import SecretStr
 
 from tradeguard.adapters.equity.calendar import fixture_calendar_registry
+from tradeguard.adapters.equity.configuration import load_release_configuration
 from tradeguard.adapters.equity.errors import (
     AdapterFailureCode,
     EquityAdapterError,
@@ -31,6 +33,8 @@ FIXTURE_PATH = (
     / "twelve_data"
     / "time_series_aapl_1day_sanitized.json"
 )
+RELEASE_CONFIGURATION_PATH = REPOSITORY_ROOT / "configs" / "adapters" / "twelve_data_equity.json"
+RELEASE_CONFIGURATION = load_release_configuration(RELEASE_CONFIGURATION_PATH)
 FIXED_NOW = datetime(2024, 1, 11, 12, 0, tzinfo=UTC)
 
 
@@ -75,6 +79,7 @@ def _adapter(
     return TwelveDataEquityAdapter(
         api_key=SecretStr(api_key),
         calendar_registry=fixture_calendar_registry(),
+        release_configuration=RELEASE_CONFIGURATION,
         transport=transport,
         clock=lambda: FIXED_NOW,
         sleeper=(sleeps if sleeps is not None else []).append,
@@ -147,14 +152,29 @@ def test_capabilities_match_the_approved_restricted_scope() -> None:
     capabilities = adapter.capabilities
 
     assert capabilities.approval_status == "APPROVED_WITH_CONDITIONS"
-    assert capabilities.authentication_required is True
+    assert capabilities.provider == "twelve_data"
+    assert capabilities.authenticated is True
     assert capabilities.historical_bars is True
-    assert capabilities.latest_bar is True
-    assert capabilities.latest_quote is False
-    assert capabilities.real_time is False
+    assert capabilities.latest_bar_or_quote is True
+    assert capabilities.instrument_metadata is True
+    assert capabilities.real_time == "entitlement_dependent"
+    assert capabilities.delayed == "entitlement_dependent"
     assert capabilities.corporate_actions is False
+    assert capabilities.consolidated_feed is False
+    assert capabilities.nbbo is False
+    assert capabilities.full_market_volume is False
+    assert capabilities.execution_grade is False
+    assert capabilities.public_display is False
+    assert capabilities.redistribution is False
+    assert capabilities.provider_fallback is False
+    assert capabilities.market_calendar_source == "internal_approved_sessions"
     assert capabilities.enabled_paths == ("/time_series",)
     assert capabilities.approved_symbols == ("AAPL",)
+    assert RELEASE_CONFIGURATION.account.plan_name == "Basic"
+    assert RELEASE_CONFIGURATION.account.account_type == "individual"
+    assert RELEASE_CONFIGURATION.api_entitlement.api_credits_per_minute == 8
+    assert RELEASE_CONFIGURATION.api_entitlement.daily_credit_limit == 800
+    assert RELEASE_CONFIGURATION.model_dump()["api_entitlement"]["symbol_AAPL"] == "allowed"
 
     with pytest.raises(UnsupportedCapabilityError):
         adapter.corporate_actions(
@@ -227,6 +247,25 @@ def test_unmodeled_discontinuity_is_quarantined() -> None:
 
 
 @pytest.mark.contract
+def test_schema_failure_traceback_excludes_raw_provider_values() -> None:
+    sensitive_value = "raw-market-value-must-not-escape"
+
+    def invalid_field(document: object) -> None:
+        assert isinstance(document, dict)
+        values = document["values"]
+        assert isinstance(values, list)
+        values[0]["close"] = {"sensitive": sensitive_value}
+
+    adapter = _adapter(FakeTransport((_success_response(mutate=invalid_field),)))
+    with pytest.raises(EquityAdapterError) as error:
+        adapter.historical_bars(HistoricalBarsRequest(symbol="AAPL", mic="XNAS"))
+
+    formatted = "".join(traceback.format_exception(error.value))
+    assert error.value.code is AdapterFailureCode.FAIL_SCHEMA_DRIFT
+    assert sensitive_value not in formatted
+
+
+@pytest.mark.contract
 @pytest.mark.parametrize(
     ("status_code", "expected_code"),
     [
@@ -246,6 +285,7 @@ def test_http_statuses_map_to_explicit_blocked_states(
         adapter.historical_bars(HistoricalBarsRequest(symbol="AAPL", mic="XNAS"))
 
     assert error.value.code is expected_code
+    assert "fixture-credential" not in str(error.value)
 
 
 @pytest.mark.contract

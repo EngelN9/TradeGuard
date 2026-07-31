@@ -7,14 +7,18 @@ import os
 from datetime import UTC, datetime
 from pathlib import Path
 
+from pydantic import ValidationError
+
 from tradeguard.adapters.equity.calendar import (
     DeterministicMicCalendarRegistry,
     MarketCalendarUnavailableError,
     ReviewedCalendarDocument,
 )
+from tradeguard.adapters.equity.configuration import load_release_configuration
 from tradeguard.adapters.equity.connected import (
     CREDENTIAL_VARIABLE,
     RUN_CONNECTED_VARIABLE,
+    ConnectedSmokeOutcome,
     ConnectedSmokeResult,
     ConnectedSmokeStatus,
     run_connected_smoke,
@@ -23,6 +27,7 @@ from tradeguard.domain.serialization import canonicalize
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 CALENDAR_PATH = REPOSITORY_ROOT / "configs" / "markets" / "equities_connected_sessions.json"
+RELEASE_CONFIGURATION_PATH = REPOSITORY_ROOT / "configs" / "adapters" / "twelve_data_equity.json"
 OUTPUT_PATH = REPOSITORY_ROOT / "artifacts" / "evidence" / "prompt4" / "connected-smoke-result.json"
 
 
@@ -44,12 +49,22 @@ def _write(result: ConnectedSmokeResult) -> None:
 
 def main() -> int:
     observed_at = datetime.now(UTC)
+    release_configuration = load_release_configuration(RELEASE_CONFIGURATION_PATH)
     if OUTPUT_PATH.exists():
-        existing = ConnectedSmokeResult.model_validate_json(OUTPUT_PATH.read_text(encoding="utf-8"))
-        if os.environ.get(RUN_CONNECTED_VARIABLE) != "1":
+        existing: ConnectedSmokeResult | None
+        try:
+            existing = ConnectedSmokeResult.model_validate_json(
+                OUTPUT_PATH.read_text(encoding="utf-8")
+            )
+        except ValidationError:
+            if os.environ.get(RUN_CONNECTED_VARIABLE) == "1":
+                print("BLOCKED_INCOMPATIBLE_EXISTING_EVIDENCE")
+                return 2
+            existing = None
+        if existing is not None and os.environ.get(RUN_CONNECTED_VARIABLE) != "1":
             print(existing.status.value)
             return 0
-        if existing.status is not ConnectedSmokeStatus.SKIP_NOT_OPTED_IN:
+        if existing is not None and existing.status is not ConnectedSmokeStatus.SKIP_NOT_OPTED_IN:
             print("BLOCKED_ALREADY_RUN_FOR_THIS_EVIDENCE_DIRECTORY")
             return 2
     opted_in = os.environ.get(RUN_CONNECTED_VARIABLE) == "1"
@@ -60,12 +75,21 @@ def main() -> int:
         except MarketCalendarUnavailableError:
             result = ConnectedSmokeResult(
                 status=ConnectedSmokeStatus.BLOCKED_MARKET_CALENDAR,
+                outcome=ConnectedSmokeOutcome.BLOCKED,
                 reason_code=ConnectedSmokeStatus.BLOCKED_MARKET_CALENDAR.value,
                 passed=False,
                 provider_contacted=False,
+                credential_present=True,
                 observed_at=observed_at,
                 request_attempts=0,
-                record_count=0,
+                completed_session_count=0,
+                manifest_generated=False,
+                promotion_blockers=(
+                    "APPROVED connected-session configuration is missing",
+                    "a release-candidate connected smoke PASS is required",
+                    "human review of connected evidence is required",
+                    "explicit human promotion approval is required",
+                ),
             )
             _write(result)
             print(result.status.value)
@@ -75,6 +99,7 @@ def main() -> int:
     result = run_connected_smoke(
         environment=os.environ,
         calendar_registry=registry,
+        release_configuration=release_configuration,
         clock=lambda: observed_at,
     )
     _write(result)

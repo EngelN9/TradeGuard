@@ -3,12 +3,16 @@
 import os
 
 import pytest
-from scripts.run_twelve_data_connected_smoke import CALENDAR_PATH
+from scripts.run_twelve_data_connected_smoke import (
+    CALENDAR_PATH,
+    RELEASE_CONFIGURATION_PATH,
+)
 
 from tradeguard.adapters.equity.calendar import (
     MarketCalendarUnavailableError,
     ReviewedCalendarDocument,
 )
+from tradeguard.adapters.equity.configuration import load_release_configuration
 from tradeguard.adapters.equity.connected import (
     RUN_CONNECTED_VARIABLE,
     ConnectedSmokeStatus,
@@ -30,5 +34,6 @@ def test_twelve_data_connected_smoke_requires_explicit_opt_in_and_reviewed_calen
     result = run_connected_smoke(
         environment=os.environ,
         calendar_registry=calendar_registry,
+        release_configuration=load_release_configuration(RELEASE_CONFIGURATION_PATH),
     )
     assert result.status is ConnectedSmokeStatus.PASS, result.model_dump_json()

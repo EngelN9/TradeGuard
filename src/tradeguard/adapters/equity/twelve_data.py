@@ -19,6 +19,7 @@ from tradeguard.adapters.equity.calendar import (
     DeterministicMicCalendarRegistry,
     MarketCalendarUnavailableError,
 )
+from tradeguard.adapters.equity.configuration import TwelveDataReleaseConfiguration
 from tradeguard.adapters.equity.errors import (
     AdapterFailureCode,
     EquityAdapterError,
@@ -30,7 +31,6 @@ from tradeguard.adapters.equity.protocol import (
     EquityDataset,
     HistoricalBarsRequest,
     ProviderCallRecord,
-    RateLimitDeclaration,
 )
 from tradeguard.adapters.equity.transport import (
     HttpRequest,
@@ -96,47 +96,6 @@ class _TimeSeriesResponse(_ProviderModel):
     status: Literal["ok"]
 
 
-CAPABILITIES = EquityAdapterCapabilities(
-    provider="Twelve Data",
-    approval_status="APPROVED_WITH_CONDITIONS",
-    public_market_data=True,
-    authentication_required=True,
-    historical_bars=True,
-    latest_quote=False,
-    latest_bar=True,
-    delayed_or_end_of_day=True,
-    real_time=False,
-    market_calendar_source="internal_deterministic_registry",
-    timezone_source="provider_validated_against_internal_registry",
-    symbol_normalization=True,
-    corporate_actions=False,
-    enabled_host="api.twelvedata.com",
-    enabled_paths=("/time_series",),
-    approved_symbols=("AAPL",),
-    approved_mics=("XNAS", "XNGS"),
-    rate_limits=RateLimitDeclaration(
-        model="plan-specific API credits; one /time_series request costs one credit per symbol",
-        known_basic_api_credits_per_minute=8,
-        known_basic_daily_credits=800,
-        authoritative_source="Twelve Data account dashboard and response headers",
-        reviewed_at=date(2026, 7, 31),
-    ),
-    licensing_constraints=(
-        "internal non-display use only",
-        "no redistribution or public display",
-        "account subscription tier and add-ons remain authoritative",
-        "raw provider market values must not enter the public repository",
-    ),
-    limitations=(
-        "AAPL US common stock only",
-        "unadjusted one-day bars only",
-        "non-consolidated and not NBBO or execution-grade",
-        "corporate actions unsupported",
-        "no fallback provider",
-    ),
-)
-
-
 def reviewed_time_series_schema() -> dict[str, Any]:
     """Return the strict provider-side schema used only at the adapter boundary."""
 
@@ -151,6 +110,7 @@ class TwelveDataEquityAdapter:
         *,
         api_key: SecretStr,
         calendar_registry: DeterministicMicCalendarRegistry,
+        release_configuration: TwelveDataReleaseConfiguration,
         transport: HttpTransport | None = None,
         clock: Callable[[], datetime] | None = None,
         sleeper: Callable[[float], None] | None = None,
@@ -163,6 +123,7 @@ class TwelveDataEquityAdapter:
             )
         self._api_key = api_key
         self._calendar_registry = calendar_registry
+        self._release_configuration = release_configuration
         self._transport = transport or UrllibHttpsTransport()
         self._clock = clock or (lambda: datetime.now(UTC))
         self._sleeper = sleeper or time.sleep
@@ -170,7 +131,7 @@ class TwelveDataEquityAdapter:
 
     @property
     def capabilities(self) -> EquityAdapterCapabilities:
-        return CAPABILITIES
+        return self._release_configuration.capabilities
 
     def normalize_symbol(self, symbol: str) -> str:
         normalized = symbol.strip().upper()
@@ -338,11 +299,11 @@ class TwelveDataEquityAdapter:
     def _parse_response(response: HttpResponse) -> _TimeSeriesResponse:
         try:
             payload: Any = json.loads(response.body)
-        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        except (UnicodeDecodeError, json.JSONDecodeError):
             raise EquityAdapterError(
                 AdapterFailureCode.FAIL_SCHEMA_DRIFT,
                 "provider response is not valid UTF-8 JSON",
-            ) from exc
+            ) from None
         if isinstance(payload, Mapping) and payload.get("status") == "error":
             code = payload.get("code")
             if isinstance(code, int):
@@ -353,11 +314,11 @@ class TwelveDataEquityAdapter:
             )
         try:
             return _TimeSeriesResponse.model_validate(payload)
-        except ValidationError as exc:
+        except ValidationError:
             raise EquityAdapterError(
                 AdapterFailureCode.FAIL_SCHEMA_DRIFT,
                 "provider response does not match the reviewed time-series schema",
-            ) from exc
+            ) from None
 
     @staticmethod
     def _validate_meta(meta: _TimeSeriesMeta, symbol: str) -> None:
@@ -571,21 +532,21 @@ def _parse_session_date(value: str) -> date:
         )
     try:
         return date.fromisoformat(value)
-    except ValueError as exc:
+    except ValueError:
         raise EquityAdapterError(
             AdapterFailureCode.FAIL_DATA_QUALITY,
             "daily bar timestamp is invalid",
-        ) from exc
+        ) from None
 
 
 def _parse_decimal(value: str, field_name: str) -> Decimal:
     try:
         parsed = Decimal(value)
-    except InvalidOperation as exc:
+    except InvalidOperation:
         raise EquityAdapterError(
             AdapterFailureCode.FAIL_DATA_QUALITY,
             f"provider {field_name} value is not a valid decimal",
-        ) from exc
+        ) from None
     if not parsed.is_finite():
         raise EquityAdapterError(
             AdapterFailureCode.FAIL_DATA_QUALITY,

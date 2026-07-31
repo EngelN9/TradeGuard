@@ -8,11 +8,12 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 from datetime import UTC, date, datetime
-from typing import Literal
+from typing import Literal, Self
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, model_validator
 
 from tradeguard.data.models import MarketSession, SessionStatus
+from tradeguard.domain.serialization import UtcDateTime
 
 
 class MarketCalendarUnavailableError(ValueError):
@@ -25,13 +26,33 @@ class ReviewedCalendarDocument(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
 
     schema_version: Literal["1.0.0"] = "1.0.0"
-    review_status: Literal["BLOCKED_PENDING_SESSION_REVIEW", "APPROVED"]
+    status: Literal["PENDING_REVIEW", "APPROVED"]
     reviewed_by: str | None = None
-    reviewed_at: date | None = None
+    reviewed_at: UtcDateTime | None = None
     sessions: tuple[MarketSession, ...] = ()
 
+    @model_validator(mode="after")
+    def validate_review_state(self) -> Self:
+        if self.status == "PENDING_REVIEW":
+            if self.reviewed_by is not None or self.reviewed_at is not None or self.sessions:
+                raise ValueError("pending session configuration cannot contain approval claims")
+            return self
+        if (
+            self.reviewed_by is None
+            or not self.reviewed_by.strip()
+            or self.reviewed_at is None
+            or not self.sessions
+        ):
+            raise ValueError("approved session configuration requires reviewer, time, and sessions")
+        for session in self.sessions:
+            if session.venue != session.session_calendar:
+                raise ValueError("reviewed session venue and calendar must match")
+            if session.known_at > self.reviewed_at:
+                raise ValueError("session knowledge time cannot follow the review time")
+        return self
+
     def to_registry(self) -> DeterministicMicCalendarRegistry:
-        if self.review_status != "APPROVED" or not self.sessions:
+        if self.status != "APPROVED" or not self.sessions:
             raise MarketCalendarUnavailableError(
                 "BLOCKED_MARKET_CALENDAR: connected session registry is not approved"
             )

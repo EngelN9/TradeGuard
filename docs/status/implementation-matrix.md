@@ -300,8 +300,9 @@ Verified locally:
   gate pass the sanitized contract.
 - Corporate actions remain unsupported; unadjusted data carries a warning and
   suspected unmodeled discontinuities are quarantined without an inferred split.
-- Ten focused adapter contract tests pass. The complete offline suite has 145
-  passing tests, one connected test deselected, and 92.94% branch-aware coverage.
+- Eleven focused adapter contract tests pass. The complete offline suite has
+  159 passing tests, one connected test deselected, and 93.02% branch-aware
+  coverage.
 - Ruff, strict mypy, schema snapshot reproduction, workflow validation, secret
   scan, dashboard checks/tests/build, and package build pass.
 - Prompt 4 changes no dependency or lock entry. System-CA-enabled Python and
@@ -309,10 +310,14 @@ Verified locally:
   unpublished `tradeguard` package is correctly skipped by the PyPI audit.
 - Public Prompt 4 evidence contains only sanitized synthetic fixtures, schemas,
   counts, dates, checksums, manifests, quality status, and licensing metadata.
-  It records `raw_payload_published=false`.
+  It records `raw_market_values_persisted=false` and
+  `raw_market_values_published=false`.
 - Connected evidence is `SKIP_NOT_OPTED_IN`, `passed=false`, and
   `provider_contacted=false`.
 
-Promotion remains `BLOCKED` until the exact Twelve Data plan, account owner/use
-classification, license classification, public-display rights, connected
-session window, and one release-candidate connected `PASS` are human reviewed.
+The Basic plan, individual account, approved internal non-display use,
+internal-use-only classification, 8/800 credit metadata, no redistribution,
+no public display, and transient-only raw-response policy are now recorded.
+Promotion remains `BLOCKED` until the exact connected-session window is human
+approved, a locally opted-in release-candidate connected smoke obtains `PASS`,
+the redacted evidence is human reviewed, and promotion is explicitly approved.
