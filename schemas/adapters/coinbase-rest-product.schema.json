@@ -1,0 +1,88 @@
+{
+  "properties": {
+    "base_currency_id": {
+      "title": "Base Currency Id",
+      "type": "string"
+    },
+    "base_increment": {
+      "title": "Base Increment",
+      "type": "string"
+    },
+    "base_min_size": {
+      "title": "Base Min Size",
+      "type": "string"
+    },
+    "cancel_only": {
+      "title": "Cancel Only",
+      "type": "boolean"
+    },
+    "is_disabled": {
+      "title": "Is Disabled",
+      "type": "boolean"
+    },
+    "new_at": {
+      "title": "New At",
+      "type": "string"
+    },
+    "price_increment": {
+      "title": "Price Increment",
+      "type": "string"
+    },
+    "product_id": {
+      "title": "Product Id",
+      "type": "string"
+    },
+    "product_type": {
+      "title": "Product Type",
+      "type": "string"
+    },
+    "product_venue": {
+      "title": "Product Venue",
+      "type": "string"
+    },
+    "quote_currency_id": {
+      "title": "Quote Currency Id",
+      "type": "string"
+    },
+    "quote_increment": {
+      "title": "Quote Increment",
+      "type": "string"
+    },
+    "quote_min_size": {
+      "title": "Quote Min Size",
+      "type": "string"
+    },
+    "status": {
+      "title": "Status",
+      "type": "string"
+    },
+    "trading_disabled": {
+      "title": "Trading Disabled",
+      "type": "boolean"
+    },
+    "view_only": {
+      "title": "View Only",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "product_id",
+    "base_increment",
+    "quote_increment",
+    "quote_min_size",
+    "base_min_size",
+    "status",
+    "is_disabled",
+    "cancel_only",
+    "trading_disabled",
+    "product_type",
+    "quote_currency_id",
+    "base_currency_id",
+    "view_only",
+    "price_increment",
+    "product_venue",
+    "new_at"
+  ],
+  "title": "_ProductResponse",
+  "type": "object"
+}

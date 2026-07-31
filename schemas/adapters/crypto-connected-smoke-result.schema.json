@@ -1,0 +1,274 @@
+{
+  "$defs": {
+    "ConnectedSmokeOutcome": {
+      "enum": [
+        "SKIP",
+        "BLOCKED",
+        "FAIL",
+        "PASS"
+      ],
+      "title": "ConnectedSmokeOutcome",
+      "type": "string"
+    },
+    "ConnectedSmokeStatus": {
+      "enum": [
+        "SKIP_NOT_OPTED_IN",
+        "BLOCKED_RATE_LIMIT",
+        "BLOCKED_PROVIDER_UNAVAILABLE",
+        "FAIL_SCHEMA_DRIFT",
+        "FAIL_DATA_QUALITY",
+        "FAIL_REQUEST_REJECTED",
+        "FAIL_SCOPE_VIOLATION",
+        "FAIL_STREAM_NOT_TRADABLE",
+        "FAIL_CLEAN_SHUTDOWN",
+        "PASS"
+      ],
+      "title": "ConnectedSmokeStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "No-credential, no-market-value public qualification record.",
+  "properties": {
+    "authentication_used": {
+      "const": false,
+      "default": false,
+      "title": "Authentication Used",
+      "type": "boolean"
+    },
+    "clean_shutdown": {
+      "title": "Clean Shutdown",
+      "type": "boolean"
+    },
+    "credential_required": {
+      "const": false,
+      "default": false,
+      "title": "Credential Required",
+      "type": "boolean"
+    },
+    "metadata_status": {
+      "enum": [
+        "ONLINE",
+        "NOT_TRADABLE",
+        "UNKNOWN",
+        "NOT_RUN"
+      ],
+      "title": "Metadata Status",
+      "type": "string"
+    },
+    "observed_at": {
+      "format": "date-time",
+      "title": "Observed At",
+      "type": "string"
+    },
+    "outcome": {
+      "$ref": "#/$defs/ConnectedSmokeOutcome"
+    },
+    "passed": {
+      "title": "Passed",
+      "type": "boolean"
+    },
+    "product_id": {
+      "const": "BTC-USD",
+      "default": "BTC-USD",
+      "title": "Product Id",
+      "type": "string"
+    },
+    "promotion_blockers": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Promotion Blockers",
+      "type": "array"
+    },
+    "promotion_gate": {
+      "const": "BLOCKED",
+      "default": "BLOCKED",
+      "title": "Promotion Gate",
+      "type": "string"
+    },
+    "provider": {
+      "const": "coinbase_advanced_trade",
+      "default": "coinbase_advanced_trade",
+      "title": "Provider",
+      "type": "string"
+    },
+    "provider_contacted": {
+      "title": "Provider Contacted",
+      "type": "boolean"
+    },
+    "provider_fallback_used": {
+      "const": false,
+      "default": false,
+      "title": "Provider Fallback Used",
+      "type": "boolean"
+    },
+    "raw_market_values_persisted": {
+      "const": false,
+      "default": false,
+      "title": "Raw Market Values Persisted",
+      "type": "boolean"
+    },
+    "raw_market_values_published": {
+      "const": false,
+      "default": false,
+      "title": "Raw Market Values Published",
+      "type": "boolean"
+    },
+    "reason_code": {
+      "title": "Reason Code",
+      "type": "string"
+    },
+    "reconnect_count": {
+      "maximum": 3,
+      "minimum": 0,
+      "title": "Reconnect Count",
+      "type": "integer"
+    },
+    "rest_health": {
+      "enum": [
+        "HEALTHY",
+        "DEGRADED",
+        "UNAVAILABLE",
+        "NOT_RUN"
+      ],
+      "title": "Rest Health",
+      "type": "string"
+    },
+    "rest_manifest_checksum": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Rest Manifest Checksum"
+    },
+    "rest_quality_result": {
+      "anyOf": [
+        {
+          "enum": [
+            "PASS",
+            "WARN",
+            "FAIL"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Rest Quality Result"
+    },
+    "rest_response_bundle_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Rest Response Bundle Sha256"
+    },
+    "rest_trade_count": {
+      "maximum": 10,
+      "minimum": 0,
+      "title": "Rest Trade Count",
+      "type": "integer"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "sequence_validated": {
+      "title": "Sequence Validated",
+      "type": "boolean"
+    },
+    "status": {
+      "$ref": "#/$defs/ConnectedSmokeStatus"
+    },
+    "websocket_manifest_checksum": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Websocket Manifest Checksum"
+    },
+    "websocket_message_bundle_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Websocket Message Bundle Sha256"
+    },
+    "websocket_message_count": {
+      "maximum": 20,
+      "minimum": 0,
+      "title": "Websocket Message Count",
+      "type": "integer"
+    },
+    "websocket_quality_result": {
+      "anyOf": [
+        {
+          "enum": [
+            "PASS",
+            "WARN",
+            "FAIL"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Websocket Quality Result"
+    },
+    "websocket_record_count": {
+      "minimum": 0,
+      "title": "Websocket Record Count",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "status",
+    "outcome",
+    "reason_code",
+    "passed",
+    "provider_contacted",
+    "observed_at",
+    "rest_health",
+    "metadata_status",
+    "rest_trade_count",
+    "websocket_message_count",
+    "websocket_record_count",
+    "reconnect_count",
+    "sequence_validated",
+    "clean_shutdown",
+    "promotion_blockers"
+  ],
+  "title": "CryptoConnectedSmokeResult",
+  "type": "object"
+}

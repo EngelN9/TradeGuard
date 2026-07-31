@@ -1,0 +1,373 @@
+{
+  "$defs": {
+    "ConnectedSmokeBoundary": {
+      "additionalProperties": false,
+      "properties": {
+        "maximum_reconnects": {
+          "const": 3,
+          "title": "Maximum Reconnects",
+          "type": "integer"
+        },
+        "product_id": {
+          "const": "BTC-USD",
+          "title": "Product Id",
+          "type": "string"
+        },
+        "rest_trade_limit": {
+          "const": 5,
+          "title": "Rest Trade Limit",
+          "type": "integer"
+        },
+        "stale_after_seconds": {
+          "const": 5,
+          "title": "Stale After Seconds",
+          "type": "integer"
+        },
+        "websocket_deadline_seconds": {
+          "const": 30,
+          "title": "Websocket Deadline Seconds",
+          "type": "integer"
+        },
+        "websocket_maximum_messages": {
+          "const": 20,
+          "title": "Websocket Maximum Messages",
+          "type": "integer"
+        },
+        "websocket_minimum_messages": {
+          "const": 4,
+          "title": "Websocket Minimum Messages",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "product_id",
+        "rest_trade_limit",
+        "websocket_minimum_messages",
+        "websocket_maximum_messages",
+        "websocket_deadline_seconds",
+        "maximum_reconnects",
+        "stale_after_seconds"
+      ],
+      "title": "ConnectedSmokeBoundary",
+      "type": "object"
+    },
+    "CryptoAdapterCapabilities": {
+      "additionalProperties": false,
+      "description": "Machine-readable declaration of enabled capabilities and prohibited surfaces.",
+      "properties": {
+        "accounts": {
+          "const": false,
+          "title": "Accounts",
+          "type": "boolean"
+        },
+        "approval_status": {
+          "const": "APPROVED_WITH_CONDITIONS",
+          "title": "Approval Status",
+          "type": "string"
+        },
+        "approved_pairs": {
+          "items": {
+            "const": "BTC-USD",
+            "type": "string"
+          },
+          "title": "Approved Pairs",
+          "type": "array"
+        },
+        "authenticated": {
+          "const": false,
+          "title": "Authenticated",
+          "type": "boolean"
+        },
+        "best_bid_ask": {
+          "const": true,
+          "title": "Best Bid Ask",
+          "type": "boolean"
+        },
+        "derivatives": {
+          "const": false,
+          "title": "Derivatives",
+          "type": "boolean"
+        },
+        "enabled_rest_host": {
+          "const": "api.coinbase.com",
+          "title": "Enabled Rest Host",
+          "type": "string"
+        },
+        "enabled_rest_paths": {
+          "items": {
+            "enum": [
+              "/api/v3/brokerage/time",
+              "/api/v3/brokerage/market/products/BTC-USD",
+              "/api/v3/brokerage/market/products/BTC-USD/candles",
+              "/api/v3/brokerage/market/products/BTC-USD/ticker"
+            ],
+            "type": "string"
+          },
+          "title": "Enabled Rest Paths",
+          "type": "array"
+        },
+        "enabled_websocket_channels": {
+          "items": {
+            "enum": [
+              "heartbeats",
+              "market_trades",
+              "status",
+              "ticker"
+            ],
+            "type": "string"
+          },
+          "title": "Enabled Websocket Channels",
+          "type": "array"
+        },
+        "enabled_websocket_host": {
+          "const": "advanced-trade-ws.coinbase.com",
+          "title": "Enabled Websocket Host",
+          "type": "string"
+        },
+        "execution_grade": {
+          "const": false,
+          "title": "Execution Grade",
+          "type": "boolean"
+        },
+        "historical_bars": {
+          "const": true,
+          "title": "Historical Bars",
+          "type": "boolean"
+        },
+        "instrument_metadata": {
+          "const": true,
+          "title": "Instrument Metadata",
+          "type": "boolean"
+        },
+        "leverage": {
+          "const": false,
+          "title": "Leverage",
+          "type": "boolean"
+        },
+        "licensing_constraints": {
+          "items": {
+            "maxLength": 2048,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Licensing Constraints",
+          "type": "array"
+        },
+        "limitations": {
+          "items": {
+            "maxLength": 2048,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Limitations",
+          "type": "array"
+        },
+        "orders": {
+          "const": false,
+          "title": "Orders",
+          "type": "boolean"
+        },
+        "provider": {
+          "const": "coinbase_advanced_trade",
+          "title": "Provider",
+          "type": "string"
+        },
+        "provider_fallback": {
+          "const": false,
+          "title": "Provider Fallback",
+          "type": "boolean"
+        },
+        "public_only": {
+          "const": true,
+          "title": "Public Only",
+          "type": "boolean"
+        },
+        "public_trades": {
+          "const": true,
+          "title": "Public Trades",
+          "type": "boolean"
+        },
+        "rate_limit_metadata": {
+          "const": true,
+          "title": "Rate Limit Metadata",
+          "type": "boolean"
+        },
+        "rest_health": {
+          "const": true,
+          "title": "Rest Health",
+          "type": "boolean"
+        },
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "supported_trading_pairs": {
+          "const": true,
+          "title": "Supported Trading Pairs",
+          "type": "boolean"
+        },
+        "transfers": {
+          "const": false,
+          "title": "Transfers",
+          "type": "boolean"
+        },
+        "user_channel": {
+          "const": false,
+          "title": "User Channel",
+          "type": "boolean"
+        },
+        "venue_maintenance_status": {
+          "const": true,
+          "title": "Venue Maintenance Status",
+          "type": "boolean"
+        },
+        "websocket_stream": {
+          "const": true,
+          "title": "Websocket Stream",
+          "type": "boolean"
+        },
+        "withdrawals": {
+          "const": false,
+          "title": "Withdrawals",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "provider",
+        "approval_status",
+        "public_only",
+        "authenticated",
+        "instrument_metadata",
+        "supported_trading_pairs",
+        "historical_bars",
+        "public_trades",
+        "best_bid_ask",
+        "rest_health",
+        "websocket_stream",
+        "venue_maintenance_status",
+        "rate_limit_metadata",
+        "user_channel",
+        "accounts",
+        "orders",
+        "transfers",
+        "withdrawals",
+        "derivatives",
+        "leverage",
+        "execution_grade",
+        "provider_fallback",
+        "enabled_rest_host",
+        "enabled_websocket_host",
+        "enabled_rest_paths",
+        "enabled_websocket_channels",
+        "approved_pairs",
+        "licensing_constraints",
+        "limitations"
+      ],
+      "title": "CryptoAdapterCapabilities",
+      "type": "object"
+    },
+    "ProviderDecision": {
+      "additionalProperties": false,
+      "properties": {
+        "authentication": {
+          "const": "prohibited_for_public_market_data",
+          "title": "Authentication",
+          "type": "string"
+        },
+        "fallback": {
+          "const": "prohibited",
+          "title": "Fallback",
+          "type": "string"
+        },
+        "name": {
+          "const": "coinbase_advanced_trade",
+          "title": "Name",
+          "type": "string"
+        },
+        "status": {
+          "const": "approved_with_conditions",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "status",
+        "authentication",
+        "fallback"
+      ],
+      "title": "ProviderDecision",
+      "type": "object"
+    },
+    "RetentionDecision": {
+      "additionalProperties": false,
+      "properties": {
+        "checksum_and_manifest_allowed": {
+          "const": true,
+          "title": "Checksum And Manifest Allowed",
+          "type": "boolean"
+        },
+        "raw_connected_response": {
+          "const": "transient_only",
+          "title": "Raw Connected Response",
+          "type": "string"
+        },
+        "raw_response_publication": {
+          "const": "prohibited",
+          "title": "Raw Response Publication",
+          "type": "string"
+        },
+        "sanitized_contract_fixture_allowed": {
+          "const": true,
+          "title": "Sanitized Contract Fixture Allowed",
+          "type": "boolean"
+        },
+        "synthetic_fixture_allowed": {
+          "const": true,
+          "title": "Synthetic Fixture Allowed",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "raw_connected_response",
+        "raw_response_publication",
+        "sanitized_contract_fixture_allowed",
+        "synthetic_fixture_allowed",
+        "checksum_and_manifest_allowed"
+      ],
+      "title": "RetentionDecision",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "capabilities": {
+      "$ref": "#/$defs/CryptoAdapterCapabilities"
+    },
+    "connected_smoke": {
+      "$ref": "#/$defs/ConnectedSmokeBoundary"
+    },
+    "provider": {
+      "$ref": "#/$defs/ProviderDecision"
+    },
+    "retention": {
+      "$ref": "#/$defs/RetentionDecision"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "provider",
+    "retention",
+    "connected_smoke",
+    "capabilities"
+  ],
+  "title": "CoinbaseReleaseConfiguration",
+  "type": "object"
+}

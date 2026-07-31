@@ -1,0 +1,217 @@
+{
+  "additionalProperties": false,
+  "description": "Machine-readable declaration of enabled capabilities and prohibited surfaces.",
+  "properties": {
+    "accounts": {
+      "const": false,
+      "title": "Accounts",
+      "type": "boolean"
+    },
+    "approval_status": {
+      "const": "APPROVED_WITH_CONDITIONS",
+      "title": "Approval Status",
+      "type": "string"
+    },
+    "approved_pairs": {
+      "items": {
+        "const": "BTC-USD",
+        "type": "string"
+      },
+      "title": "Approved Pairs",
+      "type": "array"
+    },
+    "authenticated": {
+      "const": false,
+      "title": "Authenticated",
+      "type": "boolean"
+    },
+    "best_bid_ask": {
+      "const": true,
+      "title": "Best Bid Ask",
+      "type": "boolean"
+    },
+    "derivatives": {
+      "const": false,
+      "title": "Derivatives",
+      "type": "boolean"
+    },
+    "enabled_rest_host": {
+      "const": "api.coinbase.com",
+      "title": "Enabled Rest Host",
+      "type": "string"
+    },
+    "enabled_rest_paths": {
+      "items": {
+        "enum": [
+          "/api/v3/brokerage/time",
+          "/api/v3/brokerage/market/products/BTC-USD",
+          "/api/v3/brokerage/market/products/BTC-USD/candles",
+          "/api/v3/brokerage/market/products/BTC-USD/ticker"
+        ],
+        "type": "string"
+      },
+      "title": "Enabled Rest Paths",
+      "type": "array"
+    },
+    "enabled_websocket_channels": {
+      "items": {
+        "enum": [
+          "heartbeats",
+          "market_trades",
+          "status",
+          "ticker"
+        ],
+        "type": "string"
+      },
+      "title": "Enabled Websocket Channels",
+      "type": "array"
+    },
+    "enabled_websocket_host": {
+      "const": "advanced-trade-ws.coinbase.com",
+      "title": "Enabled Websocket Host",
+      "type": "string"
+    },
+    "execution_grade": {
+      "const": false,
+      "title": "Execution Grade",
+      "type": "boolean"
+    },
+    "historical_bars": {
+      "const": true,
+      "title": "Historical Bars",
+      "type": "boolean"
+    },
+    "instrument_metadata": {
+      "const": true,
+      "title": "Instrument Metadata",
+      "type": "boolean"
+    },
+    "leverage": {
+      "const": false,
+      "title": "Leverage",
+      "type": "boolean"
+    },
+    "licensing_constraints": {
+      "items": {
+        "maxLength": 2048,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Licensing Constraints",
+      "type": "array"
+    },
+    "limitations": {
+      "items": {
+        "maxLength": 2048,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    },
+    "orders": {
+      "const": false,
+      "title": "Orders",
+      "type": "boolean"
+    },
+    "provider": {
+      "const": "coinbase_advanced_trade",
+      "title": "Provider",
+      "type": "string"
+    },
+    "provider_fallback": {
+      "const": false,
+      "title": "Provider Fallback",
+      "type": "boolean"
+    },
+    "public_only": {
+      "const": true,
+      "title": "Public Only",
+      "type": "boolean"
+    },
+    "public_trades": {
+      "const": true,
+      "title": "Public Trades",
+      "type": "boolean"
+    },
+    "rate_limit_metadata": {
+      "const": true,
+      "title": "Rate Limit Metadata",
+      "type": "boolean"
+    },
+    "rest_health": {
+      "const": true,
+      "title": "Rest Health",
+      "type": "boolean"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "supported_trading_pairs": {
+      "const": true,
+      "title": "Supported Trading Pairs",
+      "type": "boolean"
+    },
+    "transfers": {
+      "const": false,
+      "title": "Transfers",
+      "type": "boolean"
+    },
+    "user_channel": {
+      "const": false,
+      "title": "User Channel",
+      "type": "boolean"
+    },
+    "venue_maintenance_status": {
+      "const": true,
+      "title": "Venue Maintenance Status",
+      "type": "boolean"
+    },
+    "websocket_stream": {
+      "const": true,
+      "title": "Websocket Stream",
+      "type": "boolean"
+    },
+    "withdrawals": {
+      "const": false,
+      "title": "Withdrawals",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "provider",
+    "approval_status",
+    "public_only",
+    "authenticated",
+    "instrument_metadata",
+    "supported_trading_pairs",
+    "historical_bars",
+    "public_trades",
+    "best_bid_ask",
+    "rest_health",
+    "websocket_stream",
+    "venue_maintenance_status",
+    "rate_limit_metadata",
+    "user_channel",
+    "accounts",
+    "orders",
+    "transfers",
+    "withdrawals",
+    "derivatives",
+    "leverage",
+    "execution_grade",
+    "provider_fallback",
+    "enabled_rest_host",
+    "enabled_websocket_host",
+    "enabled_rest_paths",
+    "enabled_websocket_channels",
+    "approved_pairs",
+    "licensing_constraints",
+    "limitations"
+  ],
+  "title": "CryptoAdapterCapabilities",
+  "type": "object"
+}

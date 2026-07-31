@@ -1,0 +1,16 @@
+{
+  "algorithm": "sha256",
+  "fixtures": {
+    "tests/fixtures/adapters/coinbase/candles_btc_usd_sanitized.json": "710f1f24159f040064a2ca75921cd213ad8849e45d85cd352f68fb54b1bf17f3",
+    "tests/fixtures/adapters/coinbase/product_btc_usd_sanitized.json": "191842c1db6739ceb3cbfb952af95df08833e1d011cc0fea03f03096bc1a9819",
+    "tests/fixtures/adapters/coinbase/server_time_sanitized.json": "86eb2be6d20e6006881a74a777c906d5b4baa6bc4ad40c19a3a7d0119611c996",
+    "tests/fixtures/adapters/coinbase/ticker_btc_usd_sanitized.json": "6854d773316d26a2644f6981a09e65af95d48122b39d86e5d36797bfd1d46b43",
+    "tests/fixtures/adapters/coinbase/websocket_btc_usd_sanitized.json": "f30bdb61e945610129b611257b462c7cd5c1e09f344b408802dd76e98a547722"
+  },
+  "raw_payload_published": false,
+  "raw_payload_retained": false,
+  "rest_fixture_sha256": "6854d773316d26a2644f6981a09e65af95d48122b39d86e5d36797bfd1d46b43",
+  "schema_version": "1.0.0",
+  "values_are_deterministic_synthetic": true,
+  "websocket_fixture_sha256": "f30bdb61e945610129b611257b462c7cd5c1e09f344b408802dd76e98a547722"
+}

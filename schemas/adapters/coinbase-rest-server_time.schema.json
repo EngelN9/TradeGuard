@@ -1,0 +1,23 @@
+{
+  "properties": {
+    "epochMillis": {
+      "title": "Epochmillis",
+      "type": "string"
+    },
+    "epochSeconds": {
+      "title": "Epochseconds",
+      "type": "string"
+    },
+    "iso": {
+      "title": "Iso",
+      "type": "string"
+    }
+  },
+  "required": [
+    "iso",
+    "epochSeconds",
+    "epochMillis"
+  ],
+  "title": "_ServerTimeResponse",
+  "type": "object"
+}

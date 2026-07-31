@@ -4,7 +4,9 @@ Assessment date: `2026-07-31`
 
 Base Git SHA before Prompt 4: `219fce6e75c07c05d3f6e662cac70db397316b3f`
 
-Overall status: `EQUITY ADAPTER IMPLEMENTED / NOT TRADABLE`
+Base Git SHA before Prompt 5: `3e8e3c0`
+
+Overall status: `EQUITY AND CRYPTO ADAPTERS IMPLEMENTED / NOT TRADABLE`
 
 Status vocabulary:
 
@@ -47,9 +49,13 @@ resilience tests, and an opt-in connected state machine. It adds no broker,
 account, order, fallback-provider, real-time, corporate-action, or live
 capability. Connected qualification was not attempted.
 
-The local checkout initially lacked Git metadata. It was safely reattached to
-remote commit `65d3c6f` after all four local blob hashes matched the remote.
-Prompt 0 work occurs on `agent/prompt-0-contract`.
+Prompt 5 on `codex/prompt-5-coinbase-adapter` adds a public-only crypto
+protocol, tightly allowlisted Coinbase Advanced Trade REST and WebSocket
+adapters, synthetic provider-shaped fixtures, strict metadata and sequence
+gates, bounded reconnect/resubscription, controlled shutdown, and opt-in
+connected evidence. It adds no credential, user channel, account, order,
+transfer, withdrawal, derivatives, leverage, fallback, canary, or live
+capability. Connected qualification was not attempted.
 
 ## Compliance matrix
 
@@ -101,9 +107,9 @@ Prompt 0 work occurs on `agent/prompt-0-contract`.
 | Equity adapter | Protocol and implementation | COMPLETE | Provider-neutral protocol; exact host/path/symbol/MIC allowlists; UTC/session mapping | Corporate actions and fallback remain disabled |
 | Equity adapter | Offline/schema-drift tests | COMPLETE | 10 adapter contracts; status/error/redaction/calendar/quality tests | Preserve sanitized-only fixture policy |
 | Equity adapter | Connected smoke | BLOCKED | `SKIP_NOT_OPTED_IN`, `provider_contacted=false` | Exact plan/account/license/display rights, reviewed sessions, credential, and one RC observation |
-| Crypto adapter | Provider decision | COMPLETE | Coinbase public API approved 2026-07-29 | Terms recheck before TG-005 |
-| Crypto adapter | REST/WebSocket implementation | BLOCKED | None | TG-005 after decision |
-| Crypto adapter | Reconnect/sequence/connected tests | BLOCKED | None | TG-005 after decision |
+| Crypto adapter | Provider decision | COMPLETE | ADR 0003; Coinbase public API approved with conditions | Recheck terms and jurisdiction before each connected RC |
+| Crypto adapter | REST/WebSocket implementation | COMPLETE | Public-only BTC-USD adapter; exact REST/WS allowlists; Decimal/UTC manifests | Expansion requires review |
+| Crypto adapter | Reconnect/sequence/connected tests | COMPLETE | Offline contract/replay tests; redacted connected `SKIP_NOT_OPTED_IN` | Connected PASS and human promotion review remain blocked |
 | Backtest | Deterministic event loop | MISSING | None | TG-006 |
 | Backtest | Decimal portfolio ledger | MISSING | None | TG-006 |
 | Backtest | Conservative execution models | MISSING | None | TG-006 |
@@ -147,8 +153,8 @@ Prompt 0 work occurs on `agent/prompt-0-contract`.
 | Build | Package/container/dashboard/checksums | COMPLETE | Python wheel/sdist, dashboard production build, Docker images, and evidence checksums pass | Release artifact signing remains TG-015/TG-018 |
 | Qualification | Two clean environments | MISSING | None | TG-016 |
 | Qualification | Offline full matrix | MISSING | None | TG-016 |
-| Qualification | Connected equity E2E | BLOCKED | No approved adapter | TG-017 |
-| Qualification | Connected crypto E2E | BLOCKED | No approved adapter | TG-017 |
+| Qualification | Connected equity E2E | BLOCKED | Adapter exists; connected result is `SKIP_NOT_OPTED_IN` | TG-017 |
+| Qualification | Connected crypto E2E | BLOCKED | Adapter exists; connected result is `SKIP_NOT_OPTED_IN` | TG-017 |
 | Qualification | External non-live smoke | BLOCKED | No approved adapter/credential | TG-017 |
 | Qualification | Failure drills | MISSING | None | TG-016/TG-017 |
 | Release | v0.1.0 readiness report | MISSING | None | TG-017 |
@@ -161,16 +167,15 @@ Prompt 0 work occurs on `agent/prompt-0-contract`.
 
 ## Critical gaps
 
-1. Crypto/external connected adapters, backtesting, strategies, validation,
+1. External non-live adapter, backtesting, strategies, validation,
    risk, monitoring, and complete API/dashboard functionality remain future
    sequential prompts.
-2. Prompt 1 through Prompt 3 do not authorize publishing their implementation
-   branches, so remote GitHub Actions have not run for those changes. The
-   `gh` CLI token remains invalid even though the Git remote credential and
-   GitHub App successfully synchronized the public `main` security policy.
-3. No connected qualification can be claimed; the Twelve Data result is
-   `SKIP_NOT_OPTED_IN`, no provider/account/broker connection was attempted, and
-   ADR 0002 promotion blockers remain unresolved.
+2. Prompt 1 through Prompt 4 are published on the draft implementation pull
+   request, where all configured GitHub checks passed. Prompt 5 remains a
+   stacked implementation change until its own verification and publication.
+3. No connected qualification can be claimed; both Twelve Data and Coinbase
+   results are `SKIP_NOT_OPTED_IN`, no provider/account/broker connection was
+   attempted, and ADR 0002/0003 promotion blockers remain unresolved.
 4. The repository remains non-tradable and has no order-submission, withdrawal,
    transfer, canary, or live path.
 
@@ -321,3 +326,50 @@ no public display, and transient-only raw-response policy are now recorded.
 Promotion remains `BLOCKED` until the exact connected-session window is human
 approved, a locally opted-in release-candidate connected smoke obtains `PASS`,
 the redacted evidence is human reviewed, and promotion is explicitly approved.
+
+Prompt 5 was authorized by the maintainer after Prompt 4 publication.
+
+## Prompt 5 implementation result
+
+`IMPLEMENTED / PROMOTION BLOCKED`
+
+Verified locally:
+
+- The provider-neutral crypto protocol covers trading-pair metadata, supported
+  pairs, one-minute bars, public trades, best bid/ask, REST health, public
+  WebSocket, venue maintenance status, and rate-limit metadata.
+- REST allows only unauthenticated HTTPS GET to four exact
+  `api.coinbase.com/api/v3/brokerage` public paths. Authorization, cookies,
+  private paths, duplicate queries, responses over 1 MiB, and more than one
+  429 retry fail closed.
+- WebSocket allows only `advanced-trade-ws.coinbase.com` with public
+  `heartbeats`, `market_trades`, `status`, and `ticker` subscriptions. No
+  subscription contains a JWT.
+- Only BTC-USD spot is enabled. Decimal precision, minimum quantity/notional,
+  UTC timestamps, REST/WebSocket metadata agreement, and provider status are
+  validated before a stream can become research-admissible.
+- Missing, duplicate, skipped, and decreasing sequences; heartbeat gaps; stale
+  messages; future timestamps; schema drift; metadata conflict; and reconnect
+  exhaustion emit quarantined `DataQualityAlert` events and remain
+  `NOT_TRADABLE`. Missing events are never inferred.
+- Disconnect replay proves a one-second bounded backoff, full
+  resubscription, and controlled closure. The complete schedule is one, two,
+  then four seconds with at most three reconnects.
+- Five focused Coinbase REST contracts and nine WebSocket replay tests pass.
+  The complete offline suite has 189 passing tests, two connected tests
+  deselected, and 90.18% branch-aware coverage.
+- Ruff format/lint, strict mypy, schema reproduction, workflow validation,
+  secret scan, dashboard typecheck/tests/build, and Python package build pass.
+- Python and production npm audits report no known vulnerabilities; the local
+  unpublished `tradeguard` package is correctly skipped by the PyPI audit.
+- Public Prompt 5 artifacts contain deterministic synthetic fixtures,
+  checksums, counts, manifests, status, and test output only. They record no
+  raw connected values, account data, credential, order, transfer, withdrawal,
+  fallback, derivatives, leverage, canary, or live capability.
+- Connected evidence is `SKIP_NOT_OPTED_IN`, `passed=false`, and
+  `provider_contacted=false`.
+
+Promotion remains `BLOCKED` until the Coinbase terms and jurisdiction are
+rechecked for the intended release-candidate use, an explicitly opted-in
+public REST/WebSocket smoke obtains `PASS`, the redacted evidence is human
+reviewed, and promotion is explicitly approved.

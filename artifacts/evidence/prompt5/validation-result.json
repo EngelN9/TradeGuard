@@ -1,0 +1,32 @@
+{
+  "connected_tests_deselected": 2,
+  "coverage_percent": 90.18,
+  "dashboard_build": "PASS",
+  "dashboard_tests": {
+    "passed": 2,
+    "status": "PASS"
+  },
+  "fixture_provider_contacted": false,
+  "mypy_strict": "PASS",
+  "npm_production_audit": "PASS_NO_KNOWN_VULNERABILITIES",
+  "offline_coinbase_contract_tests": {
+    "passed": 5,
+    "status": "PASS"
+  },
+  "offline_full_suite": {
+    "passed": 189,
+    "status": "PASS"
+  },
+  "offline_websocket_replay_tests": {
+    "passed": 9,
+    "status": "PASS"
+  },
+  "package_build": "PASS",
+  "pip_audit": "PASS_NO_KNOWN_VULNERABILITIES",
+  "ruff_format": "PASS",
+  "ruff_lint": "PASS",
+  "schema_snapshots": "PASS",
+  "schema_version": "1.0.0",
+  "secret_scan": "PASS",
+  "workflow_validation": "PASS"
+}

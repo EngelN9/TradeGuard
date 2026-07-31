@@ -53,11 +53,12 @@ TradeGuard 不會因開發速度、操作便利性或績效展示而降低安全
 
 目前 TradeGuard 尚處於：
 
-EQUITY ADAPTER IMPLEMENTED / NOT TRADABLE
+EQUITY AND CRYPTO ADAPTERS IMPLEMENTED / NOT TRADABLE
 
 目前已完成 repository bootstrap、Prompt 2 核心資料合約、Prompt 3 離線
-資料基礎與 Prompt 4 的受限股票資料 adapter；尚未完成 connected
-qualification，也未進入策略或回測階段。系統沒有正式下單、提款或轉帳能力。
+資料基礎、Prompt 4 的受限股票資料 adapter，以及 Prompt 5 的公開、無驗證
+加密貨幣 REST/WebSocket adapter；尚未完成 connected qualification，也未
+進入策略或回測階段。系統沒有正式下單、提款或轉帳能力。
 
 在第一個正式版本發布前，安全修正原則上只會套用至預設分支：
 

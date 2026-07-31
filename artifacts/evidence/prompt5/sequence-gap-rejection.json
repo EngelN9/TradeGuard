@@ -1,0 +1,12 @@
+{
+  "alert_code": "COINBASE_WS_SEQUENCE_GAP",
+  "fixture": "deterministic_synthetic",
+  "missing_events_inferred": false,
+  "observed_sequence": 32,
+  "previous_sequence": 30,
+  "provider_contacted": false,
+  "quarantined": true,
+  "schema_version": "1.0.0",
+  "stream_state": "NOT_TRADABLE",
+  "test": "tests/replay/test_coinbase_websocket_replay.py::test_duplicate_gap_and_out_of_order_sequences_are_not_tradable"
+}

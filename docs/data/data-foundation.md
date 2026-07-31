@@ -135,7 +135,8 @@ checksums, a lineage graph, and a SHA-256 index.
 ## Known limitations
 
 - All examples are synthetic and do not qualify any real provider.
-- No connected adapter or external schema-drift handling exists yet.
+- Equity and crypto provider adapters now consume these contracts, but their
+  connected qualifications remain separately opted in and promotion-blocked.
 - The content-addressed store is a local primitive, not a retention or backup
   system.
 - Quality thresholds are explicit deterministic defaults; provider- and

@@ -9,6 +9,11 @@ from uuid import UUID
 
 from pydantic import TypeAdapter
 
+from tradeguard.adapters.crypto.coinbase import reviewed_rest_schemas
+from tradeguard.adapters.crypto.configuration import CoinbaseReleaseConfiguration
+from tradeguard.adapters.crypto.connected import CryptoConnectedSmokeResult
+from tradeguard.adapters.crypto.protocol import CryptoAdapterCapabilities, CryptoBarsRequest
+from tradeguard.adapters.crypto.stream import StreamRunResult
 from tradeguard.adapters.equity.calendar import ReviewedCalendarDocument
 from tradeguard.adapters.equity.configuration import TwelveDataReleaseConfiguration
 from tradeguard.adapters.equity.connected import ConnectedSmokeResult
@@ -73,7 +78,7 @@ def sample_run_manifest() -> RunManifest:
 def schema_documents() -> dict[str, object]:
     """Build every committed machine-readable contract artifact."""
 
-    return {
+    documents = {
         "domain-events.schema.json": TypeAdapter(AnyDomainEvent).json_schema(),
         "tradeguard-config.schema.json": TradeGuardConfig.model_json_schema(),
         "run-manifest.schema.json": RunManifest.model_json_schema(),
@@ -96,8 +101,26 @@ def schema_documents() -> dict[str, object]:
         "adapters/equity-connected-smoke-result.schema.json": (
             ConnectedSmokeResult.model_json_schema()
         ),
+        "adapters/crypto-capabilities.schema.json": (CryptoAdapterCapabilities.model_json_schema()),
+        "adapters/crypto-historical-bars-request.schema.json": (
+            CryptoBarsRequest.model_json_schema()
+        ),
+        "adapters/coinbase-release-configuration.schema.json": (
+            CoinbaseReleaseConfiguration.model_json_schema()
+        ),
+        "adapters/crypto-connected-smoke-result.schema.json": (
+            CryptoConnectedSmokeResult.model_json_schema()
+        ),
+        "adapters/crypto-websocket-run-result.schema.json": StreamRunResult.model_json_schema(),
         "examples/sample-run-manifest.json": canonicalize(sample_run_manifest()),
     }
+    documents.update(
+        {
+            f"adapters/coinbase-rest-{name}.schema.json": schema
+            for name, schema in reviewed_rest_schemas().items()
+        }
+    )
+    return documents
 
 
 def write_document(path: Path, value: object) -> None:
