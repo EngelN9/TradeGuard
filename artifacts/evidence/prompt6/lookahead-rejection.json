@@ -1,0 +1,16 @@
+{
+  "fills": 0,
+  "order": {
+    "filled_quantity": "0",
+    "order_id": "same-close-attempt",
+    "reasons": [
+      "look_ahead_guard_same_bar"
+    ],
+    "remaining_quantity": "0.1",
+    "requested_quantity": "0.1",
+    "status": "unfilled"
+  },
+  "warnings": [
+    "same-close-attempt: same-close fill rejected"
+  ]
+}

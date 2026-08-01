@@ -8,6 +8,7 @@ from collections.abc import Sequence
 import uvicorn
 
 from tradeguard import __version__
+from tradeguard.backtest.cli import configure_backtest_parsers, run_backtest_command
 from tradeguard.data.cli import configure_data_parser, run_data_command
 from tradeguard.workers.service import run_worker
 
@@ -31,6 +32,7 @@ def build_parser() -> argparse.ArgumentParser:
         subcommands.add_parser(command)
     subcommands.add_parser("worker")
     configure_data_parser(subcommands)
+    configure_backtest_parsers(subcommands)
     return parser
 
 
@@ -40,6 +42,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     arguments = build_parser().parse_args(argv)
     if arguments.command == "data":
         return run_data_command(arguments)
+    if arguments.command in {"backtest", "replay"}:
+        return run_backtest_command(arguments)
     if arguments.command == "worker":
         return run_worker()
 

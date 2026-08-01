@@ -1,0 +1,37 @@
+{
+  "ending_asset_balances": {
+    "SYNTH-CRYPTO:BTC-USD": "0.25"
+  },
+  "fills": [
+    {
+      "asset_class": "crypto",
+      "costs": {
+        "commission": "0.153",
+        "market_impact": "0.0204",
+        "slippage": "0.0204",
+        "spread": "0.0204",
+        "tax": "0",
+        "total": "0.2142"
+      },
+      "event_time_utc": "2024-01-02T00:05:00.000000Z",
+      "fill_id": "461c604e42c42ca0c285b52ce2f6ce46991385115597201b95f75684b06cd5ac",
+      "order_id": "partial-fill-attempt",
+      "order_type": "market",
+      "price": "102",
+      "quantity": "0.25",
+      "side": "buy",
+      "symbol": "BTC-USD",
+      "venue": "SYNTH-CRYPTO"
+    }
+  ],
+  "order": {
+    "filled_quantity": "0.25",
+    "order_id": "partial-fill-attempt",
+    "reasons": [
+      "look_ahead_guard_same_bar"
+    ],
+    "remaining_quantity": "0.25",
+    "requested_quantity": "0.5",
+    "status": "partially_filled"
+  }
+}

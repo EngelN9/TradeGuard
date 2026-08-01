@@ -1,0 +1,25 @@
+{
+  "conservation": {
+    "asset_quantity_differences": {
+      "SYNTH-XNYS:ACME": "0"
+    },
+    "cash_equity_difference": "0",
+    "conserved": true,
+    "duplicate_fill_ids_ignored": 0
+  },
+  "corporate_actions": [
+    {
+      "action_checksum": "92f0aa39fc9ccd5becd69c2894330ce3fae7ef00078dd481e76e7b94932b48bb",
+      "action_type": "split",
+      "cash_delta": "0",
+      "effective_at": "2024-01-02T14:30:00.000000Z",
+      "quantity_after": "20",
+      "quantity_before": "10",
+      "symbol_after": "ACME",
+      "symbol_before": "ACME"
+    }
+  ],
+  "ending_asset_balances": {
+    "SYNTH-XNYS:ACME": "20"
+  }
+}

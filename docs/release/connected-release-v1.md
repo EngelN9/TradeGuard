@@ -469,6 +469,8 @@ no-secret, fail-closed, Decimal, UTC, test, evidence, and rollback requirements.
 
 ### TG-006 — Deterministic backtester and ledger
 
+Implementation status: `IMPLEMENTED / HUMAN PROMOTION REVIEW REQUIRED`.
+
 - Purpose: produce conservative reproducible simulations.
 - Scope: event loop, Decimal ledger, orders/fills, separate market costs,
   corporate actions, replay CLI.

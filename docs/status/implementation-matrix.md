@@ -1,12 +1,14 @@
 # TradeGuard v0.1.0 Implementation Matrix
 
-Assessment date: `2026-07-31`
+Assessment date: `2026-08-01`
 
 Base Git SHA before Prompt 4: `219fce6e75c07c05d3f6e662cac70db397316b3f`
 
 Base Git SHA before Prompt 5: `3e8e3c0`
 
-Overall status: `EQUITY AND CRYPTO ADAPTERS IMPLEMENTED / NOT TRADABLE`
+Base Git SHA before Prompt 6: `0b73ca4a562f56bb05d8a0537d596332b266190c`
+
+Overall status: `DETERMINISTIC BACKTESTER IMPLEMENTED / NOT TRADABLE`
 
 Status vocabulary:
 
@@ -56,6 +58,13 @@ gates, bounded reconnect/resubscription, controlled shutdown, and opt-in
 connected evidence. It adds no credential, user channel, account, order,
 transfer, withdrawal, derivatives, leverage, fallback, canary, or live
 capability. Connected qualification was not attempted.
+
+Prompt 6 on `codex/prompt-6-deterministic-backtester` adds a deterministic
+offline event loop, Decimal cash/asset ledger, conservative bar execution,
+separate equity/crypto cost models, corporate-action accounting, backtest and
+replay CLI commands, immutable ledgers, checksummed artifacts, and synthetic
+review evidence. It adds no strategy, account, broker, external order, canary,
+or live capability. Human promotion review remains required.
 
 ## Compliance matrix
 
@@ -110,11 +119,11 @@ capability. Connected qualification was not attempted.
 | Crypto adapter | Provider decision | COMPLETE | ADR 0003; Coinbase public API approved with conditions | Recheck terms and jurisdiction before each connected RC |
 | Crypto adapter | REST/WebSocket implementation | COMPLETE | Public-only BTC-USD adapter; exact REST/WS allowlists; Decimal/UTC manifests | Expansion requires review |
 | Crypto adapter | Reconnect/sequence/connected tests | COMPLETE | Offline contract/replay tests; redacted connected `SKIP_NOT_OPTED_IN` | Connected PASS and human promotion review remain blocked |
-| Backtest | Deterministic event loop | MISSING | None | TG-006 |
-| Backtest | Decimal portfolio ledger | MISSING | None | TG-006 |
-| Backtest | Conservative execution models | MISSING | None | TG-006 |
-| Backtest | Separate equity/crypto costs | MISSING | None | TG-006 |
-| Backtest | Conservation/look-ahead/replay tests | MISSING | None | TG-006 |
+| Backtest | Deterministic event loop | COMPLETE | Stable five-key timeline, repeated-result checksum evidence | Human Prompt 6 review |
+| Backtest | Decimal portfolio ledger | COMPLETE | Cash/asset balances, cost basis, PnL, actions, conservation report | Human Prompt 6 review |
+| Backtest | Conservative execution models | COMPLETE | Future-bar high/low, crossed limits, latency, partial/non-fill and fail-closed gates | Human Prompt 6 review |
+| Backtest | Separate equity/crypto costs | COMPLETE | Versioned commission/tax and maker/taker models with explicit friction | Calibrate only under later reviewed data |
+| Backtest | Conservation/look-ahead/replay tests | COMPLETE | Unit/property/replay/integration suites and `artifacts/evidence/prompt6/` | Human Prompt 6 review |
 | Strategy | Restricted protocol and registry | MISSING | None | TG-007 |
 | Strategy | Equity baseline strategies | MISSING | None | TG-007 |
 | Strategy | Crypto baseline strategies | MISSING | None | TG-007 |
@@ -167,12 +176,11 @@ capability. Connected qualification was not attempted.
 
 ## Critical gaps
 
-1. External non-live adapter, backtesting, strategies, validation,
+1. External non-live adapter, strategies, validation,
    risk, monitoring, and complete API/dashboard functionality remain future
    sequential prompts.
-2. Prompt 1 through Prompt 4 are published on the draft implementation pull
-   request, where all configured GitHub checks passed. Prompt 5 remains a
-   stacked implementation change until its own verification and publication.
+2. Prompt 0 through Prompt 5 are published on `main`; Prompt 6 is implemented
+   on its review branch and is not promoted until the required human review.
 3. No connected qualification can be claimed; both Twelve Data and Coinbase
    results are `SKIP_NOT_OPTED_IN`, no provider/account/broker connection was
    attempted, and ADR 0002/0003 promotion blockers remain unresolved.
@@ -373,3 +381,43 @@ Promotion remains `BLOCKED` until the Coinbase terms and jurisdiction are
 rechecked for the intended release-candidate use, an explicitly opted-in
 public REST/WebSocket smoke obtains `PASS`, the redacted evidence is human
 reviewed, and promotion is explicitly approved.
+
+Prompt 6 was authorized by the maintainer after Prompt 5 publication.
+
+## Prompt 6 implementation result
+
+`IMPLEMENTED / AWAITING HUMAN PROMOTION REVIEW`
+
+Verified locally:
+
+- The five-key deterministic timeline orders event time, ingest time, sequence,
+  event-kind priority, and canonical checksum tie-breaker.
+- Fixed-order backtest and replay runs emit bound run manifests, order/fill/
+  action/position/PnL ledgers, ending balances, warnings, conservation reports,
+  and deterministic result checksums.
+- The Decimal cash-only/long-only ledger rejects negative cash and short
+  positions, applies fill IDs idempotently, and preserves split cost basis.
+- Market fills use adverse future-bar high/low prices; limit fills require a
+  crossing and receive no assumed price improvement. Latency, participation,
+  partial-fill, precision, minimum-notional, session, and maintenance gates are
+  explicit and fail closed.
+- Equity commission/tax and crypto spot maker/taker cost models are separate,
+  versioned, and include explicit spread, slippage, and impact assumptions.
+- `tradeguard backtest run`, `tradeguard replay run`, and
+  `tradeguard backtest inspect` operate offline and reject command/plan mode
+  mismatches.
+- Six Prompt 6 JSON schemas reproduce from `scripts/export_schemas.py`.
+- Ruff format/lint, strict mypy, workflow validation, and secret scan pass.
+- The complete offline suite has 227 passing tests, two connected tests safely
+  deselected, and 90.89% branch-aware coverage.
+- Committed synthetic evidence proves repeated checksum equality, cash/asset
+  conservation, same-close rejection, partial fill, split accounting, and
+  rejection of a maintenance dataset with `FAIL` quality.
+- No strategy, benchmark, external account, credential, broker/order endpoint,
+  connected observation, canary, live, withdrawal, or transfer capability was
+  added or exercised.
+
+Prompt 6 is not promoted by these automated checks. The maintainer must review
+the ordering, ledger conservation, execution/cost assumptions, look-ahead
+rejection, partial-fill behavior, split accounting, and maintenance evidence
+before authorizing Prompt 7.

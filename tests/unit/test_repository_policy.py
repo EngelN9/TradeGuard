@@ -49,6 +49,8 @@ def test_makefile_has_required_targets_and_no_live_target() -> None:
         "data-fixtures",
         "prompt3-evidence",
         "prompt4-evidence",
+        "prompt5-evidence",
+        "prompt6-evidence",
         "dev-up",
         "dev-down",
     }
@@ -98,7 +100,7 @@ def test_security_policy_has_private_report_channel_without_placeholder() -> Non
 
 @pytest.mark.unit
 def test_public_status_documents_share_the_current_non_tradable_stage() -> None:
-    expected_status = "EQUITY AND CRYPTO ADAPTERS IMPLEMENTED / NOT TRADABLE"
+    expected_status = "DETERMINISTIC BACKTESTER IMPLEMENTED / NOT TRADABLE"
     readme = (REPOSITORY_ROOT / "README.md").read_text(encoding="utf-8")
     security = (REPOSITORY_ROOT / "SECURITY.md").read_text(encoding="utf-8")
 

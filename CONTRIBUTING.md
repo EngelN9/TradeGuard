@@ -46,6 +46,11 @@ npm test --prefix web
 npm run build --prefix web
 ```
 
+Prompt 6 deterministic backtest evidence can be regenerated with
+`make prompt6-evidence` (or `uv run python scripts/collect_prompt6_evidence.py`).
+It must remain synthetic-only and must not be described as strategy performance
+or connected-market evidence.
+
 Connected tests are never part of default CI. They require an explicit
 `TRADEGUARD_RUN_CONNECTED_TESTS=1`, the applicable accepted ADR, a reviewed
 session/endpoint allowlist, and the least privilege described in

@@ -131,3 +131,20 @@ def test_prompt3_schemas_expose_required_contracts() -> None:
         "known_at",
         "metadata_version",
     } <= set(metadata_schema["properties"])
+
+
+@pytest.mark.contract
+def test_prompt6_schemas_expose_plan_artifact_and_ledgers() -> None:
+    documents = schema_documents()
+
+    assert {
+        "backtest/plan.schema.json",
+        "backtest/artifact.schema.json",
+        "backtest/order-ledger-entry.schema.json",
+        "backtest/fill-ledger-entry.schema.json",
+        "backtest/position-ledger-entry.schema.json",
+        "backtest/pnl-ledger-entry.schema.json",
+    } <= set(documents)
+    artifact = documents["backtest/artifact.schema.json"]
+    assert isinstance(artifact, dict)
+    assert {"manifest", "result"} <= set(artifact["properties"])
