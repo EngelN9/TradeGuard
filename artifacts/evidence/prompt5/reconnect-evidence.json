@@ -1,0 +1,16 @@
+{
+  "backoff_seconds": [
+    1.0
+  ],
+  "clean_shutdown": true,
+  "fixture": "deterministic_synthetic",
+  "first_connection_closed": true,
+  "messages_received": 5,
+  "provider_contacted": false,
+  "reconnect_count": 1,
+  "resubscription_count": 1,
+  "schema_version": "1.0.0",
+  "second_connection_closed": true,
+  "subscriptions_sent": 8,
+  "test": "tests/replay/test_coinbase_websocket_replay.py::test_disconnect_uses_bounded_backoff_and_resubscribes"
+}

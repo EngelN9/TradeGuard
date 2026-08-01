@@ -1,0 +1,80 @@
+{
+  "$defs": {
+    "_PublicTrade": {
+      "properties": {
+        "exchange": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exchange"
+        },
+        "price": {
+          "title": "Price",
+          "type": "string"
+        },
+        "product_id": {
+          "title": "Product Id",
+          "type": "string"
+        },
+        "side": {
+          "title": "Side",
+          "type": "string"
+        },
+        "size": {
+          "title": "Size",
+          "type": "string"
+        },
+        "time": {
+          "title": "Time",
+          "type": "string"
+        },
+        "trade_id": {
+          "title": "Trade Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "trade_id",
+        "product_id",
+        "price",
+        "size",
+        "time",
+        "side"
+      ],
+      "title": "_PublicTrade",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "best_ask": {
+      "title": "Best Ask",
+      "type": "string"
+    },
+    "best_bid": {
+      "title": "Best Bid",
+      "type": "string"
+    },
+    "trades": {
+      "items": {
+        "$ref": "#/$defs/_PublicTrade"
+      },
+      "maxItems": 10,
+      "minItems": 1,
+      "title": "Trades",
+      "type": "array"
+    }
+  },
+  "required": [
+    "trades",
+    "best_bid",
+    "best_ask"
+  ],
+  "title": "_TickerResponse",
+  "type": "object"
+}

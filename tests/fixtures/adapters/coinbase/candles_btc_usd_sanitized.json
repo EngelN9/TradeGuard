@@ -1,0 +1,37 @@
+{
+  "capture": {
+    "fixture_schema_version": "1.0.0",
+    "raw_payload_published": false,
+    "raw_payload_retained": false,
+    "sanitized": true,
+    "values_are_deterministic_synthetic": true
+  },
+  "response": {
+    "candles": [
+      {
+        "close": "42001.00",
+        "high": "42002.00",
+        "low": "41999.00",
+        "open": "42000.00",
+        "start": "1704067200",
+        "volume": "1.00000000"
+      },
+      {
+        "close": "42002.00",
+        "high": "42003.00",
+        "low": "42000.00",
+        "open": "42001.00",
+        "start": "1704067260",
+        "volume": "2.00000000"
+      },
+      {
+        "close": "42003.00",
+        "high": "42004.00",
+        "low": "42001.00",
+        "open": "42002.00",
+        "start": "1704067320",
+        "volume": "3.00000000"
+      }
+    ]
+  }
+}

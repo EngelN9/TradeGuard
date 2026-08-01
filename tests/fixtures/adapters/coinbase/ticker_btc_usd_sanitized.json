@@ -1,0 +1,33 @@
+{
+  "capture": {
+    "fixture_schema_version": "1.0.0",
+    "raw_payload_published": false,
+    "raw_payload_retained": false,
+    "sanitized": true,
+    "values_are_deterministic_synthetic": true
+  },
+  "response": {
+    "best_ask": "42004.00",
+    "best_bid": "42003.00",
+    "trades": [
+      {
+        "exchange": "CBE",
+        "price": "42002.00",
+        "product_id": "BTC-USD",
+        "side": "BUY",
+        "size": "0.01000000",
+        "time": "2024-01-01T00:03:30Z",
+        "trade_id": "synthetic-trade-001"
+      },
+      {
+        "exchange": "CBE",
+        "price": "42003.00",
+        "product_id": "BTC-USD",
+        "side": "SELL",
+        "size": "0.02000000",
+        "time": "2024-01-01T00:04:00Z",
+        "trade_id": "synthetic-trade-002"
+      }
+    ]
+  }
+}

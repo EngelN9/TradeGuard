@@ -1,0 +1,79 @@
+{
+  "capabilities": {
+    "accounts": false,
+    "approval_status": "APPROVED_WITH_CONDITIONS",
+    "approved_pairs": [
+      "BTC-USD"
+    ],
+    "authenticated": false,
+    "best_bid_ask": true,
+    "derivatives": false,
+    "enabled_rest_host": "api.coinbase.com",
+    "enabled_rest_paths": [
+      "/api/v3/brokerage/time",
+      "/api/v3/brokerage/market/products/BTC-USD",
+      "/api/v3/brokerage/market/products/BTC-USD/candles",
+      "/api/v3/brokerage/market/products/BTC-USD/ticker"
+    ],
+    "enabled_websocket_channels": [
+      "heartbeats",
+      "market_trades",
+      "status",
+      "ticker"
+    ],
+    "enabled_websocket_host": "advanced-trade-ws.coinbase.com",
+    "execution_grade": false,
+    "historical_bars": true,
+    "instrument_metadata": true,
+    "leverage": false,
+    "licensing_constraints": [
+      "internal non-display research use only until a release-candidate terms review",
+      "raw connected market values are transient and prohibited from Git or public evidence",
+      "public artifacts may contain only sanitized synthetic fixtures, checksums, manifests, counts, and status"
+    ],
+    "limitations": [
+      "BTC-USD spot only",
+      "public unauthenticated endpoints only",
+      "not a consolidated, execution-grade, account, order, transfer, withdrawal, or fallback feed",
+      "REST public-endpoint cache and provider schema evolution may affect observations",
+      "unknown sequence, stale stream, or metadata conflict is NOT_TRADABLE"
+    ],
+    "orders": false,
+    "provider": "coinbase_advanced_trade",
+    "provider_fallback": false,
+    "public_only": true,
+    "public_trades": true,
+    "rate_limit_metadata": true,
+    "rest_health": true,
+    "schema_version": "1.0.0",
+    "supported_trading_pairs": true,
+    "transfers": false,
+    "user_channel": false,
+    "venue_maintenance_status": true,
+    "websocket_stream": true,
+    "withdrawals": false
+  },
+  "connected_smoke": {
+    "maximum_reconnects": 3,
+    "product_id": "BTC-USD",
+    "rest_trade_limit": 5,
+    "stale_after_seconds": 5,
+    "websocket_deadline_seconds": 30,
+    "websocket_maximum_messages": 20,
+    "websocket_minimum_messages": 4
+  },
+  "provider": {
+    "authentication": "prohibited_for_public_market_data",
+    "fallback": "prohibited",
+    "name": "coinbase_advanced_trade",
+    "status": "approved_with_conditions"
+  },
+  "retention": {
+    "checksum_and_manifest_allowed": true,
+    "raw_connected_response": "transient_only",
+    "raw_response_publication": "prohibited",
+    "sanitized_contract_fixture_allowed": true,
+    "synthetic_fixture_allowed": true
+  },
+  "schema_version": "1.0.0"
+}

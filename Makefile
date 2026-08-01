@@ -3,6 +3,7 @@ UV ?= uv
 .PHONY: setup format lint typecheck test test-unit test-property test-integration
 .PHONY: test-contract test-replay test-e2e test-connected evidence dev-up dev-down
 .PHONY: api worker web build schemas data-fixtures prompt3-evidence prompt4-evidence
+.PHONY: prompt5-evidence test-coinbase-connected
 
 setup:
 	$(UV) sync --locked
@@ -51,6 +52,14 @@ test-connected:
 		$(UV) run pytest -m connected tests/connected; \
 	fi
 
+test-coinbase-connected:
+	@if [ "$$TRADEGUARD_RUN_COINBASE_CONNECTED_TESTS" != "1" ]; then \
+		echo "SKIP: set TRADEGUARD_RUN_COINBASE_CONNECTED_TESTS=1 after ADR 0003 prerequisites"; \
+	else \
+		$(UV) run python scripts/run_coinbase_connected_smoke.py && \
+		$(UV) run pytest -m connected tests/connected/test_coinbase_connected_opt_in.py; \
+	fi
+
 evidence:
 	$(UV) run python scripts/collect_evidence.py
 
@@ -65,6 +74,9 @@ prompt3-evidence:
 
 prompt4-evidence:
 	$(UV) run python scripts/collect_prompt4_evidence.py
+
+prompt5-evidence:
+	$(UV) run python scripts/collect_prompt5_evidence.py
 
 dev-up:
 	docker compose up --build -d

@@ -1,0 +1,31 @@
+{
+  "capture": {
+    "fixture_schema_version": "1.0.0",
+    "license_reviewed_at": "2026-07-31",
+    "raw_payload_published": false,
+    "raw_payload_retained": false,
+    "redistribution_allowed": false,
+    "sanitized": true,
+    "terms_reviewed_version": "2026-07-31",
+    "usage_class": "internal_non_display",
+    "values_are_deterministic_synthetic": true
+  },
+  "response": {
+    "base_currency_id": "BTC",
+    "base_increment": "0.00000001",
+    "base_min_size": "0.00000001",
+    "cancel_only": false,
+    "is_disabled": false,
+    "new_at": "2015-01-01T00:00:00Z",
+    "price_increment": "0.01",
+    "product_id": "BTC-USD",
+    "product_type": "SPOT",
+    "product_venue": "CBE",
+    "quote_currency_id": "USD",
+    "quote_increment": "0.01",
+    "quote_min_size": "1.00",
+    "status": "online",
+    "trading_disabled": false,
+    "view_only": false
+  }
+}

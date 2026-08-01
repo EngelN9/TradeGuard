@@ -1,0 +1,40 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "end": {
+      "format": "date-time",
+      "title": "End",
+      "type": "string"
+    },
+    "granularity": {
+      "const": "ONE_MINUTE",
+      "default": "ONE_MINUTE",
+      "title": "Granularity",
+      "type": "string"
+    },
+    "limit": {
+      "default": 5,
+      "maximum": 10,
+      "minimum": 1,
+      "title": "Limit",
+      "type": "integer"
+    },
+    "product_id": {
+      "const": "BTC-USD",
+      "default": "BTC-USD",
+      "title": "Product Id",
+      "type": "string"
+    },
+    "start": {
+      "format": "date-time",
+      "title": "Start",
+      "type": "string"
+    }
+  },
+  "required": [
+    "start",
+    "end"
+  ],
+  "title": "CryptoBarsRequest",
+  "type": "object"
+}

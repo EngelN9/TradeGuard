@@ -1,0 +1,35 @@
+{
+  "accounts": false,
+  "approved_pairs": [
+    "BTC-USD"
+  ],
+  "authenticated": false,
+  "derivatives": false,
+  "enabled_rest_host": "api.coinbase.com",
+  "enabled_rest_paths": [
+    "/api/v3/brokerage/time",
+    "/api/v3/brokerage/market/products/BTC-USD",
+    "/api/v3/brokerage/market/products/BTC-USD/candles",
+    "/api/v3/brokerage/market/products/BTC-USD/ticker"
+  ],
+  "enabled_websocket_channels": [
+    "heartbeats",
+    "market_trades",
+    "status",
+    "ticker"
+  ],
+  "enabled_websocket_host": "advanced-trade-ws.coinbase.com",
+  "execution_grade": false,
+  "fallback": false,
+  "leverage": false,
+  "orders": false,
+  "provider": "coinbase_advanced_trade",
+  "public_only": true,
+  "raw_connected_payload_publication": false,
+  "raw_connected_payload_retention": "transient_only",
+  "schema_version": "1.0.0",
+  "status": "IMPLEMENTED_PROMOTION_BLOCKED",
+  "transfers": false,
+  "user_channel": false,
+  "withdrawals": false
+}

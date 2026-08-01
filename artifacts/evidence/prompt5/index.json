@@ -1,0 +1,46 @@
+{
+  "artifacts": [
+    {
+      "path": "adapter-capability-report.json",
+      "sha256": "a83262baa59e20984060084f9eb2b38438b10be9c0629b01220b19773ab3ead1"
+    },
+    {
+      "path": "all-offline-tests.xml",
+      "sha256": "dee06b2853ab72813c5421fcb196bc3799930229d7671766776760bdd34ba886"
+    },
+    {
+      "path": "connected-smoke-result.json",
+      "sha256": "593656bf914e917edddf82bc2d3b4f802e77456807de76d57844ff818c07550d"
+    },
+    {
+      "path": "coverage.xml",
+      "sha256": "ef703c62062dd092ecb48d25927fefdf678b9b3d1442dd4cc469b97278f981f7"
+    },
+    {
+      "path": "fixture-checksums.json",
+      "sha256": "43b4a52d5ae9e958cb1d62b048177bf2af931f85cb39a23140779ed20b6c1976"
+    },
+    {
+      "path": "offline-contract-tests.xml",
+      "sha256": "43e26bd7c94aa79225b513ed68de6c5fed91172ad6b0fc8c79904cd80291e942"
+    },
+    {
+      "path": "reconnect-evidence.json",
+      "sha256": "73774a357d2a9c34ab5c32c8a5e12462d60e8467af71c29be48fb77bd30111cf"
+    },
+    {
+      "path": "sequence-gap-rejection.json",
+      "sha256": "b207e89b86b67f049eadf281b071a2381c028828f3aca9c0b858cfe7142da3a5"
+    },
+    {
+      "path": "validation-result.json",
+      "sha256": "42186bd22ebddf1b4ec2e53fcad71942f54cef4282a034552b11fe7af2110cfd"
+    },
+    {
+      "path": "websocket-replay-tests.xml",
+      "sha256": "a5ca27c6e22e510d575c8d1a484279c61a2a2580b763be3f553a61615908ce24"
+    }
+  ],
+  "evidence_stage": "prompt5",
+  "schema_version": "1.0.0"
+}

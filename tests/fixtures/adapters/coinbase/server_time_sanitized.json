@@ -1,0 +1,14 @@
+{
+  "capture": {
+    "fixture_schema_version": "1.0.0",
+    "raw_payload_published": false,
+    "raw_payload_retained": false,
+    "sanitized": true,
+    "values_are_deterministic_synthetic": true
+  },
+  "response": {
+    "epochMillis": "1704067500000",
+    "epochSeconds": "1704067500",
+    "iso": "2024-01-01T00:05:00Z"
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "capture": {
+    "channels": [
+      "status",
+      "heartbeats",
+      "ticker",
+      "market_trades"
+    ],
+    "fixture_schema_version": "1.0.0",
+    "raw_payload_published": false,
+    "raw_payload_retained": false,
+    "sanitized": true,
+    "values_are_deterministic_synthetic": true
+  },
+  "messages": [
+    {
+      "channel": "status",
+      "events": [
+        {
+          "products": [
+            {
+              "base_currency": "BTC",
+              "base_increment": "0.00000001",
+              "display_name": "BTC/USD",
+              "id": "BTC-USD",
+              "min_market_funds": "1.00",
+              "product_type": "SPOT",
+              "quote_currency": "USD",
+              "quote_increment": "0.01",
+              "status": "online",
+              "status_message": ""
+            }
+          ],
+          "type": "snapshot"
+        }
+      ],
+      "sequence_num": 10,
+      "timestamp": "2024-01-01T00:04:57Z"
+    },
+    {
+      "channel": "heartbeats",
+      "events": [
+        {
+          "current_time": "2024-01-01T00:04:58Z",
+          "heartbeat_counter": 100
+        }
+      ],
+      "sequence_num": 20,
+      "timestamp": "2024-01-01T00:04:58Z"
+    },
+    {
+      "channel": "ticker",
+      "events": [
+        {
+          "tickers": [
+            {
+              "best_ask": "42004.00",
+              "best_ask_quantity": "0.05000000",
+              "best_bid": "42003.00",
+              "best_bid_quantity": "0.04000000",
+              "high_24_h": "43000.00",
+              "high_52_w": "50000.00",
+              "low_24_h": "41000.00",
+              "low_52_w": "15000.00",
+              "price": "42003.50",
+              "price_percent_chg_24_h": "1.2",
+              "product_id": "BTC-USD",
+              "type": "ticker",
+              "volume_24_h": "1000.00000000"
+            }
+          ],
+          "type": "snapshot"
+        }
+      ],
+      "sequence_num": 30,
+      "timestamp": "2024-01-01T00:04:59Z"
+    },
+    {
+      "channel": "market_trades",
+      "events": [
+        {
+          "trades": [
+            {
+              "price": "42003.50",
+              "product_id": "BTC-USD",
+              "side": "BUY",
+              "size": "0.01000000",
+              "time": "2024-01-01T00:04:59.500000Z",
+              "trade_id": "synthetic-ws-trade-001"
+            }
+          ],
+          "type": "update"
+        }
+      ],
+      "sequence_num": 40,
+      "timestamp": "2024-01-01T00:05:00Z"
+    }
+  ]
+}

@@ -98,7 +98,7 @@ def test_security_policy_has_private_report_channel_without_placeholder() -> Non
 
 @pytest.mark.unit
 def test_public_status_documents_share_the_current_non_tradable_stage() -> None:
-    expected_status = "EQUITY ADAPTER IMPLEMENTED / NOT TRADABLE"
+    expected_status = "EQUITY AND CRYPTO ADAPTERS IMPLEMENTED / NOT TRADABLE"
     readme = (REPOSITORY_ROOT / "README.md").read_text(encoding="utf-8")
     security = (REPOSITORY_ROOT / "SECURITY.md").read_text(encoding="utf-8")
 

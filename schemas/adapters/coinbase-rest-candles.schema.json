@@ -1,0 +1,58 @@
+{
+  "$defs": {
+    "_Candle": {
+      "properties": {
+        "close": {
+          "title": "Close",
+          "type": "string"
+        },
+        "high": {
+          "title": "High",
+          "type": "string"
+        },
+        "low": {
+          "title": "Low",
+          "type": "string"
+        },
+        "open": {
+          "title": "Open",
+          "type": "string"
+        },
+        "start": {
+          "title": "Start",
+          "type": "string"
+        },
+        "volume": {
+          "title": "Volume",
+          "type": "string"
+        }
+      },
+      "required": [
+        "start",
+        "low",
+        "high",
+        "open",
+        "close",
+        "volume"
+      ],
+      "title": "_Candle",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "candles": {
+      "items": {
+        "$ref": "#/$defs/_Candle"
+      },
+      "maxItems": 10,
+      "minItems": 1,
+      "title": "Candles",
+      "type": "array"
+    }
+  },
+  "required": [
+    "candles"
+  ],
+  "title": "_CandlesResponse",
+  "type": "object"
+}

@@ -1,4 +1,4 @@
-# Bootstrap Evidence
+# TradeGuard evidence
 
 `make evidence` writes redacted, generated evidence to
 `artifacts/evidence/bootstrap/`.
@@ -14,5 +14,12 @@ The bootstrap bundle contains:
   qualification
 - an `index.json` containing SHA-256 checksums for the generated files
 
-Generated evidence is intentionally ignored by Git. It must not contain
-environment values, credentials, account details, or other secrets.
+Stage-specific Prompt 3 through Prompt 5 directories also contain committed,
+redacted review evidence. Prompt 5 includes only deterministic synthetic
+Coinbase-shaped fixture checksums, capability/status records, reconnect and
+sequence-gap evidence, test output, and an explicitly non-connected smoke
+result.
+
+Evidence must not contain environment values, credentials, account details, raw
+connected market values, or other secrets. A fixture replay must never be
+represented as a connected PASS.

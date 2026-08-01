@@ -7,6 +7,7 @@ import pytest
 from scripts.collect_evidence import build_index, sha256_file, write_json
 from scripts.collect_prompt3_evidence import evidence_documents
 from scripts.collect_prompt4_evidence import FIXTURE_PATH, collect_evidence
+from scripts.collect_prompt5_evidence import sanitize_xml
 from scripts.scan_secrets import candidate_files, scan_file
 from scripts.validate_workflows import validate_workflow
 
@@ -121,3 +122,21 @@ def test_prompt4_public_evidence_excludes_credentials_and_raw_ohlcv(tmp_path: Pa
     for row in fixture["response"]["values"]:
         for field in ("open", "high", "low", "close", "volume"):
             assert row[field] not in serialized
+
+
+@pytest.mark.unit
+def test_prompt5_xml_evidence_redacts_workstation_identity(tmp_path: Path) -> None:
+    evidence = tmp_path / "coverage.xml"
+    repository_path = Path(__file__).resolve().parents[2]
+    evidence.write_text(
+        f'<source>{repository_path}</source><testsuite hostname="private-host" />',
+        encoding="utf-8",
+    )
+
+    sanitize_xml(evidence)
+
+    sanitized = evidence.read_text(encoding="utf-8")
+    assert str(repository_path) not in sanitized
+    assert 'hostname="private-host"' not in sanitized
+    assert "<source>.</source>" in sanitized
+    assert 'hostname="redacted"' in sanitized
