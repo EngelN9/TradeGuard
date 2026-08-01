@@ -53,10 +53,11 @@ TradeGuard 不會因開發速度、操作便利性或績效展示而降低安全
 
 目前 TradeGuard 尚處於：
 
-CORE CONTRACTS / NOT TRADABLE
+EQUITY ADAPTER IMPLEMENTED / NOT TRADABLE
 
-目前已完成 repository bootstrap 與 Prompt 2 核心資料合約；尚未進入策略、
-回測或外部資料接入階段，也沒有正式下單、提款或轉帳能力。
+目前已完成 repository bootstrap、Prompt 2 核心資料合約、Prompt 3 離線
+資料基礎與 Prompt 4 的受限股票資料 adapter；尚未完成 connected
+qualification，也未進入策略或回測階段。系統沒有正式下單、提款或轉帳能力。
 
 在第一個正式版本發布前，安全修正原則上只會套用至預設分支：
 
@@ -1589,4 +1590,3 @@ TradeGuard 還必須防止：
 當系統狀態、資料完整性、權限或外部帳戶狀態無法確認時：
 
 > TradeGuard 必須停止高風險操作、保存證據並 fail closed，而不是猜測系統仍然安全。
-

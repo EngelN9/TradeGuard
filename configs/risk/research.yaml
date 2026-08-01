@@ -1,0 +1,5 @@
+risk:
+  fail_closed: true
+  max_gross_exposure: "1"
+  max_single_asset_exposure: "0.10"
+  stale_data_seconds: 300

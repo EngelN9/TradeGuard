@@ -1,0 +1,3 @@
+monitoring:
+  health_interval_seconds: 30
+  data_freshness_seconds: 300

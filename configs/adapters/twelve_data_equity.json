@@ -1,0 +1,101 @@
+{
+  "account": {
+    "account_type": "individual",
+    "plan_name": "Basic"
+  },
+  "api_entitlement": {
+    "api_credits_per_minute": 8,
+    "daily_credit_limit": 800,
+    "historical_daily_bars": "allowed",
+    "interval_1day": "allowed",
+    "symbol_AAPL": "allowed",
+    "time_series_endpoint": "allowed"
+  },
+  "capabilities": {
+    "approval_status": "APPROVED_WITH_CONDITIONS",
+    "approved_mics": [
+      "XNAS",
+      "XNGS"
+    ],
+    "approved_symbols": [
+      "AAPL"
+    ],
+    "authenticated": true,
+    "consolidated_feed": false,
+    "corporate_actions": false,
+    "delayed": "entitlement_dependent",
+    "enabled_host": "api.twelvedata.com",
+    "enabled_paths": [
+      "/time_series"
+    ],
+    "execution_grade": false,
+    "full_market_volume": false,
+    "historical_bars": true,
+    "instrument_metadata": true,
+    "latest_bar_or_quote": true,
+    "licensing_constraints": [
+      "internal non-display use only",
+      "no redistribution or public display",
+      "raw provider market values must not enter Git, public evidence, or release artifacts"
+    ],
+    "limitations": [
+      "AAPL US common stock only",
+      "unadjusted one-day bars only",
+      "real-time and delayed status are entitlement-dependent and not claimed",
+      "non-consolidated and not NBBO, full-market-volume, or execution-grade",
+      "corporate actions unsupported",
+      "no fallback provider"
+    ],
+    "market_calendar_source": "internal_approved_sessions",
+    "nbbo": false,
+    "provider": "twelve_data",
+    "provider_fallback": false,
+    "public_display": false,
+    "real_time": "entitlement_dependent",
+    "redistribution": false,
+    "schema_version": "1.0.0",
+    "symbol_normalization": true,
+    "timezone_source": "provider_validated_against_internal_registry"
+  },
+  "connected_smoke": {
+    "adjustment": "none",
+    "interval": "1day",
+    "mic": "XNAS",
+    "minimum_completed_sessions": 5,
+    "outputsize": 10,
+    "provider": "twelve_data",
+    "symbol": "AAPL"
+  },
+  "corporate_actions": {
+    "bar_adjustment": "none",
+    "corporate_action_retrieval": "unsupported",
+    "dividends_endpoint": "disabled",
+    "splits_endpoint": "disabled"
+  },
+  "licensing": {
+    "classification": "internal_use_only",
+    "public_raw_fixture_allowed": false,
+    "redistribution_allowed": false
+  },
+  "provider": {
+    "fallback": "prohibited",
+    "name": "twelve_data",
+    "status": "approved_with_conditions"
+  },
+  "public_display": {
+    "allowed": false
+  },
+  "retention": {
+    "checksum_and_manifest_allowed": true,
+    "raw_connected_response": "transient_only",
+    "raw_response_publication": "prohibited",
+    "raw_response_release_evidence": "prohibited",
+    "sanitized_contract_fixture_allowed": true,
+    "synthetic_fixture_allowed": true
+  },
+  "schema_version": "1.0.0",
+  "usage": {
+    "approved": true,
+    "intended_use": "internal_non_display"
+  }
+}

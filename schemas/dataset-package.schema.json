@@ -1,0 +1,962 @@
+{
+  "$defs": {
+    "CorporateAction": {
+      "additionalProperties": false,
+      "description": "Point-in-time equity corporate action.",
+      "properties": {
+        "action_type": {
+          "$ref": "#/$defs/CorporateActionType"
+        },
+        "action_version": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Action Version",
+          "type": "string"
+        },
+        "cash_amount": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cash Amount"
+        },
+        "currency": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Currency"
+        },
+        "effective_at": {
+          "format": "date-time",
+          "title": "Effective At",
+          "type": "string"
+        },
+        "known_at": {
+          "format": "date-time",
+          "title": "Known At",
+          "type": "string"
+        },
+        "new_symbol": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "New Symbol"
+        },
+        "ratio": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ratio"
+        },
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "symbol": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Symbol",
+          "type": "string"
+        },
+        "venue": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Venue",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source",
+        "venue",
+        "symbol",
+        "action_type",
+        "effective_at",
+        "known_at",
+        "action_version"
+      ],
+      "title": "CorporateAction",
+      "type": "object"
+    },
+    "CorporateActionType": {
+      "enum": [
+        "split",
+        "reverse_split",
+        "cash_dividend",
+        "symbol_change",
+        "delisting"
+      ],
+      "title": "CorporateActionType",
+      "type": "string"
+    },
+    "DataCorrection": {
+      "additionalProperties": false,
+      "properties": {
+        "affected_range": {
+          "$ref": "#/$defs/DataInterval"
+        },
+        "corrected_checksum": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Corrected Checksum",
+          "type": "string"
+        },
+        "correction_id": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Correction Id",
+          "type": "string"
+        },
+        "description": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "known_at": {
+          "format": "date-time",
+          "title": "Known At",
+          "type": "string"
+        },
+        "previous_checksum": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Previous Checksum",
+          "type": "string"
+        }
+      },
+      "required": [
+        "correction_id",
+        "description",
+        "known_at",
+        "affected_range",
+        "previous_checksum",
+        "corrected_checksum"
+      ],
+      "title": "DataCorrection",
+      "type": "object"
+    },
+    "DataInterval": {
+      "additionalProperties": false,
+      "properties": {
+        "end_utc": {
+          "format": "date-time",
+          "title": "End Utc",
+          "type": "string"
+        },
+        "start_utc": {
+          "format": "date-time",
+          "title": "Start Utc",
+          "type": "string"
+        }
+      },
+      "required": [
+        "start_utc",
+        "end_utc"
+      ],
+      "title": "DataInterval",
+      "type": "object"
+    },
+    "DatasetManifest": {
+      "additionalProperties": false,
+      "description": "Complete identity, provenance, and quality context for one dataset.",
+      "properties": {
+        "asset_class": {
+          "enum": [
+            "equity",
+            "crypto"
+          ],
+          "title": "Asset Class",
+          "type": "string"
+        },
+        "checksums": {
+          "additionalProperties": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "propertyNames": {
+            "maxLength": 2048,
+            "minLength": 1
+          },
+          "title": "Checksums",
+          "type": "object"
+        },
+        "corrections": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/DataCorrection"
+          },
+          "title": "Corrections",
+          "type": "array"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "dataset_id": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Dataset Id",
+          "type": "string"
+        },
+        "dataset_version": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Dataset Version",
+          "type": "string"
+        },
+        "date_range": {
+          "$ref": "#/$defs/DataInterval"
+        },
+        "ingested_at": {
+          "format": "date-time",
+          "title": "Ingested At",
+          "type": "string"
+        },
+        "licensing_notes": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Licensing Notes",
+          "type": "string"
+        },
+        "missing_intervals": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/MissingInterval"
+          },
+          "title": "Missing Intervals",
+          "type": "array"
+        },
+        "parent_dataset": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ParentDataset"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "partition_information": {
+          "items": {
+            "$ref": "#/$defs/DatasetPartition"
+          },
+          "minItems": 1,
+          "title": "Partition Information",
+          "type": "array"
+        },
+        "row_count": {
+          "minimum": 0,
+          "title": "Row Count",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "symbols": {
+          "items": {
+            "maxLength": 2048,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Symbols",
+          "type": "array"
+        },
+        "transformation_graph": {
+          "$ref": "#/$defs/TransformationGraph"
+        }
+      },
+      "required": [
+        "dataset_id",
+        "dataset_version",
+        "source",
+        "asset_class",
+        "symbols",
+        "date_range",
+        "row_count",
+        "partition_information",
+        "checksums",
+        "created_at",
+        "ingested_at",
+        "licensing_notes"
+      ],
+      "title": "DatasetManifest",
+      "type": "object"
+    },
+    "DatasetPartition": {
+      "additionalProperties": false,
+      "properties": {
+        "checksum": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Checksum",
+          "type": "string"
+        },
+        "date_range": {
+          "$ref": "#/$defs/DataInterval"
+        },
+        "partition_id": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Partition Id",
+          "type": "string"
+        },
+        "relative_path": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Relative Path",
+          "type": "string"
+        },
+        "row_count": {
+          "minimum": 0,
+          "title": "Row Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "partition_id",
+        "relative_path",
+        "row_count",
+        "date_range",
+        "checksum"
+      ],
+      "title": "DatasetPartition",
+      "type": "object"
+    },
+    "InstrumentMetadata": {
+      "additionalProperties": false,
+      "description": "Point-in-time instrument definition.",
+      "properties": {
+        "active_from": {
+          "format": "date-time",
+          "title": "Active From",
+          "type": "string"
+        },
+        "active_to": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Active To"
+        },
+        "asset_class": {
+          "enum": [
+            "equity",
+            "crypto"
+          ],
+          "title": "Asset Class",
+          "type": "string"
+        },
+        "canonical_symbol": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Canonical Symbol",
+          "type": "string"
+        },
+        "currency": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Currency"
+        },
+        "known_at": {
+          "format": "date-time",
+          "title": "Known At",
+          "type": "string"
+        },
+        "lot_size": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "gt": 0,
+          "title": "Lot Size"
+        },
+        "metadata_version": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Metadata Version",
+          "type": "string"
+        },
+        "minimum_notional": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Minimum Notional"
+        },
+        "minimum_quantity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Minimum Quantity"
+        },
+        "quote_asset": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Quote Asset"
+        },
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session_calendar": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Session Calendar"
+        },
+        "source": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "step_size": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "gt": 0,
+          "title": "Step Size"
+        },
+        "symbol": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Symbol",
+          "type": "string"
+        },
+        "tick_size": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "gt": 0,
+          "title": "Tick Size"
+        },
+        "timezone": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Timezone",
+          "type": "string"
+        },
+        "venue": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Venue",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source",
+        "asset_class",
+        "venue",
+        "symbol",
+        "canonical_symbol",
+        "tick_size",
+        "step_size",
+        "lot_size",
+        "minimum_quantity",
+        "minimum_notional",
+        "timezone",
+        "active_from",
+        "known_at",
+        "metadata_version"
+      ],
+      "title": "InstrumentMetadata",
+      "type": "object"
+    },
+    "JsonValue": {},
+    "MaintenanceInterval": {
+      "additionalProperties": false,
+      "description": "Known crypto venue-maintenance interval.",
+      "properties": {
+        "end_utc": {
+          "format": "date-time",
+          "title": "End Utc",
+          "type": "string"
+        },
+        "known_at": {
+          "format": "date-time",
+          "title": "Known At",
+          "type": "string"
+        },
+        "reason": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "start_utc": {
+          "format": "date-time",
+          "title": "Start Utc",
+          "type": "string"
+        },
+        "venue": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Venue",
+          "type": "string"
+        }
+      },
+      "required": [
+        "venue",
+        "start_utc",
+        "end_utc",
+        "known_at",
+        "reason"
+      ],
+      "title": "MaintenanceInterval",
+      "type": "object"
+    },
+    "MarketSession": {
+      "additionalProperties": false,
+      "description": "Point-in-time equity session definition, including half days.",
+      "properties": {
+        "half_day": {
+          "default": false,
+          "title": "Half Day",
+          "type": "boolean"
+        },
+        "known_at": {
+          "format": "date-time",
+          "title": "Known At",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session_calendar": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Session Calendar",
+          "type": "string"
+        },
+        "session_close_utc": {
+          "format": "date-time",
+          "title": "Session Close Utc",
+          "type": "string"
+        },
+        "session_open_utc": {
+          "format": "date-time",
+          "title": "Session Open Utc",
+          "type": "string"
+        },
+        "source": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/SessionStatus"
+        },
+        "venue": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Venue",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source",
+        "venue",
+        "session_calendar",
+        "session_open_utc",
+        "session_close_utc",
+        "known_at",
+        "status"
+      ],
+      "title": "MarketSession",
+      "type": "object"
+    },
+    "MissingInterval": {
+      "additionalProperties": false,
+      "properties": {
+        "date_range": {
+          "$ref": "#/$defs/DataInterval"
+        },
+        "reason": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "date_range",
+        "reason"
+      ],
+      "title": "MissingInterval",
+      "type": "object"
+    },
+    "ParentDataset": {
+      "additionalProperties": false,
+      "properties": {
+        "dataset_id": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Dataset Id",
+          "type": "string"
+        },
+        "manifest_checksum": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Manifest Checksum",
+          "type": "string"
+        }
+      },
+      "required": [
+        "dataset_id",
+        "manifest_checksum"
+      ],
+      "title": "ParentDataset",
+      "type": "object"
+    },
+    "QualityPolicy": {
+      "additionalProperties": false,
+      "description": "Explicit deterministic thresholds and knowledge cut-off.",
+      "properties": {
+        "evaluated_at": {
+          "format": "date-time",
+          "title": "Evaluated At",
+          "type": "string"
+        },
+        "expected_bar_interval_seconds": {
+          "default": 60,
+          "exclusiveMinimum": 0,
+          "title": "Expected Bar Interval Seconds",
+          "type": "integer"
+        },
+        "expected_record_schema_version": {
+          "default": "1.0.0",
+          "title": "Expected Record Schema Version",
+          "type": "string"
+        },
+        "knowledge_time_utc": {
+          "format": "date-time",
+          "title": "Knowledge Time Utc",
+          "type": "string"
+        },
+        "max_price_jump_ratio": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "0.25",
+          "gt": 0,
+          "title": "Max Price Jump Ratio"
+        },
+        "max_spread_ratio": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "0.05",
+          "gt": 0,
+          "title": "Max Spread Ratio"
+        },
+        "max_staleness_seconds": {
+          "default": 300,
+          "exclusiveMinimum": 0,
+          "title": "Max Staleness Seconds",
+          "type": "integer"
+        },
+        "split_tolerance_ratio": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "0.10",
+          "ge": 0,
+          "title": "Split Tolerance Ratio"
+        }
+      },
+      "required": [
+        "evaluated_at",
+        "knowledge_time_utc"
+      ],
+      "title": "QualityPolicy",
+      "type": "object"
+    },
+    "QualityStatus": {
+      "enum": [
+        "PASS",
+        "WARN",
+        "FAIL",
+        "QUARANTINED"
+      ],
+      "title": "QualityStatus",
+      "type": "string"
+    },
+    "SessionStatus": {
+      "enum": [
+        "open",
+        "closed",
+        "halted"
+      ],
+      "title": "SessionStatus",
+      "type": "string"
+    },
+    "TransformationGraph": {
+      "additionalProperties": false,
+      "description": "Immutable directed acyclic transformation graph.",
+      "properties": {
+        "steps": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/TransformationStep"
+          },
+          "title": "Steps",
+          "type": "array"
+        }
+      },
+      "title": "TransformationGraph",
+      "type": "object"
+    },
+    "TransformationStep": {
+      "additionalProperties": false,
+      "description": "One versioned transformation from one or more datasets to one dataset.",
+      "properties": {
+        "implementation_version": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Implementation Version",
+          "type": "string"
+        },
+        "input_dataset_ids": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Input Dataset Ids",
+          "type": "array"
+        },
+        "operation": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Operation",
+          "type": "string"
+        },
+        "output_dataset_id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Output Dataset Id",
+          "type": "string"
+        },
+        "parameters_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Parameters Hash",
+          "type": "string"
+        },
+        "transformation_id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Transformation Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "transformation_id",
+        "operation",
+        "implementation_version",
+        "input_dataset_ids",
+        "output_dataset_id",
+        "parameters_hash"
+      ],
+      "title": "TransformationStep",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Self-contained, synthetic/offline input for deterministic validation.",
+  "properties": {
+    "corporate_actions": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/CorporateAction"
+      },
+      "title": "Corporate Actions",
+      "type": "array"
+    },
+    "expected_quality_status": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/QualityStatus"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "instrument_metadata": {
+      "items": {
+        "$ref": "#/$defs/InstrumentMetadata"
+      },
+      "title": "Instrument Metadata",
+      "type": "array"
+    },
+    "maintenance_intervals": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/MaintenanceInterval"
+      },
+      "title": "Maintenance Intervals",
+      "type": "array"
+    },
+    "manifest": {
+      "$ref": "#/$defs/DatasetManifest"
+    },
+    "market_sessions": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/MarketSession"
+      },
+      "title": "Market Sessions",
+      "type": "array"
+    },
+    "policy": {
+      "$ref": "#/$defs/QualityPolicy"
+    },
+    "records": {
+      "items": {
+        "additionalProperties": {
+          "$ref": "#/$defs/JsonValue"
+        },
+        "type": "object"
+      },
+      "title": "Records",
+      "type": "array"
+    }
+  },
+  "required": [
+    "manifest",
+    "policy",
+    "instrument_metadata",
+    "records"
+  ],
+  "title": "DatasetPackage",
+  "type": "object"
+}

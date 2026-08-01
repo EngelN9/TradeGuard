@@ -1,0 +1,358 @@
+{
+  "$defs": {
+    "DataCorrection": {
+      "additionalProperties": false,
+      "properties": {
+        "affected_range": {
+          "$ref": "#/$defs/DataInterval"
+        },
+        "corrected_checksum": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Corrected Checksum",
+          "type": "string"
+        },
+        "correction_id": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Correction Id",
+          "type": "string"
+        },
+        "description": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "known_at": {
+          "format": "date-time",
+          "title": "Known At",
+          "type": "string"
+        },
+        "previous_checksum": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Previous Checksum",
+          "type": "string"
+        }
+      },
+      "required": [
+        "correction_id",
+        "description",
+        "known_at",
+        "affected_range",
+        "previous_checksum",
+        "corrected_checksum"
+      ],
+      "title": "DataCorrection",
+      "type": "object"
+    },
+    "DataInterval": {
+      "additionalProperties": false,
+      "properties": {
+        "end_utc": {
+          "format": "date-time",
+          "title": "End Utc",
+          "type": "string"
+        },
+        "start_utc": {
+          "format": "date-time",
+          "title": "Start Utc",
+          "type": "string"
+        }
+      },
+      "required": [
+        "start_utc",
+        "end_utc"
+      ],
+      "title": "DataInterval",
+      "type": "object"
+    },
+    "DatasetPartition": {
+      "additionalProperties": false,
+      "properties": {
+        "checksum": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Checksum",
+          "type": "string"
+        },
+        "date_range": {
+          "$ref": "#/$defs/DataInterval"
+        },
+        "partition_id": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Partition Id",
+          "type": "string"
+        },
+        "relative_path": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Relative Path",
+          "type": "string"
+        },
+        "row_count": {
+          "minimum": 0,
+          "title": "Row Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "partition_id",
+        "relative_path",
+        "row_count",
+        "date_range",
+        "checksum"
+      ],
+      "title": "DatasetPartition",
+      "type": "object"
+    },
+    "MissingInterval": {
+      "additionalProperties": false,
+      "properties": {
+        "date_range": {
+          "$ref": "#/$defs/DataInterval"
+        },
+        "reason": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "date_range",
+        "reason"
+      ],
+      "title": "MissingInterval",
+      "type": "object"
+    },
+    "ParentDataset": {
+      "additionalProperties": false,
+      "properties": {
+        "dataset_id": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Dataset Id",
+          "type": "string"
+        },
+        "manifest_checksum": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Manifest Checksum",
+          "type": "string"
+        }
+      },
+      "required": [
+        "dataset_id",
+        "manifest_checksum"
+      ],
+      "title": "ParentDataset",
+      "type": "object"
+    },
+    "TransformationGraph": {
+      "additionalProperties": false,
+      "description": "Immutable directed acyclic transformation graph.",
+      "properties": {
+        "steps": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/TransformationStep"
+          },
+          "title": "Steps",
+          "type": "array"
+        }
+      },
+      "title": "TransformationGraph",
+      "type": "object"
+    },
+    "TransformationStep": {
+      "additionalProperties": false,
+      "description": "One versioned transformation from one or more datasets to one dataset.",
+      "properties": {
+        "implementation_version": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Implementation Version",
+          "type": "string"
+        },
+        "input_dataset_ids": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Input Dataset Ids",
+          "type": "array"
+        },
+        "operation": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Operation",
+          "type": "string"
+        },
+        "output_dataset_id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Output Dataset Id",
+          "type": "string"
+        },
+        "parameters_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Parameters Hash",
+          "type": "string"
+        },
+        "transformation_id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Transformation Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "transformation_id",
+        "operation",
+        "implementation_version",
+        "input_dataset_ids",
+        "output_dataset_id",
+        "parameters_hash"
+      ],
+      "title": "TransformationStep",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Complete identity, provenance, and quality context for one dataset.",
+  "properties": {
+    "asset_class": {
+      "enum": [
+        "equity",
+        "crypto"
+      ],
+      "title": "Asset Class",
+      "type": "string"
+    },
+    "checksums": {
+      "additionalProperties": {
+        "pattern": "^[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "propertyNames": {
+        "maxLength": 2048,
+        "minLength": 1
+      },
+      "title": "Checksums",
+      "type": "object"
+    },
+    "corrections": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/DataCorrection"
+      },
+      "title": "Corrections",
+      "type": "array"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "dataset_id": {
+      "maxLength": 2048,
+      "minLength": 1,
+      "title": "Dataset Id",
+      "type": "string"
+    },
+    "dataset_version": {
+      "maxLength": 2048,
+      "minLength": 1,
+      "title": "Dataset Version",
+      "type": "string"
+    },
+    "date_range": {
+      "$ref": "#/$defs/DataInterval"
+    },
+    "ingested_at": {
+      "format": "date-time",
+      "title": "Ingested At",
+      "type": "string"
+    },
+    "licensing_notes": {
+      "maxLength": 2048,
+      "minLength": 1,
+      "title": "Licensing Notes",
+      "type": "string"
+    },
+    "missing_intervals": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/MissingInterval"
+      },
+      "title": "Missing Intervals",
+      "type": "array"
+    },
+    "parent_dataset": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ParentDataset"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "partition_information": {
+      "items": {
+        "$ref": "#/$defs/DatasetPartition"
+      },
+      "minItems": 1,
+      "title": "Partition Information",
+      "type": "array"
+    },
+    "row_count": {
+      "minimum": 0,
+      "title": "Row Count",
+      "type": "integer"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source": {
+      "maxLength": 2048,
+      "minLength": 1,
+      "title": "Source",
+      "type": "string"
+    },
+    "symbols": {
+      "items": {
+        "maxLength": 2048,
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Symbols",
+      "type": "array"
+    },
+    "transformation_graph": {
+      "$ref": "#/$defs/TransformationGraph"
+    }
+  },
+  "required": [
+    "dataset_id",
+    "dataset_version",
+    "source",
+    "asset_class",
+    "symbols",
+    "date_range",
+    "row_count",
+    "partition_information",
+    "checksums",
+    "created_at",
+    "ingested_at",
+    "licensing_notes"
+  ],
+  "title": "DatasetManifest",
+  "type": "object"
+}

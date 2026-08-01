@@ -1,0 +1,69 @@
+{
+  "additionalProperties": false,
+  "description": "Reviewed v0.1.0 historical-bar request envelope.",
+  "properties": {
+    "adjustment": {
+      "const": "none",
+      "default": "none",
+      "title": "Adjustment",
+      "type": "string"
+    },
+    "end_date": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "End Date"
+    },
+    "interval": {
+      "const": "1day",
+      "default": "1day",
+      "title": "Interval",
+      "type": "string"
+    },
+    "mic": {
+      "maxLength": 2048,
+      "minLength": 1,
+      "title": "Mic",
+      "type": "string"
+    },
+    "output_size": {
+      "default": 10,
+      "maximum": 10,
+      "minimum": 1,
+      "title": "Output Size",
+      "type": "integer"
+    },
+    "start_date": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Start Date"
+    },
+    "symbol": {
+      "maxLength": 2048,
+      "minLength": 1,
+      "title": "Symbol",
+      "type": "string"
+    }
+  },
+  "required": [
+    "symbol",
+    "mic"
+  ],
+  "title": "HistoricalBarsRequest",
+  "type": "object"
+}

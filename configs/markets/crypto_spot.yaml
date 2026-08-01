@@ -1,0 +1,5 @@
+market:
+  asset_class: crypto
+  timezone: UTC
+  session_calendar: null
+  quote_asset: USD

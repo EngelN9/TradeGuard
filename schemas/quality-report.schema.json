@@ -1,0 +1,149 @@
+{
+  "$defs": {
+    "QualityCode": {
+      "enum": [
+        "missing",
+        "duplicate",
+        "out_of_order",
+        "future_timestamp",
+        "stale_content",
+        "invalid_ohlc",
+        "negative_volume",
+        "abnormal_price_jump",
+        "inconsistent_schema",
+        "symbol_mapping_conflict",
+        "trading_session_violation",
+        "half_day_handling",
+        "corporate_action_mismatch",
+        "corporate_actions_unsupported",
+        "suspected_unmodeled_corporate_action",
+        "split_discontinuity",
+        "delisted_symbol_handling",
+        "point_in_time_universe_violation",
+        "crypto_24_7_gap",
+        "precision_mismatch",
+        "minimum_notional_mismatch",
+        "venue_maintenance_interval",
+        "bid_greater_than_ask",
+        "spread_anomaly",
+        "quote_asset_inconsistency"
+      ],
+      "title": "QualityCode",
+      "type": "string"
+    },
+    "QualityIssue": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/QualityCode"
+        },
+        "context": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Context",
+          "type": "object"
+        },
+        "message": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Message",
+          "type": "string"
+        },
+        "record_indexes": {
+          "default": [],
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "title": "Record Indexes",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "WARN",
+            "FAIL",
+            "QUARANTINED"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "status",
+        "message"
+      ],
+      "title": "QualityIssue",
+      "type": "object"
+    },
+    "QualityStatus": {
+      "enum": [
+        "PASS",
+        "WARN",
+        "FAIL",
+        "QUARANTINED"
+      ],
+      "title": "QualityStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Checksummed result bound to a specific dataset manifest.",
+  "properties": {
+    "dataset_id": {
+      "maxLength": 2048,
+      "minLength": 1,
+      "title": "Dataset Id",
+      "type": "string"
+    },
+    "evaluated_at": {
+      "format": "date-time",
+      "title": "Evaluated At",
+      "type": "string"
+    },
+    "issues": {
+      "items": {
+        "$ref": "#/$defs/QualityIssue"
+      },
+      "title": "Issues",
+      "type": "array"
+    },
+    "manifest_checksum": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Manifest Checksum",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/QualityStatus"
+    }
+  },
+  "required": [
+    "dataset_id",
+    "manifest_checksum",
+    "evaluated_at",
+    "status",
+    "issues"
+  ],
+  "title": "QualityReport",
+  "type": "object"
+}

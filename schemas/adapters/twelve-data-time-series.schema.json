@@ -1,0 +1,114 @@
+{
+  "$defs": {
+    "_TimeSeriesMeta": {
+      "additionalProperties": false,
+      "properties": {
+        "currency": {
+          "title": "Currency",
+          "type": "string"
+        },
+        "exchange": {
+          "title": "Exchange",
+          "type": "string"
+        },
+        "exchange_timezone": {
+          "title": "Exchange Timezone",
+          "type": "string"
+        },
+        "interval": {
+          "title": "Interval",
+          "type": "string"
+        },
+        "mic_code": {
+          "title": "Mic Code",
+          "type": "string"
+        },
+        "symbol": {
+          "title": "Symbol",
+          "type": "string"
+        },
+        "type": {
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "symbol",
+        "interval",
+        "currency",
+        "exchange_timezone",
+        "exchange",
+        "mic_code",
+        "type"
+      ],
+      "title": "_TimeSeriesMeta",
+      "type": "object"
+    },
+    "_TimeSeriesValue": {
+      "additionalProperties": false,
+      "properties": {
+        "close": {
+          "title": "Close",
+          "type": "string"
+        },
+        "datetime": {
+          "title": "Datetime",
+          "type": "string"
+        },
+        "high": {
+          "title": "High",
+          "type": "string"
+        },
+        "low": {
+          "title": "Low",
+          "type": "string"
+        },
+        "open": {
+          "title": "Open",
+          "type": "string"
+        },
+        "volume": {
+          "title": "Volume",
+          "type": "string"
+        }
+      },
+      "required": [
+        "datetime",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "title": "_TimeSeriesValue",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "meta": {
+      "$ref": "#/$defs/_TimeSeriesMeta"
+    },
+    "status": {
+      "const": "ok",
+      "title": "Status",
+      "type": "string"
+    },
+    "values": {
+      "items": {
+        "$ref": "#/$defs/_TimeSeriesValue"
+      },
+      "maxItems": 10,
+      "minItems": 1,
+      "title": "Values",
+      "type": "array"
+    }
+  },
+  "required": [
+    "meta",
+    "values",
+    "status"
+  ],
+  "title": "_TimeSeriesResponse",
+  "type": "object"
+}

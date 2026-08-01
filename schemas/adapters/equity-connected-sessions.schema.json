@@ -1,0 +1,133 @@
+{
+  "$defs": {
+    "MarketSession": {
+      "additionalProperties": false,
+      "description": "Point-in-time equity session definition, including half days.",
+      "properties": {
+        "half_day": {
+          "default": false,
+          "title": "Half Day",
+          "type": "boolean"
+        },
+        "known_at": {
+          "format": "date-time",
+          "title": "Known At",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session_calendar": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Session Calendar",
+          "type": "string"
+        },
+        "session_close_utc": {
+          "format": "date-time",
+          "title": "Session Close Utc",
+          "type": "string"
+        },
+        "session_open_utc": {
+          "format": "date-time",
+          "title": "Session Open Utc",
+          "type": "string"
+        },
+        "source": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/SessionStatus"
+        },
+        "venue": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Venue",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source",
+        "venue",
+        "session_calendar",
+        "session_open_utc",
+        "session_close_utc",
+        "known_at",
+        "status"
+      ],
+      "title": "MarketSession",
+      "type": "object"
+    },
+    "SessionStatus": {
+      "enum": [
+        "open",
+        "closed",
+        "halted"
+      ],
+      "title": "SessionStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Versioned, human-reviewable connected-session registry document.",
+  "properties": {
+    "reviewed_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reviewed At"
+    },
+    "reviewed_by": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reviewed By"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "sessions": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/MarketSession"
+      },
+      "title": "Sessions",
+      "type": "array"
+    },
+    "status": {
+      "enum": [
+        "PENDING_REVIEW",
+        "APPROVED"
+      ],
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "status"
+  ],
+  "title": "ReviewedCalendarDocument",
+  "type": "object"
+}

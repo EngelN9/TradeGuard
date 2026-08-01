@@ -1,0 +1,186 @@
+{
+  "additionalProperties": false,
+  "description": "Machine-readable declaration of enabled, not merely provider-offered, features.",
+  "properties": {
+    "approval_status": {
+      "const": "APPROVED_WITH_CONDITIONS",
+      "title": "Approval Status",
+      "type": "string"
+    },
+    "approved_mics": {
+      "items": {
+        "enum": [
+          "XNAS",
+          "XNGS"
+        ],
+        "type": "string"
+      },
+      "title": "Approved Mics",
+      "type": "array"
+    },
+    "approved_symbols": {
+      "items": {
+        "const": "AAPL",
+        "type": "string"
+      },
+      "title": "Approved Symbols",
+      "type": "array"
+    },
+    "authenticated": {
+      "const": true,
+      "title": "Authenticated",
+      "type": "boolean"
+    },
+    "consolidated_feed": {
+      "const": false,
+      "title": "Consolidated Feed",
+      "type": "boolean"
+    },
+    "corporate_actions": {
+      "const": false,
+      "title": "Corporate Actions",
+      "type": "boolean"
+    },
+    "delayed": {
+      "const": "entitlement_dependent",
+      "title": "Delayed",
+      "type": "string"
+    },
+    "enabled_host": {
+      "const": "api.twelvedata.com",
+      "title": "Enabled Host",
+      "type": "string"
+    },
+    "enabled_paths": {
+      "items": {
+        "const": "/time_series",
+        "type": "string"
+      },
+      "title": "Enabled Paths",
+      "type": "array"
+    },
+    "execution_grade": {
+      "const": false,
+      "title": "Execution Grade",
+      "type": "boolean"
+    },
+    "full_market_volume": {
+      "const": false,
+      "title": "Full Market Volume",
+      "type": "boolean"
+    },
+    "historical_bars": {
+      "const": true,
+      "title": "Historical Bars",
+      "type": "boolean"
+    },
+    "instrument_metadata": {
+      "const": true,
+      "title": "Instrument Metadata",
+      "type": "boolean"
+    },
+    "latest_bar_or_quote": {
+      "const": true,
+      "title": "Latest Bar Or Quote",
+      "type": "boolean"
+    },
+    "licensing_constraints": {
+      "items": {
+        "maxLength": 2048,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Licensing Constraints",
+      "type": "array"
+    },
+    "limitations": {
+      "items": {
+        "maxLength": 2048,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    },
+    "market_calendar_source": {
+      "const": "internal_approved_sessions",
+      "title": "Market Calendar Source",
+      "type": "string"
+    },
+    "nbbo": {
+      "const": false,
+      "title": "Nbbo",
+      "type": "boolean"
+    },
+    "provider": {
+      "const": "twelve_data",
+      "title": "Provider",
+      "type": "string"
+    },
+    "provider_fallback": {
+      "const": false,
+      "title": "Provider Fallback",
+      "type": "boolean"
+    },
+    "public_display": {
+      "const": false,
+      "title": "Public Display",
+      "type": "boolean"
+    },
+    "real_time": {
+      "const": "entitlement_dependent",
+      "title": "Real Time",
+      "type": "string"
+    },
+    "redistribution": {
+      "const": false,
+      "title": "Redistribution",
+      "type": "boolean"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "symbol_normalization": {
+      "const": true,
+      "title": "Symbol Normalization",
+      "type": "boolean"
+    },
+    "timezone_source": {
+      "const": "provider_validated_against_internal_registry",
+      "title": "Timezone Source",
+      "type": "string"
+    }
+  },
+  "required": [
+    "provider",
+    "approval_status",
+    "authenticated",
+    "historical_bars",
+    "latest_bar_or_quote",
+    "instrument_metadata",
+    "real_time",
+    "delayed",
+    "corporate_actions",
+    "consolidated_feed",
+    "nbbo",
+    "full_market_volume",
+    "execution_grade",
+    "public_display",
+    "redistribution",
+    "market_calendar_source",
+    "provider_fallback",
+    "timezone_source",
+    "symbol_normalization",
+    "enabled_host",
+    "enabled_paths",
+    "approved_symbols",
+    "approved_mics",
+    "licensing_constraints",
+    "limitations"
+  ],
+  "title": "EquityAdapterCapabilities",
+  "type": "object"
+}

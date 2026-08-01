@@ -1,0 +1,3 @@
+alerting:
+  enabled: true
+  minimum_severity: warning

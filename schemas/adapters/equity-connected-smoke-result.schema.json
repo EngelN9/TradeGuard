@@ -1,0 +1,215 @@
+{
+  "$defs": {
+    "ConnectedSmokeOutcome": {
+      "enum": [
+        "SKIP",
+        "BLOCKED",
+        "FAIL",
+        "PASS"
+      ],
+      "title": "ConnectedSmokeOutcome",
+      "type": "string"
+    },
+    "ConnectedSmokeStatus": {
+      "enum": [
+        "SKIP_NOT_OPTED_IN",
+        "BLOCKED_MISSING_CREDENTIAL",
+        "BLOCKED_INVALID_CREDENTIAL",
+        "BLOCKED_ENTITLEMENT",
+        "BLOCKED_RATE_LIMIT",
+        "BLOCKED_PROVIDER_UNAVAILABLE",
+        "BLOCKED_MARKET_CALENDAR",
+        "FAIL_SCHEMA_DRIFT",
+        "FAIL_DATA_QUALITY",
+        "FAIL_REQUEST_REJECTED",
+        "FAIL_SCOPE_VIOLATION",
+        "PASS"
+      ],
+      "title": "ConnectedSmokeStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "No-secret, no-market-value connected qualification record.",
+  "properties": {
+    "adjustment": {
+      "const": "none",
+      "default": "none",
+      "title": "Adjustment",
+      "type": "string"
+    },
+    "completed_session_count": {
+      "minimum": 0,
+      "title": "Completed Session Count",
+      "type": "integer"
+    },
+    "credential_exposed": {
+      "const": false,
+      "default": false,
+      "title": "Credential Exposed",
+      "type": "boolean"
+    },
+    "credential_present": {
+      "title": "Credential Present",
+      "type": "boolean"
+    },
+    "interval": {
+      "const": "1day",
+      "default": "1day",
+      "title": "Interval",
+      "type": "string"
+    },
+    "manifest_checksum": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Manifest Checksum"
+    },
+    "manifest_generated": {
+      "title": "Manifest Generated",
+      "type": "boolean"
+    },
+    "observed_at": {
+      "format": "date-time",
+      "title": "Observed At",
+      "type": "string"
+    },
+    "outcome": {
+      "$ref": "#/$defs/ConnectedSmokeOutcome"
+    },
+    "passed": {
+      "title": "Passed",
+      "type": "boolean"
+    },
+    "promotion_blockers": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Promotion Blockers",
+      "type": "array"
+    },
+    "promotion_gate": {
+      "const": "BLOCKED",
+      "default": "BLOCKED",
+      "title": "Promotion Gate",
+      "type": "string"
+    },
+    "provider": {
+      "const": "twelve_data",
+      "default": "twelve_data",
+      "title": "Provider",
+      "type": "string"
+    },
+    "provider_contacted": {
+      "title": "Provider Contacted",
+      "type": "boolean"
+    },
+    "provider_fallback_used": {
+      "const": false,
+      "default": false,
+      "title": "Provider Fallback Used",
+      "type": "boolean"
+    },
+    "provider_request_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Provider Request Id"
+    },
+    "quality_result": {
+      "anyOf": [
+        {
+          "enum": [
+            "PASS",
+            "WARN",
+            "FAIL"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Quality Result"
+    },
+    "raw_market_values_persisted": {
+      "const": false,
+      "default": false,
+      "title": "Raw Market Values Persisted",
+      "type": "boolean"
+    },
+    "raw_market_values_published": {
+      "const": false,
+      "default": false,
+      "title": "Raw Market Values Published",
+      "type": "boolean"
+    },
+    "raw_response_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Raw Response Sha256"
+    },
+    "reason_code": {
+      "title": "Reason Code",
+      "type": "string"
+    },
+    "request_attempts": {
+      "maximum": 2,
+      "minimum": 0,
+      "title": "Request Attempts",
+      "type": "integer"
+    },
+    "schema_version": {
+      "const": "1.1.0",
+      "default": "1.1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/ConnectedSmokeStatus"
+    },
+    "symbol": {
+      "const": "AAPL",
+      "default": "AAPL",
+      "title": "Symbol",
+      "type": "string"
+    }
+  },
+  "required": [
+    "status",
+    "outcome",
+    "reason_code",
+    "passed",
+    "provider_contacted",
+    "credential_present",
+    "observed_at",
+    "request_attempts",
+    "completed_session_count",
+    "manifest_generated",
+    "promotion_blockers"
+  ],
+  "title": "ConnectedSmokeResult",
+  "type": "object"
+}

@@ -1,0 +1,150 @@
+{
+  "corporate_actions": [
+    {
+      "action_type": "symbol_change",
+      "action_version": "synthetic-v1",
+      "cash_amount": null,
+      "currency": null,
+      "effective_at": "2024-01-03T00:00:00.000000Z",
+      "known_at": "2023-12-15T00:00:00.000000Z",
+      "new_symbol": "ACM2",
+      "ratio": null,
+      "schema_version": "1.0.0",
+      "source": "synthetic",
+      "symbol": "ACME",
+      "venue": "SYNTH-XNYS"
+    }
+  ],
+  "expected_quality_status": "PASS",
+  "instrument_metadata": [
+    {
+      "active_from": "2020-01-01T00:00:00.000000Z",
+      "active_to": null,
+      "asset_class": "equity",
+      "canonical_symbol": "ACME",
+      "currency": "USD",
+      "known_at": "2020-01-01T00:00:00.000000Z",
+      "lot_size": "1",
+      "metadata_version": "synthetic-v1",
+      "minimum_notional": "1",
+      "minimum_quantity": "1",
+      "quote_asset": null,
+      "schema_version": "1.0.0",
+      "session_calendar": "SYNTH-XNYS",
+      "source": "synthetic",
+      "step_size": "1",
+      "symbol": "ACME",
+      "tick_size": "0.01",
+      "timezone": "America/New_York",
+      "venue": "SYNTH-XNYS"
+    }
+  ],
+  "maintenance_intervals": [],
+  "manifest": {
+    "asset_class": "equity",
+    "checksums": {
+      "canonical_records_sha256": "21f35fe08987350316755968ef0ff0a137082cc0449968641c9d28783d475309"
+    },
+    "corrections": [],
+    "created_at": "2024-01-01T21:00:00.000000Z",
+    "dataset_id": "synthetic-symbol_change",
+    "dataset_version": "1.0.0",
+    "date_range": {
+      "end_utc": "2024-01-01T20:59:00.000000Z",
+      "start_utc": "2024-01-01T20:58:00.000000Z"
+    },
+    "ingested_at": "2024-01-01T21:00:00.000000Z",
+    "licensing_notes": "Synthetic fixture; Apache-2.0; no external market data.",
+    "missing_intervals": [],
+    "parent_dataset": {
+      "dataset_id": "synthetic-symbol_change-raw",
+      "manifest_checksum": "5a2ba722b79c56145332ef71795529c9c88304149531970f5c99e84ed846438d"
+    },
+    "partition_information": [
+      {
+        "checksum": "21f35fe08987350316755968ef0ff0a137082cc0449968641c9d28783d475309",
+        "date_range": {
+          "end_utc": "2024-01-01T20:59:00.000000Z",
+          "start_utc": "2024-01-01T20:58:00.000000Z"
+        },
+        "partition_id": "part-0000",
+        "relative_path": "symbol_change/part-0000.json",
+        "row_count": 1
+      }
+    ],
+    "row_count": 1,
+    "schema_version": "1.0.0",
+    "source": "synthetic-fixture-generator",
+    "symbols": [
+      "ACME"
+    ],
+    "transformation_graph": {
+      "steps": [
+        {
+          "implementation_version": "1.0.0",
+          "input_dataset_ids": [
+            "synthetic-symbol_change-raw"
+          ],
+          "operation": "canonicalize_synthetic_fixture",
+          "output_dataset_id": "synthetic-symbol_change",
+          "parameters_hash": "2f646bdea30b9d42e1d4a4f21941b8e10aedda758106050d52a7bb6210d6d36c",
+          "transformation_id": "normalize-symbol_change"
+        }
+      ]
+    }
+  },
+  "market_sessions": [
+    {
+      "half_day": false,
+      "known_at": "2023-12-01T00:00:00.000000Z",
+      "schema_version": "1.0.0",
+      "session_calendar": "SYNTH-XNYS",
+      "session_close_utc": "2024-01-01T21:00:00.000000Z",
+      "session_open_utc": "2024-01-01T14:30:00.000000Z",
+      "source": "synthetic",
+      "status": "open",
+      "venue": "SYNTH-XNYS"
+    },
+    {
+      "half_day": false,
+      "known_at": "2023-12-01T00:00:00.000000Z",
+      "schema_version": "1.0.0",
+      "session_calendar": "SYNTH-XNYS",
+      "session_close_utc": "2024-01-02T21:00:00.000000Z",
+      "session_open_utc": "2024-01-02T14:30:00.000000Z",
+      "source": "synthetic",
+      "status": "open",
+      "venue": "SYNTH-XNYS"
+    }
+  ],
+  "policy": {
+    "evaluated_at": "2024-01-01T21:00:00.000000Z",
+    "expected_bar_interval_seconds": 60,
+    "expected_record_schema_version": "1.0.0",
+    "knowledge_time_utc": "2024-01-01T21:00:00.000000Z",
+    "max_price_jump_ratio": "0.25",
+    "max_spread_ratio": "0.05",
+    "max_staleness_seconds": 300,
+    "split_tolerance_ratio": "0.1"
+  },
+  "records": [
+    {
+      "asset_class": "equity",
+      "close_price": "100",
+      "event_time_utc": "2024-01-01T20:59:00.000000Z",
+      "high_price": "101",
+      "ingest_time_utc": "2024-01-01T20:59:00.000000Z",
+      "interval_end_utc": "2024-01-01T20:59:00.000000Z",
+      "interval_start_utc": "2024-01-01T20:58:00.000000Z",
+      "low_price": "99",
+      "open_price": "100",
+      "record_type": "bar",
+      "schema_version": "1.0.0",
+      "sequence_number": 1,
+      "source": "synthetic",
+      "symbol": "ACME",
+      "venue": "SYNTH-XNYS",
+      "volume": "1000"
+    }
+  ]
+}

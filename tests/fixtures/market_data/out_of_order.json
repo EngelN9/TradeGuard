@@ -1,0 +1,130 @@
+{
+  "corporate_actions": [],
+  "expected_quality_status": "FAIL",
+  "instrument_metadata": [
+    {
+      "active_from": "2020-01-01T00:00:00.000000Z",
+      "active_to": null,
+      "asset_class": "crypto",
+      "canonical_symbol": "BTC/USD",
+      "currency": null,
+      "known_at": "2020-01-01T00:00:00.000000Z",
+      "lot_size": "0.0001",
+      "metadata_version": "synthetic-v1",
+      "minimum_notional": "10",
+      "minimum_quantity": "0.0001",
+      "quote_asset": "USD",
+      "schema_version": "1.0.0",
+      "session_calendar": null,
+      "source": "synthetic",
+      "step_size": "0.0001",
+      "symbol": "BTC-USD",
+      "tick_size": "0.01",
+      "timezone": "UTC",
+      "venue": "SYNTH-CRYPTO"
+    }
+  ],
+  "maintenance_intervals": [],
+  "manifest": {
+    "asset_class": "crypto",
+    "checksums": {
+      "canonical_records_sha256": "004934513bbfdfcbca6cf29b08f2d81cb6a6b1910876d84db2d2f442e37772d1"
+    },
+    "corrections": [],
+    "created_at": "2024-01-02T00:06:00.000000Z",
+    "dataset_id": "synthetic-out_of_order",
+    "dataset_version": "1.0.0",
+    "date_range": {
+      "end_utc": "2024-01-02T00:05:00.000000Z",
+      "start_utc": "2024-01-02T00:03:00.000000Z"
+    },
+    "ingested_at": "2024-01-02T00:06:00.000000Z",
+    "licensing_notes": "Synthetic fixture; Apache-2.0; no external market data.",
+    "missing_intervals": [],
+    "parent_dataset": {
+      "dataset_id": "synthetic-out_of_order-raw",
+      "manifest_checksum": "5f493c4cc0830e082f171ca9fb5b93da9619ec4e38198cc6920481269c532ea8"
+    },
+    "partition_information": [
+      {
+        "checksum": "004934513bbfdfcbca6cf29b08f2d81cb6a6b1910876d84db2d2f442e37772d1",
+        "date_range": {
+          "end_utc": "2024-01-02T00:05:00.000000Z",
+          "start_utc": "2024-01-02T00:03:00.000000Z"
+        },
+        "partition_id": "part-0000",
+        "relative_path": "out_of_order/part-0000.json",
+        "row_count": 2
+      }
+    ],
+    "row_count": 2,
+    "schema_version": "1.0.0",
+    "source": "synthetic-fixture-generator",
+    "symbols": [
+      "BTC-USD"
+    ],
+    "transformation_graph": {
+      "steps": [
+        {
+          "implementation_version": "1.0.0",
+          "input_dataset_ids": [
+            "synthetic-out_of_order-raw"
+          ],
+          "operation": "canonicalize_synthetic_fixture",
+          "output_dataset_id": "synthetic-out_of_order",
+          "parameters_hash": "a121d1f1013a92a5c299c5b813dd30c59216d03c4cd859055a38e369d7f7116f",
+          "transformation_id": "normalize-out_of_order"
+        }
+      ]
+    }
+  },
+  "market_sessions": [],
+  "policy": {
+    "evaluated_at": "2024-01-02T00:06:00.000000Z",
+    "expected_bar_interval_seconds": 60,
+    "expected_record_schema_version": "1.0.0",
+    "knowledge_time_utc": "2024-01-02T00:06:00.000000Z",
+    "max_price_jump_ratio": "0.25",
+    "max_spread_ratio": "0.05",
+    "max_staleness_seconds": 300,
+    "split_tolerance_ratio": "0.1"
+  },
+  "records": [
+    {
+      "asset_class": "crypto",
+      "close_price": "101",
+      "event_time_utc": "2024-01-02T00:05:00.000000Z",
+      "high_price": "102",
+      "ingest_time_utc": "2024-01-02T00:05:00.000000Z",
+      "interval_end_utc": "2024-01-02T00:05:00.000000Z",
+      "interval_start_utc": "2024-01-02T00:04:00.000000Z",
+      "low_price": "99",
+      "open_price": "100",
+      "record_type": "bar",
+      "schema_version": "1.0.0",
+      "sequence_number": 2,
+      "source": "synthetic",
+      "symbol": "BTC-USD",
+      "venue": "SYNTH-CRYPTO",
+      "volume": "1"
+    },
+    {
+      "asset_class": "crypto",
+      "close_price": "100",
+      "event_time_utc": "2024-01-02T00:04:00.000000Z",
+      "high_price": "101",
+      "ingest_time_utc": "2024-01-02T00:04:00.000000Z",
+      "interval_end_utc": "2024-01-02T00:04:00.000000Z",
+      "interval_start_utc": "2024-01-02T00:03:00.000000Z",
+      "low_price": "99",
+      "open_price": "100",
+      "record_type": "bar",
+      "schema_version": "1.0.0",
+      "sequence_number": 1,
+      "source": "synthetic",
+      "symbol": "BTC-USD",
+      "venue": "SYNTH-CRYPTO",
+      "volume": "1"
+    }
+  ]
+}
