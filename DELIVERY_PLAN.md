@@ -263,12 +263,12 @@ results actually executed.
 For a large stage, first create small GitHub Issues with explicit scope,
 dependencies, acceptance criteria, tests, evidence, risk impact, and rollback.
 
-## 10. Historical prompt material
+## 10. Historical delivery-plan material
 
-The former monolithic `PROMPTS.md` mixed persistent policy, completed bootstrap
-prompts, future implementation tasks, evidence requirements, and release
-operations. Those concerns are now represented by this delivery-plan index and
-the authoritative project documents listed above.
+The former monolithic delivery-plan file mixed persistent policy, completed
+bootstrap prompts, future implementation tasks, evidence requirements, and
+release operations. Those concerns are now represented by this delivery-plan
+index and the authoritative project documents listed above.
 
 Completed-stage history remains available in Git history and current status
 records. It must not be re-executed blindly against the current repository.
