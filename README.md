@@ -43,7 +43,7 @@ EQUITY AND CRYPTO ADAPTERS IMPLEMENTED / NOT TRADABLE
 重要文件：
 
 * [`AGENTS.md`](AGENTS.md)：最高層級工程、安全、研究與風險規格。
-* [`PROMPTS.md`](PROMPTS.md)：依序執行的交付階段與人工審查閘門。
+* [`DELIVERY_PLAN.md`](DELIVERY_PLAN.md)：分階段交付計畫、目前進度與人工審查閘門。
 * [`SECURITY.md`](SECURITY.md)：安全政策與私密通報方式。
 * [`CONTRIBUTING.md`](CONTRIBUTING.md)：開發、測試與 Pull Request 規範。
 * [`docs/data/data-foundation.md`](docs/data/data-foundation.md)：資料模型、manifest、lineage 與品質閘門。
