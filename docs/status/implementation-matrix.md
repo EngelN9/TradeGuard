@@ -18,12 +18,9 @@ Status vocabulary:
 
 ## Repository inventory
 
-At Prompt 0 assessment time the remote `main` tree contained exactly:
-
-- `AGENTS.md`
-- `PROMPTS.md`
-- `README.md`
-- `SECURITY.md`
+At Prompt 0 assessment time, the remote `main` tree contained four files:
+`AGENTS.md`, `README.md`, `SECURITY.md`, and the original monolithic delivery-plan
+document. That document has since been superseded by `DELIVERY_PLAN.md`.
 
 Prompt 1 on `agent/prompt-1-bootstrap` now adds the typed Python package, locked
 Python and dashboard dependencies, tests, local tooling, CI workflow
@@ -62,7 +59,7 @@ capability. Connected qualification was not attempted.
 | Area | Requirement | Status | Existing evidence | Gap / next issue |
 | --- | --- | --- | --- | --- |
 | Governance | Highest-level safety specification | COMPLETE | `AGENTS.md` | Keep synchronized |
-| Governance | Prompted delivery stages and gates | COMPLETE | `PROMPTS.md` | Execute sequentially |
+| Governance | Delivery stages and review gates | COMPLETE | `DELIVERY_PLAN.md` | Execute one current stage at a time |
 | Governance | Product positioning and safety boundary | COMPLETE | `README.md`, `SECURITY.md`, runtime policy tests | Keep synchronized |
 | Governance | Contribution guide | COMPLETE | `CONTRIBUTING.md` | Maintain with tooling |
 | Governance | Public software license | COMPLETE | `LICENSE`, Apache-2.0 approved on 2026-07-29 | Recheck dependency licenses before release |
