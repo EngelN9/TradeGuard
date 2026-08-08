@@ -1,375 +1,128 @@
-# TradeGuard v0.1.0 Implementation Matrix
+# TradeGuard implementation and roadmap matrix
 
-Assessment date: `2026-07-31`
+Assessment date: `2026-08-08`
 
-Base Git SHA before Prompt 4: `219fce6e75c07c05d3f6e662cac70db397316b3f`
+Public repository: `https://github.com/EngelN9/TradeGuard`
 
-Base Git SHA before Prompt 5: `3e8e3c0`
+Public stable base: `main@0b73ca4a562f56bb05d8a0537d596332b266190c`
 
-Overall status: `EQUITY AND CRYPTO ADAPTERS IMPLEMENTED / NOT TRADABLE`
+Review candidate: `codex/prompt-6-deterministic-backtester@cddb676f5af4f4992daf4fde14dd7b4f65f58508`
 
-Status vocabulary:
+Overall candidate status: `DETERMINISTIC BACKTESTER IMPLEMENTED / NOT TRADABLE`
 
-- `COMPLETE`: implemented and supported by reviewable evidence.
-- `PARTIAL`: some relevant material exists, but acceptance criteria are unmet.
-- `MISSING`: no implementation or required artifact exists.
-- `BLOCKED`: cannot proceed until a named external/human prerequisite is met.
-- `NOT APPLICABLE`: deliberately outside the v0.1.0 contract.
+## How to read this matrix
 
-## Repository inventory
+Implementation and roadmap are separate axes:
 
-At Prompt 0 assessment time the remote `main` tree contained exactly:
+- Implementation: `IMPLEMENTED`, `PARTIAL`, `MISSING`, `NOT APPLICABLE`.
+- Roadmap: `CURRENT`, `NEXT`, `LATER`, `OPTIONAL`, `BLOCKED`, `OUT OF SCOPE`.
 
-- `AGENTS.md`
-- `PROMPTS.md`
-- `README.md`
-- `SECURITY.md`
+`CURRENT` means stable on the named public base. `NEXT` is the one immediate
+promotion slice. `IMPLEMENTED + BLOCKED` means code/offline contracts exist but
+a named human/external qualification is unmet. Future rows are not commitments.
 
-Prompt 1 on `agent/prompt-1-bootstrap` now adds the typed Python package, locked
-Python and dashboard dependencies, tests, local tooling, CI workflow
-definitions, container definitions, service skeletons, a dashboard placeholder,
-and bootstrap evidence generation. It does not add a strategy, external adapter,
-account connection, or order-submission route.
+## Repository reality
 
-Prompt 2 on `agent/prompt-2-domain-config` adds immutable domain events,
-canonical serialization and checksums, fail-closed schema parsing, layered
-configuration with redaction and audit events, reproducible run manifests, and
-versioned JSON Schema snapshots. It does not add market-data connectivity,
-strategy execution, account access, or order submission.
+- `main` is the stable **R2 — Restricted market-data contracts** stop.
+- Draft PR #3 is cleanly mergeable and its five GitHub checks passed on
+  2026-08-01. It is the **R3 candidate**, not promoted `main`.
+- PR #3's last recorded full local evidence is 227 offline tests passing, two
+  connected tests deselected, and 90.89% branch coverage. Fresh verification
+  for this documentation change is reported in the task handoff, not inferred
+  here.
+- Both connected market-data qualifications remain unexecuted/not opted in.
+- The paper broker, worker, API, and dashboard remain bounded skeletons except
+  for the offline data/backtest CLI paths described below.
+- No strategy, investment result, risk engine, account integration, external
+  order route, `canary`, `live`, withdrawal, or transfer capability exists.
 
-Prompt 3 on `codex/prompt-3-data-foundation` adds canonical equity and crypto
-records, point-in-time reference data, content-addressed raw storage, complete
-dataset manifests and lineage, deterministic quality gates, synthetic fixtures,
-and an offline data CLI. It does not connect to a real provider or account.
+## Domain matrix
 
-Prompt 4 on `codex/prompt-4-twelve-data-adapter` adds a provider-neutral equity
-data protocol, a tightly allowlisted Twelve Data daily-bar adapter, sanitized
-synthetic contract fixtures, strict UTC/session normalization, schema-drift and
-resilience tests, and an opt-in connected state machine. It adds no broker,
-account, order, fallback-provider, real-time, corporate-action, or live
-capability. Connected qualification was not attempted.
+| # | Domain | Implementation | Roadmap | Actual evidence | Current cap / named gap |
+| ---: | --- | --- | --- | --- | --- |
+| 1 | Repository/tooling | `IMPLEMENTED` | `CURRENT` | `pyproject.toml`, `uv.lock`, Make targets, SHA-pinned CI, package/web/container builds | R2/R3 toolchain; no new build platform |
+| 2 | Domain/events | `IMPLEMENTED` | `CURRENT` | 23 immutable event models, canonical checksum, parser/migration policy, schemas | Used event contracts only; no event bus/persistence claim |
+| 3 | Configuration | `IMPLEMENTED` | `CURRENT` | Layered safe YAML, five environments, redaction/hash/audit tests | Local validated config; no admin policy engine |
+| 4 | Run manifest/reproducibility | `IMPLEMENTED` | `CURRENT` | Clean/dirty `RunManifest`, lock/config/data/model/result binding | Data/backtest binding; two-environment qualification is later |
+| 5 | Market-data foundation | `IMPLEMENTED` | `CURRENT` | Canonical Decimal/UTC records, PIT metadata, manifests, lineage, content store | Local immutable foundation; no persistent catalog |
+| 6 | Equity market data | `IMPLEMENTED` | `CURRENT` | Restricted AAPL daily Twelve Data offline contracts, ADR 0002 | Connected use is separately `BLOCKED`; no corporate-action feed/public display |
+| 7 | Crypto market data | `IMPLEMENTED` | `CURRENT` | Restricted BTC-USD Coinbase REST/WebSocket offline/replay contracts, ADR 0003 | Connected use is separately `BLOCKED`; no private/user channels |
+| 8 | Data quality | `IMPLEMENTED` | `CURRENT` | Shared/equity/crypto status codes, synthetic gates, quarantine enforcement | Provider calibration/cross-source comparison deferred |
+| 9 | Dataset/version/lineage | `IMPLEMENTED` | `CURRENT` | `DatasetManifest`, acyclic transformations, local content address/tamper tests | No searchable/persistent catalog or retention service |
+| 10 | Backtester | `IMPLEMENTED` on PR #3 | `NEXT` | Five-key timeline, fixed-order backtest/replay, checksummed artifact | Human R3 promotion review required before merge or strategy work |
+| 11 | Execution/fill models | `IMPLEMENTED` on PR #3 | `NEXT` | Conservative future-bar market/limit, latency, partial/non-fill, rejection | Human assumptions/same-close review required; no order book/queue claim |
+| 12 | Portfolio ledger | `IMPLEMENTED` on PR #3 | `NEXT` | Decimal cash/long-only ledger, PnL, idempotency, corporate actions, conservation | Human conservation/split review required; single base currency only |
+| 13 | Strategy interface | `MISSING` | `LATER` | Domain output event types exist; no `strategies` implementation | First post-R3 slice: protocol plus one consumer, no speculative registry |
+| 14 | Baseline strategies | `MISSING` | `LATER` | None | One market/one buy-and-hold baseline first; six-strategy batch removed |
+| 15 | Strategy validation | `MISSING` | `LATER` | Data eligibility gate is not strategy validation | Begin only after one baseline: benchmark + one fixed OOS split |
+| 16 | Walk-forward/OOS | `MISSING` | `LATER` | None | Fixed split precedes rolling/expanding schedules |
+| 17 | Overfitting/leakage controls | `PARTIAL` | `LATER` | Backtest same-close/look-ahead rejection exists | Strategy/OOS contamination and multiple-testing controls await validation slice |
+| 18 | Risk engine | `MISSING` | `LATER` | `RiskDecision` event/config schema only; no evaluator | Minimal stale/session/exposure gate after basic validation |
+| 19 | Experiment tracking | `PARTIAL` | `LATER` | Run manifest and stage-specific artifacts only | No experiment model/catalog/finalization workflow |
+| 20 | Reporting | `MISSING` | `LATER` | Safe CLI inspection/evidence summaries are not research reports | One balanced report only after a baseline and validation evidence |
+| 21 | Evidence pipeline | `PARTIAL` | `LATER` | Stage-specific checksum indexes and redacted synthetic bundles | Generic collect/verify/index and tamper workflow remains later |
+| 22 | Paper broker | `PARTIAL` | `LATER` | Capability-only FastAPI skeleton; no submit/order route | Internal deterministic market-order state machine is first paper slice |
+| 23 | External paper/sandbox adapters | `MISSING` | `LATER` | Coinbase static sandbox selected historically; no adapter implementation | Wait for internal paper stability; connected environment review required |
+| 24 | Read-only account adapters | `MISSING` | `LATER` | None | Wait for reconciliation contract; permission verification mandatory |
+| 25 | Shadow monitoring | `MISSING` | `LATER` | `shadow` is an allowed configuration ceiling only | No account/market comparison or monitoring runtime exists |
+| 26 | Reconciliation | `MISSING` | `LATER` | Five-state domain enum only | Internal ledger-to-paper comparison precedes external account use |
+| 27 | Drift | `MISSING` | `LATER` | Drift event type only | One deterministic drift measure first; no automatic action |
+| 28 | API | `PARTIAL` | `CURRENT` | Root and health endpoints only; OpenAPI contract fixes that narrow surface | Resource APIs follow implemented backing domains; no write/auth claim |
+| 29 | Web dashboard | `PARTIAL` | `CURRENT` | Responsive environment-labeled non-tradable placeholder | Text still describes bootstrap; real pages follow data/backtest status work |
+| 30 | Alerting | `MISSING` | `LATER` | Severity/event concepts only | Local alert list first; no outbound channel |
+| 31 | Security | `PARTIAL` | `CURRENT` | `SECURITY.md`, private reporting, secret/workflow/dependency/container checks | Threat model for implemented surfaces remains a later bounded task |
+| 32 | Observability | `PARTIAL` | `LATER` | Liveness/readiness only | Structured logs/correlation/freshness first; no tracing platform |
+| 33 | Deployment | `PARTIAL` | `CURRENT` | Secure local Compose skeleton, non-root/read-only/cap-drop app containers | Local research stack only; persistence/backup deployment not qualified |
+| 34 | Release engineering | `PARTIAL` | `LATER` | Package/web/container build and checksums; no candidate/tag/release | Offline candidate precedes connected candidate; publication human-only |
+| 35 | Freqtrade integration | `MISSING` | `OPTIONAL` | A pre-existing external Docker image on the workstation is not TradeGuard capability | First allowed slice is one offline export importer after a fixture/use case |
+| 36 | Hummingbot integration | `MISSING` | `OPTIONAL` | None | Same: offline import precedes paper/read-only monitoring |
+| 37 | External strategy integrations | `MISSING` | `OPTIONAL` | None | No arbitrary packages; versioned offline import or trusted local adapter first |
 
-Prompt 5 on `codex/prompt-5-coinbase-adapter` adds a public-only crypto
-protocol, tightly allowlisted Coinbase Advanced Trade REST and WebSocket
-adapters, synthetic provider-shaped fixtures, strict metadata and sequence
-gates, bounded reconnect/resubscription, controlled shutdown, and opt-in
-connected evidence. It adds no credential, user channel, account, order,
-transfer, withdrawal, derivatives, leverage, fallback, canary, or live
-capability. Connected qualification was not attempted.
+## Immediate `NEXT` gate
 
-## Compliance matrix
+Only R3 human promotion review is `NEXT`:
 
-| Area | Requirement | Status | Existing evidence | Gap / next issue |
-| --- | --- | --- | --- | --- |
-| Governance | Highest-level safety specification | COMPLETE | `AGENTS.md` | Keep synchronized |
-| Governance | Prompted delivery stages and gates | COMPLETE | `PROMPTS.md` | Execute sequentially |
-| Governance | Product positioning and safety boundary | COMPLETE | `README.md`, `SECURITY.md`, runtime policy tests | Keep synchronized |
-| Governance | Contribution guide | COMPLETE | `CONTRIBUTING.md` | Maintain with tooling |
-| Governance | Public software license | COMPLETE | `LICENSE`, Apache-2.0 approved on 2026-07-29 | Recheck dependency licenses before release |
-| Governance | CODEOWNERS | COMPLETE | `CODEOWNERS` | Verify repository team/user resolution after push |
-| Governance | Private security contact | COMPLETE | GitHub Private Vulnerability Reporting approved | Verify repository feature before release |
-| Release | Connected Release contract | COMPLETE | `docs/release/connected-release-v1.md` | Human approval required |
-| Release | Implementation matrix | COMPLETE | This file | Maintain per issue |
-| Architecture | System context | COMPLETE | `docs/architecture/system-context.md` | Human review |
-| Architecture | Scope ADR | COMPLETE | `docs/adr/0001-connected-release-scope.md` | Accepted 2026-07-29 |
-| Bootstrap | Python 3.12 typed package | COMPLETE | `pyproject.toml`, `src/tradeguard/`, package build | Domain implementation begins in TG-002 |
-| Bootstrap | `pyproject.toml` and `uv.lock` | COMPLETE | Locked sync succeeded in the working tree and an independent clean clone | Revalidate on Python 3.12 CI |
-| Bootstrap | Ruff, mypy, pytest, Hypothesis, coverage | COMPLETE | 39 offline tests pass; 95.86% coverage | Re-run in CI |
-| Bootstrap | Pre-commit | COMPLETE | `.pre-commit-config.yaml` with local deterministic hooks | Installation not exercised because GNU Make is unavailable |
-| Bootstrap | Required Make targets | COMPLETE | `Makefile`, repository policy tests | GNU Make unavailable locally; direct equivalents passed |
-| Bootstrap | Safe opt-in connected test target | COMPLETE | `make test-connected`, safe-skip test | No adapter or credentials used |
-| Bootstrap | `.gitignore` and fake `.env.example` | COMPLETE | Files and policy tests | Keep placeholders non-sensitive |
-| CI | Format/lint/type/test workflows | COMPLETE | `.github/workflows/ci.yml`, workflow validator | Remote execution pending later push |
-| CI | Secret/dependency/container/workflow scans | COMPLETE | Local secret, Python, npm, and workflow scans pass; container scan workflow is validated; Docker images build locally | Execute pinned Trivy Action after later authorized push |
-| CI | Minimal permissions and SHA-pinned Actions | COMPLETE | Workflow validator passes for two workflows | Recheck pins before release |
-| Container | Secure Dockerfile and Compose | COMPLETE | Docker Desktop build/start, health probes, non-root/read-only/cap-drop inspection, and cleanup pass | Re-run in remote CI after later authorized push |
-| Database | PostgreSQL and migrations | PARTIAL | PostgreSQL Compose service exists | Migrations are deferred to TG-015 |
-| Health | Liveness and readiness skeleton | COMPLETE | Integration tests and actual localhost probe pass | Container probe pending |
-| Evidence | Bootstrap evidence skeleton | COMPLETE | `scripts/collect_evidence.py`, checksum index, evidence documentation | Container metadata remains explicitly unpopulated |
-| Domain | Versioned immutable events | COMPLETE | 23 strict event models, discriminated schema, parser policy | Extend only with reviewed schema migration |
-| Domain | Canonical serialization/checksums | COMPLETE | Canonical JSON, SHA-256 event checksum, tamper tests | Preserve snapshot compatibility |
-| Domain | UTC and Decimal validation | COMPLETE | UTC normalization, naive-time rejection, binary-float rejection | Data models extend this boundary in TG-003 |
-| Config | Allowed environment validation | COMPLETE | Five allowlisted environments and property tests | No canary/live configuration |
-| Config | Redaction, effective config, config hash | COMPLETE | Ordered safe-YAML layers, redacted inspection, deterministic hash | Secret providers remain future adapter work |
-| Config | Configuration audit event | COMPLETE | Checksummed `ConfigurationChanged` event with before/after hashes | Persistence remains TG-015 |
-| Reproducibility | Complete RunManifest | COMPLETE | Immutable manifest, dataset references, clean/dirty qualification gate | Run producers arrive in later prompts |
-| Schema | JSON/OpenAPI-compatible domain schemas | COMPLETE | Eight generated JSON Schema snapshots and synthetic examples | Regenerate with `make schemas` |
-| Data | Canonical equity and crypto models | COMPLETE | Strict immutable Quote, Trade, OHLCV, session, action, and metadata models | Connected provider normalization remains TG-004/TG-005 |
-| Data | Instrument point-in-time metadata | COMPLETE | Effective-time and knowledge-time validation with market-specific identity | Provider histories remain TG-004/TG-005 |
-| Data | Dataset manifest and lineage | COMPLETE | Checksummed partitions, corrections, parents, and acyclic transformation graph | Persistent catalog remains later work |
-| Data | Append-only/content-addressed raw storage | COMPLETE | Write-once SHA-256 store with idempotency and tamper tests | Backup/retention remains TG-015 |
-| Data | Shared quality gates | COMPLETE | Ten shared checks plus manifest row-count/checksum binding | Provider calibration remains TG-004/TG-005 |
-| Data | Equity-specific quality gates | COMPLETE | Sessions, half days, corporate actions, splits, delisting, PIT universe | Real calendar/action feeds remain TG-004 |
-| Data | Crypto-specific quality gates | COMPLETE | 24/7 gaps, precision, notional, maintenance, quote/spread/asset checks | Real venue semantics remain TG-005 |
-| Data | Quarantine enforcement | COMPLETE | FAIL/QUARANTINED reports cannot enter validation evidence | Persistence and operator workflow remain later work |
-| Data | Synthetic fixtures and CLI | COMPLETE | Eleven committed fixtures; validate/manifest/inspect commands; evidence bundle | No external data is claimed |
-| Equity adapter | Provider decision | COMPLETE | ADR 0002, approved with conditions 2026-07-31 | Recheck terms and account entitlement before each connected RC |
-| Equity adapter | Protocol and implementation | COMPLETE | Provider-neutral protocol; exact host/path/symbol/MIC allowlists; UTC/session mapping | Corporate actions and fallback remain disabled |
-| Equity adapter | Offline/schema-drift tests | COMPLETE | 10 adapter contracts; status/error/redaction/calendar/quality tests | Preserve sanitized-only fixture policy |
-| Equity adapter | Connected smoke | BLOCKED | `SKIP_NOT_OPTED_IN`, `provider_contacted=false` | Exact plan/account/license/display rights, reviewed sessions, credential, and one RC observation |
-| Crypto adapter | Provider decision | COMPLETE | ADR 0003; Coinbase public API approved with conditions | Recheck terms and jurisdiction before each connected RC |
-| Crypto adapter | REST/WebSocket implementation | COMPLETE | Public-only BTC-USD adapter; exact REST/WS allowlists; Decimal/UTC manifests | Expansion requires review |
-| Crypto adapter | Reconnect/sequence/connected tests | COMPLETE | Offline contract/replay tests; redacted connected `SKIP_NOT_OPTED_IN` | Connected PASS and human promotion review remain blocked |
-| Backtest | Deterministic event loop | MISSING | None | TG-006 |
-| Backtest | Decimal portfolio ledger | MISSING | None | TG-006 |
-| Backtest | Conservative execution models | MISSING | None | TG-006 |
-| Backtest | Separate equity/crypto costs | MISSING | None | TG-006 |
-| Backtest | Conservation/look-ahead/replay tests | MISSING | None | TG-006 |
-| Strategy | Restricted protocol and registry | MISSING | None | TG-007 |
-| Strategy | Equity baseline strategies | MISSING | None | TG-007 |
-| Strategy | Crypto baseline strategies | MISSING | None | TG-007 |
-| Strategy | Specifications/contracts/version hashes | MISSING | None | TG-007 |
-| Validation | Immutable dataset splits | MISSING | None | TG-008 |
-| Validation | Walk-forward | MISSING | None | TG-008 |
-| Validation | Leakage/overfitting controls | MISSING | None | TG-008 |
-| Validation | Sensitivity and regime analysis | MISSING | None | TG-008 |
-| Validation | Bootstrap/multiple testing | MISSING | None | TG-008 |
-| Risk | Independent decision engine | MISSING | None | TG-009 |
-| Risk | Pre-trade research/paper gates | MISSING | None | TG-009 |
-| Risk | Portfolio risk and stress scenarios | MISSING | None | TG-009 |
-| Risk | Fail-closed property tests | MISSING | None | TG-009 |
-| Experiments | Experiment model/store | MISSING | None | TG-010 |
-| Reports | Complete balanced research report | MISSING | None | TG-010 |
-| Evidence | Collect/verify/index and tamper detection | MISSING | None | TG-010 |
-| Paper | Deterministic paper broker | PARTIAL | Non-ordering deterministic broker skeleton and negative route test | State machine and fills remain TG-011 |
-| Paper | Order state machine/idempotency/recovery | MISSING | None | TG-011 |
-| External adapter | Adapter decision | COMPLETE | Coinbase static sandbox approved 2026-07-29 | Static behavior is a known limitation |
-| External adapter | Non-live implementation/tests | BLOCKED | None | TG-012 after decision |
-| Monitoring | Paper/shadow event ingestion | MISSING | None | TG-013 |
-| Reconciliation | Five-state reconciliation | MISSING | None | TG-013 |
-| Drift | Required drift and alerts | MISSING | None | TG-013 |
-| API | FastAPI resource endpoints | PARTIAL | Root and health skeleton only | Resource APIs remain TG-014 |
-| API | Authz/audit/idempotent writes | MISSING | None | TG-014 |
-| API | Fixed OpenAPI contract | PARTIAL | Bootstrap OpenAPI contract tests | Versioned resource contract remains TG-014 |
-| Dashboard | Required pages and environment labels | PARTIAL | Responsive non-tradable placeholder with environment label | Required operational pages remain TG-014 |
-| Dashboard | Unknown/stale/accessibility/E2E tests | MISSING | None | TG-014 |
-| Security | Threat model | MISSING | None | TG-015 |
-| Security | Structured logs/redaction/correlation | MISSING | None | TG-015 |
-| Observability | Metrics and component health | MISSING | None | TG-015 |
-| Supply chain | SBOM/inventory/scan reports | MISSING | None | TG-015 |
-| Container | Non-root/read-only/minimal/pinned | MISSING | None | TG-015 |
-| Database | Least privilege/backup/restore test | MISSING | None | TG-015 |
-| Security | Regression suite | MISSING | None | TG-015 |
-| Build | Package/container/dashboard/checksums | COMPLETE | Python wheel/sdist, dashboard production build, Docker images, and evidence checksums pass | Release artifact signing remains TG-015/TG-018 |
-| Qualification | Two clean environments | MISSING | None | TG-016 |
-| Qualification | Offline full matrix | MISSING | None | TG-016 |
-| Qualification | Connected equity E2E | BLOCKED | Adapter exists; connected result is `SKIP_NOT_OPTED_IN` | TG-017 |
-| Qualification | Connected crypto E2E | BLOCKED | Adapter exists; connected result is `SKIP_NOT_OPTED_IN` | TG-017 |
-| Qualification | External non-live smoke | BLOCKED | No approved adapter/credential | TG-017 |
-| Qualification | Failure drills | MISSING | None | TG-016/TG-017 |
-| Release | v0.1.0 readiness report | MISSING | None | TG-017 |
-| Release | Candidate manifest/artifacts | BLOCKED | Requires Prompt 15 GO | TG-018 |
-| Release | Tag and GitHub Release | BLOCKED | Requires Prompt 16 READY_TO_TAG and explicit authorization | TG-019 |
-| Prohibited | Canary environment | NOT APPLICABLE | Explicitly prohibited | Must remain absent |
-| Prohibited | Live trading | NOT APPLICABLE | Explicitly prohibited | Must remain absent |
-| Prohibited | Withdrawal/transfer | NOT APPLICABLE | Explicitly prohibited | Must remain absent |
-| Prohibited | Arbitrary untrusted strategy sandbox | NOT APPLICABLE | Explicitly out of v0.1.0 | Trusted local code only |
+1. verify event ordering and deterministic checksum scope;
+2. verify cash/asset conservation and duplicate-fill idempotency;
+3. verify same-close rejection and future-knowable bars;
+4. review market/limit, latency, partial/non-fill, precision/notional, session,
+   halt, and maintenance behavior;
+5. review separate equity/crypto costs and synthetic assumptions;
+6. review split/dividend/symbol/delisting accounting and evidence;
+7. record `PASS`, `FAIL`, or `BLOCKED` and a maintainer merge decision.
 
-## Critical gaps
+Strategy code is not `NEXT` until this gate passes and the stable base changes.
 
-1. External non-live adapter, backtesting, strategies, validation,
-   risk, monitoring, and complete API/dashboard functionality remain future
-   sequential prompts.
-2. Prompt 1 through Prompt 4 are published on the draft implementation pull
-   request, where all configured GitHub checks passed. Prompt 5 remains a
-   stacked implementation change until its own verification and publication.
-3. No connected qualification can be claimed; both Twelve Data and Coinbase
-   results are `SKIP_NOT_OPTED_IN`, no provider/account/broker connection was
-   attempted, and ADR 0002/0003 promotion blockers remain unresolved.
-4. The repository remains non-tradable and has no order-submission, withdrawal,
-   transfer, canary, or live path.
+## Blocker register
 
-## Prompt 0 promotion result
+| Capability | Status | Exact unblock condition | Authority |
+| --- | --- | --- | --- |
+| Twelve Data connected AAPL daily qualification | `BLOCKED` | Approved exact XNAS/XNGS session registry, local data-only credential, one bounded `PASS`, redacted evidence review | Data/license owner and maintainer |
+| Coinbase public connected qualification | `BLOCKED` | Terms/jurisdiction recheck, one bounded public REST/WebSocket `PASS`, redacted evidence review | Data/license owner and maintainer |
+| PR #3 R3 promotion | `NEXT` (human gate not a technical blocker) | Review checklist above and explicit decision | Maintainer/research reviewer |
+| Any account integration | `BLOCKED` | Internal paper/reconciliation contracts plus adapter/permission/terms approval | Security and risk owners |
+| Connected Research Release/tag | `BLOCKED` | R10 non-waivable gates, human GO, verified candidate, explicit exact publish authorization | Maintainer/release owner |
 
-`PASS`
+## Explicitly out of scope
 
-The documentation deliverables exist, the required decisions are recorded, and
-no connected/trading claim is made. Prompt 1 implementation is authorized.
+| Capability | Roadmap status | Enforcement expectation |
+| --- | --- | --- |
+| `canary` or `live` runtime/order path | `OUT OF SCOPE` | Configuration/CLI/API/workflow negative tests |
+| Withdrawal, transfer, custody, sub-account or API-key management | `OUT OF SCOPE` | Adapter capability and endpoint allowlist rejection |
+| Leverage, margin, borrowing, shorting, derivatives | `OUT OF SCOPE` | Market/ledger/config schema rejection |
+| Automatic strategy/risk/release promotion | `OUT OF SCOPE` | Human approval record required |
+| Arbitrary in-process untrusted strategy execution | `OUT OF SCOPE` | No dynamic package upload/import path |
+| Profit guarantees or investment advice | `OUT OF SCOPE` | Public copy/report review |
 
-## Prompt 1 promotion result
+## Evidence locations
 
-`PASS`
+- Domain/config schemas: `schemas/`
+- Synthetic data fixtures: `tests/fixtures/market_data/`
+- Adapter fixtures: `tests/fixtures/adapters/`
+- Stage evidence: `artifacts/evidence/bootstrap/`, `prompt2/`, `prompt3/`,
+  `prompt4/`, `prompt5/`, and PR #3's `prompt6/`
+- Durable contracts and human gates: `docs/architecture/`, `docs/data/`,
+  `docs/backtest/`, `docs/adapters/`, and `docs/adr/`
 
-Verified locally:
-
-- Ruff format and lint pass.
-- mypy passes.
-- 40 offline Python tests pass and one connected test is safely deselected.
-- Coverage is 95.86%, above the 90% gate.
-- Dashboard typecheck, two safety tests, and production build pass.
-- Python and production npm dependency audits report no known vulnerabilities.
-- Workflow permission/SHA validation and the redacted secret scan pass.
-- Python wheel and source distribution build successfully.
-- An independent local clone at commit `ae8c0d5` completed locked Python/npm
-  installation, Ruff, mypy, 39 offline Python tests, dashboard checks/tests,
-  dashboard production build, and Python package build; the temporary clone was
-  removed after verification.
-- `scripts/verify_clean_bootstrap.sh` was invoked with Git Bash and returned its
-  final `PASS: clean bootstrap verified` result.
-- Docker Compose built and started PostgreSQL, API, worker, mock market data,
-  deterministic paper broker skeleton, and dashboard. All probes passed.
-- Application containers were verified read-only, non-root, capability-dropped,
-  and configured with `no-new-privileges`.
-- Paper broker capabilities remained non-external and non-live; its order route
-  returned HTTP 404.
-- Verification removed its containers, network, and volume. The pre-existing
-  `freqtrade` container remained running and unchanged.
-- Actual localhost `/health/live` and `/health/ready` probes return healthy
-  `research` status.
-- Bootstrap evidence and its checksum index are generated.
-
-Prompt 2 was authorized by the maintainer on 2026-07-29.
-
-## Prompt 2 promotion result
-
-`PASS`
-
-Verified locally:
-
-- Ruff format and lint pass.
-- mypy strict mode passes for 26 source files.
-- 74 offline Python tests pass and one connected test is safely deselected.
-- Coverage is 96.30%, above the 90% gate.
-- All 23 required event types share a strict immutable envelope and generated
-  discriminated JSON Schema.
-- Canonical JSON and SHA-256 checksums are deterministic; binary floats,
-  naive datetimes, tampered events, and unregistered schema versions fail
-  closed.
-- All five allowed environments load successfully; unallowlisted environments
-  fail property-based validation.
-- Effective configuration inspection is redacted, configuration hashes are
-  credential-independent, and no secret value appears in schema snapshots or
-  generated evidence.
-- Clean run manifests qualify deterministically; dirty worktrees and validation
-  failures are recorded and rejected for release qualification.
-- Domain event, configuration, and run-manifest schemas reproduce exactly from
-  `scripts/export_schemas.py`; the synthetic sample manifest validates.
-- Workflow permission/SHA validation, the redacted secret scan, and repository
-  diff checks pass.
-- The Python dependency audit reports no known vulnerabilities, and the wheel
-  and source distribution build successfully.
-- No external provider, account, credential, strategy, adapter, order route,
-  canary environment, or live-trading capability was added or exercised.
-
-Prompt 3 was authorized by the maintainer on 2026-07-29.
-
-## Prompt 3 promotion result
-
-`PASS`
-
-Verified locally:
-
-- Ruff format and lint pass.
-- mypy strict mode passes for 35 source files.
-- 128 offline Python tests pass and one connected test is safely deselected.
-- Coverage is 94.26%, above the 90% gate.
-- All required canonical records and point-in-time metadata use immutable,
-  strict UTC/Decimal contracts.
-- Dataset manifests bind sorted symbols, date ranges, row counts, partitions,
-  licensing, gaps, corrections, parent identity, checksums, and an acyclic
-  transformation graph.
-- Content-addressed raw storage is write-once through its API, idempotent for
-  identical bytes, and detects altered blobs.
-- Every required shared, equity, and crypto quality code is implemented.
-- Quality evaluation validates record count and checksum against the manifest;
-  unknown or future-known reference data fails closed.
-- `FAIL` and `QUARANTINED` reports cannot support validation evidence.
-- Eleven committed synthetic fixtures reproduce exact manifests and reports,
-  including stale-content-with-fresh-ingest and quarantined examples.
-- `tradeguard data validate`, `manifest`, and `inspect` operate offline and
-  return non-zero status for unsafe inputs.
-- JSON Schema snapshots, fixture manifests, quality reports, transformed data
-  checksums, lineage graphs, and evidence checksums regenerate deterministically.
-- No external provider, account, credential, strategy, adapter, order route,
-  canary environment, or live-trading capability was added or exercised.
-
-Prompt 4 was authorized by the maintainer through the 2026-07-31 provider review.
-
-## Prompt 4 implementation result
-
-`IMPLEMENTED / PROMOTION BLOCKED`
-
-Verified locally:
-
-- The provider-neutral equity protocol covers reviewed metadata, historical
-  bars, latest completed bar, calendar, timezone, symbol normalization, and
-  explicit unsupported corporate actions.
-- The Twelve Data client permits only HTTPS GET to
-  `api.twelvedata.com/time_series`, sends credentials only by authorization
-  header, limits responses to 1 MiB, times out after 10 seconds, and retries
-  exactly once only after HTTP 429.
-- Only AAPL, NASDAQ, XNAS/XNGS, `1day`, `outputsize <= 10`, and `adjust=none`
-  pass the adapter scope boundary.
-- Strict provider schema, Decimal parsing, exchange-local session-date mapping,
-  reviewed UTC sessions, manifest/checksum creation, and the Prompt 3 quality
-  gate pass the sanitized contract.
-- Corporate actions remain unsupported; unadjusted data carries a warning and
-  suspected unmodeled discontinuities are quarantined without an inferred split.
-- Eleven focused adapter contract tests pass. The complete offline suite has
-  159 passing tests, one connected test deselected, and 93.02% branch-aware
-  coverage.
-- Ruff, strict mypy, schema snapshot reproduction, workflow validation, secret
-  scan, dashboard checks/tests/build, and package build pass.
-- Prompt 4 changes no dependency or lock entry. System-CA-enabled Python and
-  production npm audits report no known dependency vulnerabilities; the local
-  unpublished `tradeguard` package is correctly skipped by the PyPI audit.
-- Public Prompt 4 evidence contains only sanitized synthetic fixtures, schemas,
-  counts, dates, checksums, manifests, quality status, and licensing metadata.
-  It records `raw_market_values_persisted=false` and
-  `raw_market_values_published=false`.
-- Connected evidence is `SKIP_NOT_OPTED_IN`, `passed=false`, and
-  `provider_contacted=false`.
-
-The Basic plan, individual account, approved internal non-display use,
-internal-use-only classification, 8/800 credit metadata, no redistribution,
-no public display, and transient-only raw-response policy are now recorded.
-Promotion remains `BLOCKED` until the exact connected-session window is human
-approved, a locally opted-in release-candidate connected smoke obtains `PASS`,
-the redacted evidence is human reviewed, and promotion is explicitly approved.
-
-Prompt 5 was authorized by the maintainer after Prompt 4 publication.
-
-## Prompt 5 implementation result
-
-`IMPLEMENTED / PROMOTION BLOCKED`
-
-Verified locally:
-
-- The provider-neutral crypto protocol covers trading-pair metadata, supported
-  pairs, one-minute bars, public trades, best bid/ask, REST health, public
-  WebSocket, venue maintenance status, and rate-limit metadata.
-- REST allows only unauthenticated HTTPS GET to four exact
-  `api.coinbase.com/api/v3/brokerage` public paths. Authorization, cookies,
-  private paths, duplicate queries, responses over 1 MiB, and more than one
-  429 retry fail closed.
-- WebSocket allows only `advanced-trade-ws.coinbase.com` with public
-  `heartbeats`, `market_trades`, `status`, and `ticker` subscriptions. No
-  subscription contains a JWT.
-- Only BTC-USD spot is enabled. Decimal precision, minimum quantity/notional,
-  UTC timestamps, REST/WebSocket metadata agreement, and provider status are
-  validated before a stream can become research-admissible.
-- Missing, duplicate, skipped, and decreasing sequences; heartbeat gaps; stale
-  messages; future timestamps; schema drift; metadata conflict; and reconnect
-  exhaustion emit quarantined `DataQualityAlert` events and remain
-  `NOT_TRADABLE`. Missing events are never inferred.
-- Disconnect replay proves a one-second bounded backoff, full
-  resubscription, and controlled closure. The complete schedule is one, two,
-  then four seconds with at most three reconnects.
-- Five focused Coinbase REST contracts and nine WebSocket replay tests pass.
-  The complete offline suite has 189 passing tests, two connected tests
-  deselected, and 90.18% branch-aware coverage.
-- Ruff format/lint, strict mypy, schema reproduction, workflow validation,
-  secret scan, dashboard typecheck/tests/build, and Python package build pass.
-- Python and production npm audits report no known vulnerabilities; the local
-  unpublished `tradeguard` package is correctly skipped by the PyPI audit.
-- Public Prompt 5 artifacts contain deterministic synthetic fixtures,
-  checksums, counts, manifests, status, and test output only. They record no
-  raw connected values, account data, credential, order, transfer, withdrawal,
-  fallback, derivatives, leverage, canary, or live capability.
-- Connected evidence is `SKIP_NOT_OPTED_IN`, `passed=false`, and
-  `provider_contacted=false`.
-
-Promotion remains `BLOCKED` until the Coinbase terms and jurisdiction are
-rechecked for the intended release-candidate use, an explicitly opted-in
-public REST/WebSocket smoke obtains `PASS`, the redacted evidence is human
-reviewed, and promotion is explicitly approved.
+Historical Prompt 0–6 evidence remains valid as delivery history but no longer
+defines the next scope. See `docs/history/prompt-migration.md`.

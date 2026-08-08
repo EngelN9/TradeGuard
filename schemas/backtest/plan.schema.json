@@ -1,0 +1,446 @@
+{
+  "$defs": {
+    "ConservativeExecutionConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "latency_seconds": {
+          "default": 1,
+          "minimum": 0,
+          "title": "Latency Seconds",
+          "type": "integer"
+        },
+        "max_participation_rate": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "0.25",
+          "gt": 0,
+          "le": 1,
+          "title": "Max Participation Rate"
+        },
+        "version": {
+          "const": "conservative-bar-v1",
+          "default": "conservative-bar-v1",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "title": "ConservativeExecutionConfig",
+      "type": "object"
+    },
+    "CryptoCostModel": {
+      "additionalProperties": false,
+      "description": "Conservative spot-only maker/taker and execution assumptions.",
+      "properties": {
+        "maker_fee_rate": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "0.004",
+          "ge": 0,
+          "title": "Maker Fee Rate"
+        },
+        "market_impact_bps": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "8",
+          "ge": 0,
+          "title": "Market Impact Bps"
+        },
+        "slippage_bps": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "8",
+          "ge": 0,
+          "title": "Slippage Bps"
+        },
+        "spread_bps": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "8",
+          "ge": 0,
+          "title": "Spread Bps"
+        },
+        "taker_fee_rate": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "0.006",
+          "ge": 0,
+          "title": "Taker Fee Rate"
+        },
+        "version": {
+          "const": "crypto-spot-conservative-v1",
+          "default": "crypto-spot-conservative-v1",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "title": "CryptoCostModel",
+      "type": "object"
+    },
+    "EquityCostModel": {
+      "additionalProperties": false,
+      "description": "Conservative cash-equity commission, tax, and execution assumptions.",
+      "properties": {
+        "commission_rate": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "0.001",
+          "ge": 0,
+          "title": "Commission Rate"
+        },
+        "market_impact_bps": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "5",
+          "ge": 0,
+          "title": "Market Impact Bps"
+        },
+        "minimum_commission": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "1",
+          "ge": 0,
+          "title": "Minimum Commission"
+        },
+        "sell_tax_rate": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "0.003",
+          "ge": 0,
+          "title": "Sell Tax Rate"
+        },
+        "slippage_bps": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "5",
+          "ge": 0,
+          "title": "Slippage Bps"
+        },
+        "spread_bps": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "5",
+          "ge": 0,
+          "title": "Spread Bps"
+        },
+        "version": {
+          "const": "equity-conservative-v1",
+          "default": "equity-conservative-v1",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "title": "EquityCostModel",
+      "type": "object"
+    },
+    "OrderType": {
+      "enum": [
+        "market",
+        "limit"
+      ],
+      "title": "OrderType",
+      "type": "string"
+    },
+    "PlannedOrder": {
+      "additionalProperties": false,
+      "description": "An explicit research order; strategy generation arrives in Prompt 7.",
+      "properties": {
+        "asset_class": {
+          "enum": [
+            "equity",
+            "crypto"
+          ],
+          "title": "Asset Class",
+          "type": "string"
+        },
+        "decision_event_time_utc": {
+          "format": "date-time",
+          "title": "Decision Event Time Utc",
+          "type": "string"
+        },
+        "limit_price": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                  "type": "string"
+                }
+              ],
+              "gt": 0
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Limit Price"
+        },
+        "order_id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Order Id",
+          "type": "string"
+        },
+        "order_type": {
+          "$ref": "#/$defs/OrderType"
+        },
+        "quantity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "gt": 0,
+          "title": "Quantity"
+        },
+        "sequence_number": {
+          "minimum": 0,
+          "title": "Sequence Number",
+          "type": "integer"
+        },
+        "side": {
+          "$ref": "#/$defs/Side"
+        },
+        "submitted_at_utc": {
+          "format": "date-time",
+          "title": "Submitted At Utc",
+          "type": "string"
+        },
+        "symbol": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Symbol",
+          "type": "string"
+        },
+        "venue": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Venue",
+          "type": "string"
+        }
+      },
+      "required": [
+        "order_id",
+        "asset_class",
+        "venue",
+        "symbol",
+        "side",
+        "order_type",
+        "quantity",
+        "decision_event_time_utc",
+        "submitted_at_utc",
+        "sequence_number"
+      ],
+      "title": "PlannedOrder",
+      "type": "object"
+    },
+    "Side": {
+      "enum": [
+        "buy",
+        "sell"
+      ],
+      "title": "Side",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Complete deterministic input independent of workstation state.",
+  "properties": {
+    "base_currency": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Base Currency",
+      "type": "string"
+    },
+    "crypto_costs": {
+      "$ref": "#/$defs/CryptoCostModel",
+      "default": {
+        "maker_fee_rate": "0.004",
+        "market_impact_bps": "8",
+        "slippage_bps": "8",
+        "spread_bps": "8",
+        "taker_fee_rate": "0.006",
+        "version": "crypto-spot-conservative-v1"
+      }
+    },
+    "equity_costs": {
+      "$ref": "#/$defs/EquityCostModel",
+      "default": {
+        "commission_rate": "0.001",
+        "market_impact_bps": "5",
+        "minimum_commission": "1",
+        "sell_tax_rate": "0.003",
+        "slippage_bps": "5",
+        "spread_bps": "5",
+        "version": "equity-conservative-v1"
+      }
+    },
+    "execution": {
+      "$ref": "#/$defs/ConservativeExecutionConfig",
+      "default": {
+        "latency_seconds": 1,
+        "max_participation_rate": "0.25",
+        "version": "conservative-bar-v1"
+      }
+    },
+    "initial_cash": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "gt": 0,
+      "title": "Initial Cash"
+    },
+    "orders": {
+      "items": {
+        "$ref": "#/$defs/PlannedOrder"
+      },
+      "title": "Orders",
+      "type": "array"
+    },
+    "random_seed": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Random Seed",
+      "type": "integer"
+    },
+    "run_id": {
+      "format": "uuid",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "run_type": {
+      "enum": [
+        "backtest",
+        "replay"
+      ],
+      "title": "Run Type",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "strategy_id": {
+      "default": "fixed-order-plan",
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Strategy Id",
+      "type": "string"
+    },
+    "strategy_version": {
+      "default": "1.0.0",
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Strategy Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "run_id",
+    "run_type",
+    "initial_cash",
+    "base_currency",
+    "orders"
+  ],
+  "title": "BacktestPlan",
+  "type": "object"
+}

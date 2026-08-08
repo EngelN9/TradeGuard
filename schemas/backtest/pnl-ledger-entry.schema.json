@@ -1,0 +1,96 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "cash": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "ge": 0,
+      "title": "Cash"
+    },
+    "event_time_utc": {
+      "format": "date-time",
+      "title": "Event Time Utc",
+      "type": "string"
+    },
+    "market_value": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "ge": 0,
+      "title": "Market Value"
+    },
+    "realized_pnl": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "title": "Realized Pnl"
+    },
+    "total_equity": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "ge": 0,
+      "title": "Total Equity"
+    },
+    "total_pnl": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "title": "Total Pnl"
+    },
+    "unrealized_pnl": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "title": "Unrealized Pnl"
+    }
+  },
+  "required": [
+    "event_time_utc",
+    "cash",
+    "market_value",
+    "realized_pnl",
+    "unrealized_pnl",
+    "total_pnl",
+    "total_equity"
+  ],
+  "title": "PnLLedgerEntry",
+  "type": "object"
+}

@@ -19,6 +19,14 @@ from tradeguard.adapters.equity.configuration import TwelveDataReleaseConfigurat
 from tradeguard.adapters.equity.connected import ConnectedSmokeResult
 from tradeguard.adapters.equity.protocol import EquityAdapterCapabilities, HistoricalBarsRequest
 from tradeguard.adapters.equity.twelve_data import reviewed_time_series_schema
+from tradeguard.backtest.models import (
+    BacktestArtifact,
+    BacktestPlan,
+    FillLedgerEntry,
+    OrderLedgerEntry,
+    PnLLedgerEntry,
+    PositionLedgerEntry,
+)
 from tradeguard.config.models import TradeGuardConfig
 from tradeguard.data.manifest import DatasetManifest
 from tradeguard.data.models import AnyMarketRecord, InstrumentMetadata
@@ -87,6 +95,12 @@ def schema_documents() -> dict[str, object]:
         "dataset-manifest.schema.json": DatasetManifest.model_json_schema(),
         "quality-report.schema.json": QualityReport.model_json_schema(),
         "dataset-package.schema.json": DatasetPackage.model_json_schema(),
+        "backtest/plan.schema.json": BacktestPlan.model_json_schema(),
+        "backtest/artifact.schema.json": BacktestArtifact.model_json_schema(),
+        "backtest/order-ledger-entry.schema.json": OrderLedgerEntry.model_json_schema(),
+        "backtest/fill-ledger-entry.schema.json": FillLedgerEntry.model_json_schema(),
+        "backtest/position-ledger-entry.schema.json": PositionLedgerEntry.model_json_schema(),
+        "backtest/pnl-ledger-entry.schema.json": PnLLedgerEntry.model_json_schema(),
         "adapters/equity-capabilities.schema.json": (EquityAdapterCapabilities.model_json_schema()),
         "adapters/equity-historical-bars-request.schema.json": (
             HistoricalBarsRequest.model_json_schema()

@@ -3,7 +3,7 @@ UV ?= uv
 .PHONY: setup format lint typecheck test test-unit test-property test-integration
 .PHONY: test-contract test-replay test-e2e test-connected evidence dev-up dev-down
 .PHONY: api worker web build schemas data-fixtures prompt3-evidence prompt4-evidence
-.PHONY: prompt5-evidence test-coinbase-connected
+.PHONY: prompt5-evidence prompt6-evidence test-coinbase-connected
 
 setup:
 	$(UV) sync --locked
@@ -77,6 +77,9 @@ prompt4-evidence:
 
 prompt5-evidence:
 	$(UV) run python scripts/collect_prompt5_evidence.py
+
+prompt6-evidence:
+	$(UV) run python scripts/collect_prompt6_evidence.py
 
 dev-up:
 	docker compose up --build -d

@@ -1,0 +1,203 @@
+{
+  "$defs": {
+    "CostBreakdown": {
+      "additionalProperties": false,
+      "description": "Explicit costs charged in the account's quote currency.",
+      "properties": {
+        "commission": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Commission"
+        },
+        "market_impact": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Market Impact"
+        },
+        "slippage": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Slippage"
+        },
+        "spread": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Spread"
+        },
+        "tax": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Tax"
+        },
+        "total": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Total"
+        }
+      },
+      "required": [
+        "commission",
+        "tax",
+        "spread",
+        "slippage",
+        "market_impact",
+        "total"
+      ],
+      "title": "CostBreakdown",
+      "type": "object"
+    },
+    "OrderType": {
+      "enum": [
+        "market",
+        "limit"
+      ],
+      "title": "OrderType",
+      "type": "string"
+    },
+    "Side": {
+      "enum": [
+        "buy",
+        "sell"
+      ],
+      "title": "Side",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "asset_class": {
+      "enum": [
+        "equity",
+        "crypto"
+      ],
+      "title": "Asset Class",
+      "type": "string"
+    },
+    "costs": {
+      "$ref": "#/$defs/CostBreakdown"
+    },
+    "event_time_utc": {
+      "format": "date-time",
+      "title": "Event Time Utc",
+      "type": "string"
+    },
+    "fill_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Fill Id",
+      "type": "string"
+    },
+    "order_id": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Order Id",
+      "type": "string"
+    },
+    "order_type": {
+      "$ref": "#/$defs/OrderType"
+    },
+    "price": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "gt": 0,
+      "title": "Price"
+    },
+    "quantity": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "gt": 0,
+      "title": "Quantity"
+    },
+    "side": {
+      "$ref": "#/$defs/Side"
+    },
+    "symbol": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Symbol",
+      "type": "string"
+    },
+    "venue": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Venue",
+      "type": "string"
+    }
+  },
+  "required": [
+    "fill_id",
+    "order_id",
+    "asset_class",
+    "venue",
+    "symbol",
+    "side",
+    "order_type",
+    "event_time_utc",
+    "price",
+    "quantity",
+    "costs"
+  ],
+  "title": "FillLedgerEntry",
+  "type": "object"
+}

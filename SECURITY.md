@@ -53,12 +53,14 @@ TradeGuard 不會因開發速度、操作便利性或績效展示而降低安全
 
 目前 TradeGuard 尚處於：
 
-EQUITY AND CRYPTO ADAPTERS IMPLEMENTED / NOT TRADABLE
+DETERMINISTIC BACKTESTER IMPLEMENTED / NOT TRADABLE
 
-目前已完成 repository bootstrap、Prompt 2 核心資料合約、Prompt 3 離線
-資料基礎、Prompt 4 的受限股票資料 adapter，以及 Prompt 5 的公開、無驗證
-加密貨幣 REST/WebSocket adapter；尚未完成 connected qualification，也未
-進入策略或回測階段。系統沒有正式下單、提款或轉帳能力。
+公開 `main@0b73ca4` 的穩定停止點為 R2：已完成 repository bootstrap、核心
+資料合約、離線資料基礎，以及受限股票／加密貨幣市場資料 adapter 的離線
+contracts。Draft PR #3 (`cddb676`) 另包含純離線 fixed-order deterministic
+backtest/replay 核心，但 R3 人工 promotion 尚未完成。兩個 connected
+qualification 皆未 opt in，也尚未加入策略。系統沒有正式下單、提款或轉帳
+能力。
 
 在第一個正式版本發布前，安全修正原則上只會套用至預設分支：
 

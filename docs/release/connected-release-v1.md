@@ -1,12 +1,22 @@
 # TradeGuard Connected Release v1 Contract
 
-Status: `APPROVED FOR IMPLEMENTATION`
+Status: `APPROVED AGGREGATE TARGET / DELIVERY DECOMPOSED`
 
 Target version: `v0.1.0`
 
 Assessment date: `2026-07-29`
 
 Assessment base: `65d3c6f8499a189685c7c21e722c8ff6bf498cdb`
+
+Governance amendment: `2026-08-08`
+
+This remains the accepted aggregate contract for the later **R10 — Connected
+Research Release**. It is no longer an instruction to implement every section
+as one linear v0.1.0 batch. The normative stage caps, stable stops, and current
+status are `docs/roadmap/scope-ladder.md`,
+`docs/roadmap/release-ladder.md`, and
+`docs/status/implementation-matrix.md`. Any conflict is resolved in favor of
+the smaller current ladder scope and the stricter safety gate.
 
 ## 1. Release identity
 
@@ -381,7 +391,12 @@ regional availability, permissions, or endpoints change.
 - [x] Initial data, risk, security, release, and connected-test owner:
       `EngelN9`.
 
-## 19. Work breakdown
+## 19. Historical aggregate work breakdown
+
+The TG-001–TG-019 list below records the original approved decomposition. It is
+useful for traceability but is not the active execution sequence. Large items
+TG-007 onward were split into smaller domain stages by the 2026-08-08 scope
+ladder. Prompt/TG numbering does not authorize continuation.
 
 Each issue below is independently reviewable. Every issue inherits the no-live,
 no-secret, fail-closed, Decimal, UTC, test, evidence, and rollback requirements.
@@ -468,6 +483,8 @@ no-secret, fail-closed, Decimal, UTC, test, evidence, and rollback requirements.
 - Promotion gate: Prompt 5 pass or connected smoke explicitly BLOCKED.
 
 ### TG-006 — Deterministic backtester and ledger
+
+Implementation status: `IMPLEMENTED / HUMAN PROMOTION REVIEW REQUIRED`.
 
 - Purpose: produce conservative reproducible simulations.
 - Scope: event loop, Decimal ledger, orders/fills, separate market costs,
@@ -663,7 +680,7 @@ no-secret, fail-closed, Decimal, UTC, test, evidence, and rollback requirements.
 - Security/rollback: withdraw/deprecate failed release and preserve evidence.
 - Promotion gate: `RELEASED` only if all post-release checks pass.
 
-## 20. Dependency graph
+## 20. Historical dependency graph
 
 ```mermaid
 flowchart TD
@@ -704,5 +721,7 @@ The contract exits Prompt 0 because:
 - no external connection, credential, runtime dependency, or application code
   was introduced by Prompt 0.
 
-The first recommended implementation issue after approval is **TG-001 —
-Bootstrap typed repository and offline CI**.
+The original first issue was TG-001 and is complete. Current work must follow
+the release ladder. The only immediate `NEXT` gate is R3 human review of draft
+PR #3; the first later implementation slice, only after R3 promotion, is the R4
+strategy protocol plus one transparent baseline for one market.

@@ -1,0 +1,35 @@
+{
+  "artifacts": [
+    {
+      "path": "all-offline-tests.xml",
+      "sha256": "0e30113dff45c966ea8523e2dce0b90d86972077a2e785288e346e3afdd49117"
+    },
+    {
+      "path": "conservation-report.json",
+      "sha256": "cde8e9d56412a77c1c215d9665a36e414efe30fb972b5be0a94d7de4e3014b17"
+    },
+    {
+      "path": "crypto-maintenance-rejection.json",
+      "sha256": "e6d589fc5c02dcc94ecd03ff6bf2ea6ef2d25fdaa7809fa34e036708504ce970"
+    },
+    {
+      "path": "deterministic-checksum.json",
+      "sha256": "c27ae2490e3424a4d6900e2c3ab23dbd80474188ab709fd2148e5971144c298b"
+    },
+    {
+      "path": "lookahead-rejection.json",
+      "sha256": "ea87a4153e6a801e8211f981a44623b77a9861e1c8d0bb90ce6ec05e984d76b9"
+    },
+    {
+      "path": "partial-fill.json",
+      "sha256": "b0c37766c876791a1c2094281d8b6733f3684ba94b6c9d518ae5122dc3824296"
+    },
+    {
+      "path": "stock-split.json",
+      "sha256": "fdb32161f2d685343b10afc67055e79b352ceb0161b4b5edae63f9fab775a67e"
+    }
+  ],
+  "evidence_stage": "prompt6",
+  "schema_version": "1.0.0",
+  "synthetic_only": true
+}

@@ -1,0 +1,8 @@
+{
+  "asset_quantity_differences": {
+    "SYNTH-CRYPTO:BTC-USD": "0"
+  },
+  "cash_equity_difference": "0",
+  "conserved": true,
+  "duplicate_fill_ids_ignored": 0
+}
