@@ -22,10 +22,12 @@ TradeGuard 不以「保證獲利」為產品目標，而是提供一套更可靠
 
 DETERMINISTIC BACKTESTER IMPLEMENTED / NOT TRADABLE
 
-目前專案已完成 repository bootstrap、Prompt 2 核心資料合約、Prompt 3
-離線資料基礎、Prompt 4 的受限股票資料 adapter、Prompt 5 的公開
-加密貨幣 REST/WebSocket adapter，以及 Prompt 6 的離線確定性回測與 replay
-核心；尚未完成 connected qualification，也尚未加入 Prompt 7 策略。
+目前 GitHub 公開 `main` 的穩定停止點是 **R2 — Restricted market-data
+contracts**（`0b73ca4`）：已完成 repository bootstrap、核心資料合約、離線
+資料基礎，以及受限股票／加密貨幣公開資料 adapter。Draft PR #3
+（`cddb676`）另包含離線 fixed-order deterministic backtest/replay，屬於 **R3
+候選**；自動檢查已通過，但人工 promotion 尚未完成，因此不能視為已核准的
+公開穩定能力。connected qualification 與策略皆未完成。
 
 * 已建立 typed Python package、FastAPI health endpoints、worker、mock market-data、deterministic paper broker skeleton 與唯讀 dashboard placeholder。
 * 已建立鎖定依賴、測試、靜態檢查、GitHub Actions、Dockerfile、Docker Compose 與 bootstrap evidence 骨架。
@@ -33,7 +35,7 @@ DETERMINISTIC BACKTESTER IMPLEMENTED / NOT TRADABLE
 * 已建立 canonical equity/crypto records、point-in-time metadata、DatasetManifest、content-addressed storage、品質閘門、synthetic fixtures、lineage 與離線 data CLI。
 * 已建立受限 Twelve Data 股票資料 adapter；connected session 仍待人工審閱，promotion 為 `BLOCKED`。
 * 已建立僅限公開、無驗證、BTC-USD spot 的 Coinbase Advanced Trade REST/WebSocket adapter；connected smoke 未 opt in，promotion 為 `BLOCKED`。
-* 已建立 fixed-order deterministic backtest/replay、Decimal cash-only/long-only 帳本、保守成交、分市場成本、公司行動、守恆檢查與 checksummed artifact；Prompt 6 promotion 仍待人工審閱。
+* PR #3 已建立 fixed-order deterministic backtest/replay、Decimal cash-only/long-only 帳本、保守成交、分市場成本、公司行動、守恆檢查與 checksummed artifact；R3 promotion 仍待人工審閱與維護者合併決定。
 * 尚未提供任何策略、投資建議或可供投資判斷的驗證結果。
 * 尚未連接正式券商、交易所帳戶或外部市場資料服務。
 * 執行環境只接受 `research`、`backtest`、`replay`、`paper`、`shadow`；其他值會 fail closed。
@@ -43,13 +45,15 @@ DETERMINISTIC BACKTESTER IMPLEMENTED / NOT TRADABLE
 
 重要文件：
 
-* [`AGENTS.md`](AGENTS.md)：最高層級工程、安全、研究與風險規格。
-* [`PROMPTS.md`](PROMPTS.md)：依序執行的交付階段與人工審查閘門。
+* [`AGENTS.md`](AGENTS.md)：repository-wide AI 代理、安全與驗證硬規則。
+* [`docs/README.md`](docs/README.md)：正式文件權威與導航。
+* [`docs/roadmap/scope-ladder.md`](docs/roadmap/scope-ladder.md)：37 個 domain 的 Stage 0–5 範圍上限。
+* [`docs/roadmap/release-ladder.md`](docs/roadmap/release-ladder.md)：可長期維持的穩定停止點與 promotion gates。
 * [`SECURITY.md`](SECURITY.md)：安全政策與私密通報方式。
 * [`CONTRIBUTING.md`](CONTRIBUTING.md)：開發、測試與 Pull Request 規範。
 * [`docs/data/data-foundation.md`](docs/data/data-foundation.md)：資料模型、manifest、lineage 與品質閘門。
 * [`docs/adapters/crypto-market-data.md`](docs/adapters/crypto-market-data.md)：公開加密貨幣 adapter、序號與重連安全規格。
-* [`docs/backtest/deterministic-engine.md`](docs/backtest/deterministic-engine.md)：Prompt 6 排序、帳本、成交、成本與人工審查規格。
+* [`docs/backtest/deterministic-engine.md`](docs/backtest/deterministic-engine.md)：R3 候選的排序、帳本、成交、成本與人工審查規格。
 * [`docs/release/connected-release-v1.md`](docs/release/connected-release-v1.md)：Connected Release v1 合約。
 * [`docs/status/implementation-matrix.md`](docs/status/implementation-matrix.md)：逐項實作狀態與缺口。
 
@@ -480,7 +484,11 @@ Paper／Shadow 事件監控
 
 ---
 
-## **預定儲存庫結構**
+## **參考儲存庫結構**
+
+下列是長期模組位置，不代表每個目錄或能力目前已實作。實際狀態以
+[`docs/status/implementation-matrix.md`](docs/status/implementation-matrix.md)
+為準；新增模組前必須符合 scope ladder，禁止為未來能力預建空框架。
 
 tradeguard/
 
@@ -602,7 +610,7 @@ tradeguard/
 
 ## **開發環境**
 
-以下指令已由 Prompt 1 bootstrap 提供。Windows 沒有 GNU Make 時，可以直接執行
+以下指令由目前 bootstrap 工具鏈提供。Windows 沒有 GNU Make 時，可以直接執行
 Makefile 中對應的 `uv`、`npm` 或 `docker compose` 指令。
 
 ### **必要工具**
@@ -981,168 +989,46 @@ Reporting 私密回報。請勿在公開 Issue 張貼任何：
 
 ---
 
-## **開發里程碑**
+## **開發與 Release Ladder**
 
-### **Milestone 0 — Repository Bootstrap**
+TradeGuard 不再以一個包含所有功能的 MVP 作為唯一完成標準。每個 release
+stop 都是可以長期維持的產品邊界：
 
-* Python typed project。  
-* Dependency lock。  
-* Lint、typecheck 與 tests。  
-* GitHub Actions。  
-* Docker Compose。  
-* PostgreSQL。  
-* FastAPI skeleton。  
-* Dashboard skeleton。  
-* Mock services。  
-* Domain events。  
-* Versioned configuration。  
-* Security baseline。
+* R0：治理與安全基線。
+* R1：可重現的離線資料基礎。
+* R2：受限市場資料 contracts（目前公開 `main`）。
+* R3：fixed-order deterministic simulation（目前 draft PR 候選）。
+* R4：單一策略垂直切片。
+* R5：基本比較與樣本外驗證。
+* R6：最小獨立風控。
+* R7：可重現研究報告與 evidence。
+* R8：內部 deterministic paper。
+* R9：唯讀 monitoring/reconciliation slice。
+* R10：完整 Connected Research Release（較後期且需獨立人工 gate）。
 
-### **Milestone 1 — Data Foundation**
+每一站的 entry、exit、證據、rollback、複雜度預算與停止條件請見
+[`docs/roadmap/release-ladder.md`](docs/roadmap/release-ladder.md)。各 domain
+可擴張到哪一級則以
+[`docs/roadmap/scope-ladder.md`](docs/roadmap/scope-ladder.md) 為準。
 
-* Canonical market schema。  
-* Dataset manifest。  
-* Checksum。  
-* Data quality pipeline。  
-* Instrument metadata。  
-* 股票交易日曆。  
-* 股票公司行動。  
-* 加密貨幣 precision 與 notional 規則。
-
-### **Milestone 2 — Deterministic Backtester**
-
-* Event loop。  
-* Strategy adapter。  
-* Portfolio ledger。  
-* Fill model。  
-* Cost model。  
-* Replay。  
-* Run manifest。  
-* Determinism tests。
-
-### **Milestone 3 — Validation Engine**
-
-* Benchmark comparison。  
-* Walk-forward。  
-* Out-of-sample evaluation。  
-* Parameter sensitivity。  
-* Cost sensitivity。  
-* Bootstrap。  
-* Monte Carlo。  
-* Regime analysis。  
-* Overfitting warnings。
-
-### **Milestone 4 — Risk Engine**
-
-* Exposure。  
-* Concentration。  
-* Volatility targeting。  
-* Drawdown limits。  
-* Liquidity risk。  
-* Venue risk。  
-* Stablecoin risk。  
-* Stress scenarios。
-
-### **Milestone 5 — Reports and Dashboard**
-
-* Research reports。  
-* Strategy comparison。  
-* Validation dashboard。  
-* Risk dashboard。  
-* Data-health dashboard。  
-* Audit log。  
-* Promotion workflow。
-
-### **Milestone 6 — Paper Monitoring**
-
-* Paper adapter。  
-* Position monitoring。  
-* Order monitoring。  
-* Reconciliation。  
-* Drift monitoring。  
-* Alerts。
-
-### **Milestone 7 — Shadow Monitoring**
-
-* Read-only account integration。  
-* Real-time market comparison。  
-* Expected versus observed costs。  
-* Strategy drift。  
-* Operational runbooks。
-
----
-
-## **MVP 成功標準**
-
-第一個 MVP 只需要完成一條可驗證的垂直路徑：
-
-歷史資料匯入
-
-  ↓
-
-資料品質檢查
-
-  ↓
-
-股票 baseline 策略
-
-  ↓
-
-加密貨幣 baseline 策略
-
-  ↓
-
-確定性回測
-
-  ↓
-
-成本與滑價模型
-
-  ↓
-
-Walk-forward
-
-  ↓
-
-樣本外驗證
-
-  ↓
-
-風險摘要
-
-  ↓
-
-可重現研究報告
-
-  ↓
-
-Web 儀表板
-
-MVP 不需要：
-
-* 正式下單。  
-* 多券商正式整合。  
-* 多交易所正式整合。  
-* 原生手機 App。  
-* 高頻交易。  
-* 複雜微服務。  
-* 機器學習黑箱策略。  
-* 自動參數自我修改。  
-* 自動管理使用者資金。
+目前唯一 `NEXT` 是 R3 人工 promotion review；在通過與合併決定前，不開始
+策略實作。
 
 ---
 
 ## **貢獻方式**
 
-TradeGuard 尚在早期開發階段；目前已有資料 adapter 與離線 deterministic
-backtest/replay 核心，但尚無 Prompt 7 策略、正式帳戶連線或交易能力。
+TradeGuard 尚在早期開發階段；公開 `main` 已有資料 adapter，draft PR #3
+另有離線 deterministic backtest/replay 核心候選，但尚無策略、正式帳戶
+連線或交易能力。
 
 提交變更前，請先閱讀：
 
 1. [`AGENTS.md`](AGENTS.md)
-2. [`CONTRIBUTING.md`](CONTRIBUTING.md)
-3. 目標目錄內較具體的 `AGENTS.md`  
-4. 相關測試與文件
+2. [`docs/README.md`](docs/README.md)
+3. [`CONTRIBUTING.md`](CONTRIBUTING.md)
+4. 目標目錄內較具體的 `AGENTS.md`
+5. 相關測試與文件
 
 Pull Request 必須：
 
@@ -1162,7 +1048,9 @@ Pull Request 必須：
 
 ## **AI 程式設計代理**
 
-本 repository 可以使用 Codex 或其他 AI 程式設計代理協助開發，但代理必須遵守 [`AGENTS.md`](AGENTS.md)。
+本 repository 可以使用 Codex 或其他 AI 程式設計代理協助開發，但代理必須遵守 [`AGENTS.md`](AGENTS.md)。新的單一增量任務可由
+[`docs/ai/codex-task-template.md`](docs/ai/codex-task-template.md) 起草；歷史
+Prompt 編號不再自動授權下一階段。
 
 AI 代理不得：
 

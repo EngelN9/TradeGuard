@@ -1,6 +1,6 @@
 # TradeGuard v0.1.0 System Context
 
-Status: `DRAFT`
+Status: `CURRENT TARGET ARCHITECTURE / PROGRESSIVELY IMPLEMENTED`
 
 Scope: Connected research, backtest, replay, paper, and shadow monitoring
 
@@ -215,6 +215,18 @@ deleting historical research or hiding an unfavorable result.
 
 ## Current implementation status
 
-Only project specifications and Prompt 0 documentation exist. Every runtime box
-in the diagrams is target architecture, not an implemented claim. See
-`docs/status/implementation-matrix.md`.
+The diagram is the maximum modular-monolith context, not a claim that every box
+exists. As of 2026-08-08:
+
+- public `main@0b73ca4` is Release Stop R2 with domain/config/data foundations
+  and restricted offline equity/crypto adapter contracts;
+- draft PR #3 at `cddb676` is an R3 candidate with fixed-order deterministic
+  backtest/replay, ledger, fills, and costs awaiting human promotion review;
+- strategy, independent validation/risk, experiments/reports, paper state
+  machine, monitoring/reconciliation/drift, and their full API/dashboard paths
+  are target boxes only;
+- connected qualifications are blocked/not opted in; no account or order path
+  exists.
+
+The exact reality is maintained in `docs/status/implementation-matrix.md`; stage
+caps and stopping points are in `docs/roadmap/`.

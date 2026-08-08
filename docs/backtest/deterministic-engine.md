@@ -2,7 +2,8 @@
 
 Status: `IMPLEMENTED / HUMAN PROMOTION REVIEW REQUIRED`
 
-TradeGuard Prompt 6 provides an offline, fixed-order simulation engine. It is a
+Draft PR #3 provides an offline, fixed-order simulation engine as the R3
+candidate. It is a
 research component, not a strategy, broker, account connector, or indication
 that any simulated result can be achieved in a real market.
 
@@ -10,14 +11,14 @@ that any simulated result can be achieved in a real market.
 
 The engine accepts only:
 
-- a self-contained `DatasetPackage` that passes the Prompt 3 quality gate with
+- a self-contained `DatasetPackage` that passes the data-foundation quality gate with
   `PASS` or `WARN`;
 - an immutable `BacktestPlan` containing explicit fixed orders;
 - recorded runtime metadata for the `RunManifest`.
 
 The engine has no network client, credential input, account state, external
 order endpoint, `canary`, or `live` mode. Strategy generation is deliberately
-deferred to Prompt 7. A `FAIL` or `QUARANTINED` dataset is rejected before any
+deferred to Release Stop R4. A `FAIL` or `QUARANTINED` dataset is rejected before any
 simulation result is produced.
 
 ## Deterministic ordering
@@ -109,10 +110,10 @@ evidence is committed under `artifacts/evidence/prompt6/`.
 - No strategy, benchmark, performance report or promotion decision is included.
 - A bar model cannot establish real-world fillability.
 
-Before Prompt 7, a human reviewer must inspect the ordering contract, same-close
+Before R3 promotion, a human reviewer must inspect the ordering contract, same-close
 rejection, partial-fill behavior, cost assumptions, split accounting,
-maintenance rejection and conservation evidence. Prompt 6 remains unpromoted
+maintenance rejection and conservation evidence. The R3 candidate remains unpromoted
 until that review is explicitly recorded.
 
-Rollback is a normal revert of the Prompt 6 model version. Previously generated
+Rollback is a normal revert of the R3 model version. Previously generated
 artifacts and checksums must remain available for audit and must not be rewritten.

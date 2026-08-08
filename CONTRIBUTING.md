@@ -5,8 +5,9 @@ security, risk controls, and the non-live v0.1.0 boundary.
 
 ## Before changing code
 
-1. Read `AGENTS.md`, `README.md`, `SECURITY.md`, the relevant ADRs, and any
-   narrower `AGENTS.md`.
+1. Read `AGENTS.md`, `docs/README.md`, the current implementation/scope/release
+   ladders, `README.md`, `SECURITY.md`, the relevant ADRs, and any narrower
+   `AGENTS.md`.
 2. Work on a branch; do not commit directly to `main`.
 3. State the objective, assumptions, expected files, validation, risk impact,
    and rollback.
@@ -46,10 +47,13 @@ npm test --prefix web
 npm run build --prefix web
 ```
 
-Prompt 6 deterministic backtest evidence can be regenerated with
+The historical Prompt 6 / current R3-candidate deterministic backtest evidence can be regenerated with
 `make prompt6-evidence` (or `uv run python scripts/collect_prompt6_evidence.py`).
 It must remain synthetic-only and must not be described as strategy performance
 or connected-market evidence.
+
+Historical Prompt numbers are delivery references, not automatic authority for
+the next change. Use `docs/ai/codex-task-template.md` for one bounded increment.
 
 Connected tests are never part of default CI. They require an explicit
 `TRADEGUARD_RUN_CONNECTED_TESTS=1`, the applicable accepted ADR, a reviewed

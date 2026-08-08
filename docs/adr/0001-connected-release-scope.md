@@ -7,8 +7,9 @@
 
 ## Context
 
-TradeGuard currently contains planning and safety documentation but no executable
-implementation. `PROMPTS.md` defines a Connected Release that must demonstrate
+At the time of this decision, TradeGuard contained planning and safety
+documentation but no executable implementation. The historical root prompt
+program defined a Connected Release that must demonstrate
 real public equity data, real public crypto REST/WebSocket data, deterministic
 paper behavior, one external non-live integration, validation, risk, monitoring,
 API/dashboard, and reproducible evidence.
@@ -138,9 +139,12 @@ This ADR was accepted after maintainer `EngelN9`:
 5. accepted initial ownership of data, risk, security, release, and connected
    tests.
 
-Implementation promotion still follows every later Prompt and human review gate.
-Acceptance of this ADR is not approval to publish, tag, connect credentials, or
-trade.
+Implementation promotion now follows the domain scope and release ladders plus
+their human review gates. Historical Prompt numbers remain traceability labels,
+not execution authority. Acceptance of this ADR is not approval to publish,
+tag, connect credentials, or trade. The 2026-08-08 delivery decomposition is
+documented in `docs/history/prompt-migration.md` and does not weaken this ADR's
+safety boundary.
 
 ## Rollback
 
