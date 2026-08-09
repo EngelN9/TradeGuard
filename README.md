@@ -23,11 +23,11 @@ TradeGuard 不以「保證獲利」為產品目標，而是提供一套更可靠
 DETERMINISTIC BACKTESTER IMPLEMENTED / NOT TRADABLE
 
 目前 GitHub 公開 `main` 的穩定停止點是 **R2 — Restricted market-data
-contracts**（`0b73ca4`）：已完成 repository bootstrap、核心資料合約、離線
-資料基礎，以及受限股票／加密貨幣公開資料 adapter。Draft PR #3
-（`cddb676`）另包含離線 fixed-order deterministic backtest/replay，屬於 **R3
-候選**；自動檢查已通過，但人工 promotion 尚未完成，因此不能視為已核准的
-公開穩定能力。connected qualification 與策略皆未完成。
+contracts**：已完成 repository bootstrap、核心資料合約、離線資料基礎，
+以及受限股票／加密貨幣公開資料 adapter。Draft PR #3 另包含離線
+fixed-order deterministic backtest/replay，屬於 **R3 候選**；其 current head
+與自動檢查狀態以 GitHub PR 為準，且人工 promotion 尚未完成，因此不能視為
+已核准的公開穩定能力。connected qualification 與策略皆未完成。
 
 * 已建立 typed Python package、FastAPI health endpoints、worker、mock market-data、deterministic paper broker skeleton 與唯讀 dashboard placeholder。
 * 已建立鎖定依賴、測試、靜態檢查、GitHub Actions、Dockerfile、Docker Compose 與 bootstrap evidence 骨架。

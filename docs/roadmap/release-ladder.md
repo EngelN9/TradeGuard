@@ -9,13 +9,14 @@ testable, reversible, and safe to maintain for the long term.
 Semantic version numbers and publication are human decisions. `R0`–`R10` are
 planning IDs, not automatic tags.
 
-## Repository reality as of 2026-08-08
+## Repository reality as of 2026-08-09
 
-- Public GitHub `main`: `0b73ca4`, through the restricted offline market-data
-  adapter contracts. This is the current stable stop, **R2**.
-- Draft PR #3: `cddb676`, fixed-order deterministic backtest/replay. All five
-  GitHub checks passed, but human Prompt 6 promotion review is not recorded.
-  This is an **R3 candidate**, not the current stable stop.
+- Public GitHub `main`: `4999a30`, through the restricted offline market-data
+  adapter contracts plus the reviewed dashboard dependency security
+  remediation. This is the current stable stop, **R2**.
+- Draft PR #3 contains fixed-order deterministic backtest/replay. Checks must
+  be green at the exact reviewed head, but human Prompt 6 promotion review is
+  not recorded. This is an **R3 candidate**, not the current stable stop.
 - Twelve Data and Coinbase connected qualification are both blocked/not opted
   in and are not release evidence.
 - No strategy, independent risk engine, account adapter, order-submission path,

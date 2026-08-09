@@ -216,12 +216,14 @@ deleting historical research or hiding an unfavorable result.
 ## Current implementation status
 
 The diagram is the maximum modular-monolith context, not a claim that every box
-exists. As of 2026-08-08:
+exists. As of 2026-08-09:
 
-- public `main@0b73ca4` is Release Stop R2 with domain/config/data foundations
-  and restricted offline equity/crypto adapter contracts;
-- draft PR #3 at `cddb676` is an R3 candidate with fixed-order deterministic
-  backtest/replay, ledger, fills, and costs awaiting human promotion review;
+- public `main@4999a30` is Release Stop R2 with domain/config/data foundations,
+  restricted offline equity/crypto adapter contracts, and the reviewed
+  dashboard dependency security remediation;
+- draft PR #3 is an R3 candidate with fixed-order deterministic backtest/replay,
+  ledger, fills, and costs awaiting green checks at its reviewed head and human
+  promotion review;
 - strategy, independent validation/risk, experiments/reports, paper state
   machine, monitoring/reconciliation/drift, and their full API/dashboard paths
   are target boxes only;

@@ -1,12 +1,14 @@
 # TradeGuard implementation and roadmap matrix
 
-Assessment date: `2026-08-08`
+Assessment date: `2026-08-09`
 
 Public repository: `https://github.com/EngelN9/TradeGuard`
 
-Public stable base: `main@0b73ca4a562f56bb05d8a0537d596332b266190c`
+Public stable base: `main@4999a300319d9f0580540fdf0a2cc8d6c9e61bfa`
 
-Review candidate: `codex/prompt-6-deterministic-backtester@cddb676f5af4f4992daf4fde14dd7b4f65f58508`
+Review candidate: Draft PR #3 on `codex/prompt-6-deterministic-backtester`;
+the reviewed head SHA and current checks are recorded by GitHub, not duplicated
+as a mutable value here.
 
 Overall candidate status: `DETERMINISTIC BACKTESTER IMPLEMENTED / NOT TRADABLE`
 
@@ -24,8 +26,9 @@ a named human/external qualification is unmet. Future rows are not commitments.
 ## Repository reality
 
 - `main` is the stable **R2 — Restricted market-data contracts** stop.
-- Draft PR #3 is cleanly mergeable and its five GitHub checks passed on
-  2026-08-01. It is the **R3 candidate**, not promoted `main`.
+- Draft PR #3 is the **R3 candidate**, not promoted `main`. Automated checks
+  must be green at the exact reviewed head, but they are not human promotion
+  approval; current check status is maintained on the PR.
 - The remediated R3 candidate's fresh local evidence is 236 offline tests
   passing, two connected tests deselected, and 90.70% total coverage (93.42%
   line coverage and 78.45% branch coverage). The
