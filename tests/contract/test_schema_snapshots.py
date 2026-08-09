@@ -147,4 +147,6 @@ def test_prompt6_schemas_expose_plan_artifact_and_ledgers() -> None:
     } <= set(documents)
     artifact = documents["backtest/artifact.schema.json"]
     assert isinstance(artifact, dict)
-    assert {"manifest", "result"} <= set(artifact["properties"])
+    assert {"manifest", "result", "manifest_checksum"} <= set(artifact["properties"])
+    result_schema = artifact["$defs"]["BacktestResult"]
+    assert "run_identity" in result_schema["properties"]

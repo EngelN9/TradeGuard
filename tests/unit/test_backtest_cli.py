@@ -106,3 +106,4 @@ def test_environment_discovery_records_git_and_lock(
     assert environment.git_sha == "a" * 40
     assert environment.dirty_worktree is True
     assert len(environment.dependency_lock_hash) == 64
+    assert environment.completed_at is None

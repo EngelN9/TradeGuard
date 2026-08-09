@@ -5,17 +5,31 @@ from __future__ import annotations
 import hashlib
 import json
 import re
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from decimal import Decimal
 from pathlib import Path
 from uuid import UUID
 
-from tradeguard.backtest.engine import DeterministicBacktester
-from tradeguard.backtest.models import BacktestPlan, PlannedOrder, RunEnvironment
+from pydantic import ValidationError
+
+from tradeguard.backtest.engine import BacktestRejectedError, DeterministicBacktester
+from tradeguard.backtest.models import (
+    BacktestArtifact,
+    BacktestPlan,
+    PlannedOrder,
+    RunEnvironment,
+)
 from tradeguard.data.fixtures import build_fixture
+from tradeguard.data.models import (
+    MARKET_RECORD_ADAPTER,
+    CorporateAction,
+    CorporateActionType,
+    OHLCVBar,
+)
+from tradeguard.data.package import DatasetPackage
 from tradeguard.data.quality import ValidationEvidenceRejectedError
 from tradeguard.domain.events import AssetClass, OrderType, Side
-from tradeguard.domain.serialization import canonicalize
+from tradeguard.domain.serialization import canonicalize, deterministic_checksum
 from tradeguard.experiments.manifest import RunType
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
@@ -32,7 +46,6 @@ def _environment() -> RunEnvironment:
         platform="redacted-synthetic-runner",
         dependency_lock_hash=hashlib.sha256((REPOSITORY_ROOT / "uv.lock").read_bytes()).hexdigest(),
         started_at=FIXED_TIME,
-        completed_at=FIXED_TIME,
     )
 
 
@@ -112,10 +125,196 @@ def _sanitize_xml(path: Path) -> None:
     path.write_text(content, encoding="utf-8", newline="\n")
 
 
+def _collect_manifest_binding_evidence(artifact: BacktestArtifact) -> None:
+    checksum_payload = artifact.model_dump()
+    checksum_payload["manifest"]["git_sha"] = "f" * 40
+    checksum_tamper_accepted = True
+    try:
+        BacktestArtifact.model_validate(checksum_payload)
+    except ValidationError:
+        checksum_tamper_accepted = False
+
+    semantic_payload = artifact.model_dump()
+    semantic_payload["manifest"]["config_hash"] = "e" * 64
+    semantic_payload["manifest_checksum"] = deterministic_checksum(semantic_payload["manifest"])
+    recomputed_tamper_accepted = True
+    try:
+        BacktestArtifact.model_validate(semantic_payload)
+    except ValidationError:
+        recomputed_tamper_accepted = False
+
+    recomputed_provenance_tamper_accepted: dict[str, bool] = {}
+    for identity_field in ("git_sha", "universe", "dataset_id"):
+        provenance_payload = artifact.model_dump()
+        if identity_field == "git_sha":
+            provenance_payload["manifest"]["git_sha"] = "f" * 40
+        elif identity_field == "universe":
+            provenance_payload["manifest"]["universe"] = ["UNRELATED"]
+        else:
+            provenance_payload["manifest"]["dataset_manifests"][0]["dataset_id"] = (
+                "unrelated-dataset"
+            )
+        provenance_payload["manifest_checksum"] = deterministic_checksum(
+            provenance_payload["manifest"]
+        )
+        accepted = True
+        try:
+            BacktestArtifact.model_validate(provenance_payload)
+        except ValidationError:
+            accepted = False
+        recomputed_provenance_tamper_accepted[identity_field] = accepted
+
+    if (
+        checksum_tamper_accepted
+        or recomputed_tamper_accepted
+        or any(recomputed_provenance_tamper_accepted.values())
+    ):
+        raise RuntimeError("tampered backtest artifact passed manifest binding")
+    _write(
+        "manifest-tamper-rejection.json",
+        {
+            "schema_version": "1.0.0",
+            "synthetic_only": True,
+            "manifest_checksum": artifact.manifest_checksum,
+            "checksum_tamper_accepted": checksum_tamper_accepted,
+            "recomputed_checksum_tamper_accepted": recomputed_tamper_accepted,
+            "recomputed_git_sha_tamper_accepted": (
+                recomputed_provenance_tamper_accepted["git_sha"]
+            ),
+            "recomputed_universe_tamper_accepted": (
+                recomputed_provenance_tamper_accepted["universe"]
+            ),
+            "recomputed_dataset_id_tamper_accepted": (
+                recomputed_provenance_tamper_accepted["dataset_id"]
+            ),
+        },
+    )
+
+
+def _collect_aggregate_participation_evidence(
+    engine: DeterministicBacktester,
+) -> None:
+    package = build_fixture("normal")
+    submitted = datetime(2024, 1, 2, 0, 4, tzinfo=UTC)
+    aggregate_plan = _plan(
+        run_id="00000000-0000-4000-8000-000000000064",
+        orders=(
+            _crypto_order(order_id="aggregate-a", quantity="0.2500", submitted_at=submitted),
+            _crypto_order(order_id="aggregate-b", quantity="0.2500", submitted_at=submitted),
+        ),
+    )
+    artifact = engine.run(package=package, plan=aggregate_plan, environment=_environment())
+    final_record = MARKET_RECORD_ADAPTER.validate_python(package.records[-1])
+    if not isinstance(final_record, OHLCVBar):
+        raise TypeError("aggregate participation evidence requires a final OHLCV bar")
+    configured_cap = final_record.volume * aggregate_plan.execution.max_participation_rate
+    aggregate_fill = sum(
+        (fill.quantity for fill in artifact.result.fills),
+        start=Decimal("0"),
+    )
+    within_cap = aggregate_fill <= configured_cap
+    if not within_cap:
+        raise RuntimeError("aggregate fills exceed the configured bar participation cap")
+    _write(
+        "aggregate-participation-cap.json",
+        {
+            "schema_version": "1.0.0",
+            "synthetic_only": True,
+            "aggregate_fill_quantity": aggregate_fill,
+            "configured_bar_cap": configured_cap,
+            "within_cap": within_cap,
+            "orders": artifact.result.orders,
+        },
+    )
+
+
+def _collect_post_bar_action_evidence(engine: DeterministicBacktester) -> None:
+    package = build_fixture("stock_split")
+    dividend = CorporateAction(
+        source="synthetic",
+        venue="SYNTH-XNYS",
+        symbol="ACME",
+        action_type=CorporateActionType.CASH_DIVIDEND,
+        effective_at=datetime(2024, 1, 2, 14, 31, 30, tzinfo=UTC),
+        known_at=datetime(2024, 1, 2, 14, 31, 30, tzinfo=UTC),
+        action_version="synthetic-v1",
+        cash_amount=Decimal("1"),
+        currency="USD",
+    )
+    extended_range = package.manifest.date_range.model_copy(
+        update={"end_utc": datetime(2024, 1, 2, 14, 32, tzinfo=UTC)}
+    )
+    package = package.model_copy(
+        update={
+            "manifest": package.manifest.model_copy(update={"date_range": extended_range}),
+            "corporate_actions": (*package.corporate_actions, dividend),
+        }
+    )
+    artifact = engine.run(package=package, plan=_equity_plan(), environment=_environment())
+    ending_cash = artifact.result.ending_currency_balances["USD"]
+    final_pnl_cash = artifact.result.pnl_series[-1].cash
+    finalized = ending_cash == final_pnl_cash and artifact.result.conservation.conserved
+    if not finalized:
+        raise RuntimeError("post-bar corporate action did not finalize PnL and conservation")
+    _write(
+        "post-bar-corporate-action.json",
+        {
+            "schema_version": "1.0.0",
+            "synthetic_only": True,
+            "cash_delta": artifact.result.corporate_actions[-1].cash_delta,
+            "ending_cash": ending_cash,
+            "final_pnl_cash": final_pnl_cash,
+            "conserved": artifact.result.conservation.conserved,
+            "finalized": finalized,
+        },
+    )
+
+
+def _collect_completion_time_evidence(
+    normal: DatasetPackage,
+    normal_plan: BacktestPlan,
+) -> None:
+    completed_at = FIXED_TIME + timedelta(seconds=1)
+    environment = _environment().model_copy(update={"completed_at": None})
+    artifact = DeterministicBacktester(completion_clock=lambda: completed_at).run(
+        package=normal,
+        plan=normal_plan,
+        environment=environment,
+    )
+    if artifact.manifest.completed_at is None:
+        raise RuntimeError("completion timestamp is missing")
+    captured_after_start = artifact.manifest.completed_at > artifact.manifest.started_at
+    if not captured_after_start:
+        raise RuntimeError("completion timestamp was not captured after the run start")
+    prefilled_completion_rejected = False
+    prefilled_environment = environment.model_copy(update={"completed_at": FIXED_TIME})
+    try:
+        DeterministicBacktester(completion_clock=lambda: completed_at).run(
+            package=normal,
+            plan=normal_plan,
+            environment=prefilled_environment,
+        )
+    except BacktestRejectedError:
+        prefilled_completion_rejected = True
+    if not prefilled_completion_rejected:
+        raise RuntimeError("prefilled completion timestamp was accepted")
+    _write(
+        "truthful-completion-time.json",
+        {
+            "schema_version": "1.0.0",
+            "synthetic_only": True,
+            "started_at": artifact.manifest.started_at,
+            "completed_at": artifact.manifest.completed_at,
+            "captured_after_start": captured_after_start,
+            "prefilled_completion_rejected": prefilled_completion_rejected,
+        },
+    )
+
+
 def main() -> int:
     for xml_path in EVIDENCE_ROOT.glob("*.xml"):
         _sanitize_xml(xml_path)
-    engine = DeterministicBacktester()
+    engine = DeterministicBacktester(completion_clock=lambda: FIXED_TIME + timedelta(seconds=1))
     normal = build_fixture("normal")
     submitted = datetime(2024, 1, 2, 0, 4, tzinfo=UTC)
     normal_plan = _plan(
@@ -143,6 +342,10 @@ def main() -> int:
         },
     )
     _write("conservation-report.json", first.result.conservation)
+    _collect_manifest_binding_evidence(first)
+    _collect_aggregate_participation_evidence(engine)
+    _collect_post_bar_action_evidence(engine)
+    _collect_completion_time_evidence(normal, normal_plan)
     lookahead_plan = _plan(
         run_id="00000000-0000-4000-8000-000000000061",
         orders=(

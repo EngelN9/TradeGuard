@@ -1,0 +1,10 @@
+{
+  "checksum_tamper_accepted": false,
+  "manifest_checksum": "076d99b48a2b4c91517d4f4629fddb3ff46be5d571492c320460759e8b5c99fb",
+  "recomputed_checksum_tamper_accepted": false,
+  "recomputed_dataset_id_tamper_accepted": false,
+  "recomputed_git_sha_tamper_accepted": false,
+  "recomputed_universe_tamper_accepted": false,
+  "schema_version": "1.0.0",
+  "synthetic_only": true
+}

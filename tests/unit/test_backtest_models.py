@@ -22,6 +22,7 @@ from tradeguard.backtest.models import (
 )
 from tradeguard.data.fixtures import build_fixture
 from tradeguard.domain.events import AssetClass, OrderType, Side
+from tradeguard.domain.serialization import deterministic_checksum
 from tradeguard.experiments.manifest import RunType
 
 
@@ -107,10 +108,53 @@ def test_artifact_must_bind_manifest_to_result() -> None:
     result_payload["run_id"] = UUID("00000000-0000-4000-8000-000000000099")
     result = BacktestResult.build(**result_payload)
     with pytest.raises(ValidationError, match="run_id"):
-        BacktestArtifact(manifest=artifact.manifest, result=result)
+        BacktestArtifact.build(manifest=artifact.manifest, result=result)
     manifest = artifact.manifest.model_copy(update={"result_checksum": "f" * 64})
     with pytest.raises(ValidationError, match="not bound"):
-        BacktestArtifact(manifest=manifest, result=artifact.result)
+        BacktestArtifact.build(manifest=manifest, result=artifact.result)
+
+
+@pytest.mark.unit
+def test_artifact_rejects_manifest_identity_tampering() -> None:
+    artifact = DeterministicBacktester().run(
+        package=build_fixture("normal"),
+        plan=plan(crypto_order()),
+        environment=fixed_environment(),
+    )
+    payload = artifact.model_dump()
+    payload["manifest"]["git_sha"] = "f" * 40
+
+    with pytest.raises(ValidationError, match="manifest checksum"):
+        BacktestArtifact.model_validate(payload)
+
+    payload = artifact.model_dump()
+    payload["manifest"]["config_hash"] = "e" * 64
+    payload["manifest_checksum"] = deterministic_checksum(payload["manifest"])
+    with pytest.raises(ValidationError, match="config hash"):
+        BacktestArtifact.model_validate(payload)
+
+
+@pytest.mark.unit
+@pytest.mark.parametrize("identity_field", ["git_sha", "universe", "dataset_id"])
+def test_artifact_rejects_recomputed_manifest_provenance_tampering(
+    identity_field: str,
+) -> None:
+    artifact = DeterministicBacktester().run(
+        package=build_fixture("normal"),
+        plan=plan(crypto_order()),
+        environment=fixed_environment(),
+    )
+    payload = artifact.model_dump()
+    if identity_field == "git_sha":
+        payload["manifest"]["git_sha"] = "f" * 40
+    elif identity_field == "universe":
+        payload["manifest"]["universe"] = ["UNRELATED"]
+    else:
+        payload["manifest"]["dataset_manifests"][0]["dataset_id"] = "unrelated-dataset"
+    payload["manifest_checksum"] = deterministic_checksum(payload["manifest"])
+
+    with pytest.raises(ValidationError, match="run identity"):
+        BacktestArtifact.model_validate(payload)
 
 
 @pytest.mark.unit

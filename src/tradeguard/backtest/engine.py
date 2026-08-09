@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
+from datetime import UTC, datetime
 from decimal import Decimal
 
 from tradeguard.backtest.event_loop import TimelineKind, build_timeline
@@ -10,18 +12,25 @@ from tradeguard.backtest.models import (
     BacktestArtifact,
     BacktestPlan,
     BacktestResult,
+    BacktestRunIdentity,
     CorporateActionLedgerEntry,
     FillLedgerEntry,
     OrderLedgerEntry,
     OrderStatus,
     PlannedOrder,
+    PnLLedgerEntry,
     PositionLedgerEntry,
     RunEnvironment,
 )
-from tradeguard.data.models import CorporateAction, InstrumentMetadata, OHLCVBar
+from tradeguard.data.models import (
+    CorporateAction,
+    CorporateActionType,
+    InstrumentMetadata,
+    OHLCVBar,
+)
 from tradeguard.data.package import DatasetPackage
 from tradeguard.data.quality import require_validation_evidence_eligible
-from tradeguard.domain.serialization import deterministic_checksum
+from tradeguard.domain.serialization import UtcDateTime, deterministic_checksum
 from tradeguard.execution_models.conservative import (
     ConservativeBarExecutionModel,
     ExecutionDisposition,
@@ -59,8 +68,13 @@ class _OrderState:
 class DeterministicBacktester:
     """Pure historical simulation; it has no network or order-submission path."""
 
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        *,
+        completion_clock: Callable[[], UtcDateTime] | None = None,
+    ) -> None:
         self._execution = ConservativeBarExecutionModel()
+        self._completion_clock = completion_clock or _utc_now
 
     def run(
         self,
@@ -69,6 +83,8 @@ class DeterministicBacktester:
         plan: BacktestPlan,
         environment: RunEnvironment,
     ) -> BacktestArtifact:
+        if environment.completed_at is not None:
+            raise BacktestRejectedError("completed_at is engine-owned and must not be prefilled")
         report = package.validate_quality()
         require_validation_evidence_eligible(package.manifest, report)
         self._validate_plan(package, plan)
@@ -81,7 +97,7 @@ class DeterministicBacktester:
         fills: list[FillLedgerEntry] = []
         actions: list[CorporateActionLedgerEntry] = []
         positions: list[PositionLedgerEntry] = []
-        pnl_series = []
+        pnl_series: list[PnLLedgerEntry] = []
         marks: dict[tuple[str, str], Decimal] = {}
         warnings: set[str] = set()
         if report.status.value == "WARN":
@@ -99,9 +115,14 @@ class DeterministicBacktester:
                 action = event.payload
                 if not isinstance(action, CorporateAction):
                     raise TypeError("corporate-action timeline payload type mismatch")
-                applied = ledger.apply_corporate_action(action)
-                if applied is not None:
-                    actions.append(applied)
+                self._process_corporate_action(
+                    action=action,
+                    ledger=ledger,
+                    marks=marks,
+                    actions=actions,
+                    positions=positions,
+                    pnl_series=pnl_series,
+                )
             else:
                 bar = event.payload
                 if not isinstance(bar, OHLCVBar):
@@ -134,9 +155,11 @@ class DeterministicBacktester:
         conservation = ledger.conservation_report(pnl_series[-1])
         if not conservation.conserved:
             raise BacktestRejectedError("portfolio conservation check failed")
+        run_identity = self._build_run_identity(package, plan, environment)
         result = BacktestResult.build(
             run_id=plan.run_id,
             run_type=plan.run_type,
+            run_identity=run_identity,
             plan_checksum=plan.checksum(),
             dataset_manifest_checksum=package.manifest.checksum(),
             orders=order_ledger,
@@ -149,8 +172,14 @@ class DeterministicBacktester:
             conservation=conservation,
             warnings=tuple(sorted(warnings)),
         )
-        manifest = self._build_manifest(package, plan, environment, result)
-        return BacktestArtifact(manifest=manifest, result=result)
+        completed_at = self._completion_clock()
+        manifest = self._build_manifest(
+            run_identity,
+            environment,
+            result,
+            completed_at=completed_at,
+        )
+        return BacktestArtifact.build(manifest=manifest, result=result)
 
     @staticmethod
     def _validate_plan(package: DatasetPackage, plan: BacktestPlan) -> None:
@@ -182,6 +211,7 @@ class DeterministicBacktester:
         warnings: set[str],
     ) -> None:
         metadata = self._metadata_for(package, bar)
+        consumed_participation_quantity = Decimal("0")
         for order_id in sorted(states):
             state = states[order_id]
             if not state.active or state.rejected or state.remaining_quantity <= 0:
@@ -194,6 +224,7 @@ class DeterministicBacktester:
                 knowledge_time_utc=package.policy.knowledge_time_utc,
                 latency_seconds=plan.execution.latency_seconds,
                 max_participation_rate=plan.execution.max_participation_rate,
+                consumed_participation_quantity=consumed_participation_quantity,
                 equity_costs=plan.equity_costs,
                 crypto_costs=plan.crypto_costs,
                 market_sessions=package.market_sessions,
@@ -245,8 +276,49 @@ class DeterministicBacktester:
                 continue
             fills.append(fill)
             state.filled_quantity += fill.quantity
+            consumed_participation_quantity += fill.quantity
             if state.remaining_quantity == 0:
                 state.active = False
+
+    @staticmethod
+    def _process_corporate_action(  # noqa: PLR0913 - ledger outputs remain explicit
+        *,
+        action: CorporateAction,
+        ledger: PortfolioLedger,
+        marks: dict[tuple[str, str], Decimal],
+        actions: list[CorporateActionLedgerEntry],
+        positions: list[PositionLedgerEntry],
+        pnl_series: list[PnLLedgerEntry],
+    ) -> None:
+        applied = ledger.apply_corporate_action(action)
+        if applied is None:
+            return
+        actions.append(applied)
+        DeterministicBacktester._adjust_marks_for_corporate_action(action, marks)
+        position_snapshot, pnl = ledger.mark(
+            event_time_utc=action.effective_at,
+            marks=marks,
+        )
+        positions.extend(position_snapshot)
+        pnl_series.append(pnl)
+
+    @staticmethod
+    def _adjust_marks_for_corporate_action(
+        action: CorporateAction,
+        marks: dict[tuple[str, str], Decimal],
+    ) -> None:
+        key = (action.venue, action.symbol)
+        if action.action_type in {
+            CorporateActionType.SPLIT,
+            CorporateActionType.REVERSE_SPLIT,
+        }:
+            if key in marks and action.ratio is not None:
+                marks[key] /= action.ratio
+        elif action.action_type is CorporateActionType.SYMBOL_CHANGE:
+            if key in marks and action.new_symbol is not None:
+                marks[(action.venue, action.new_symbol)] = marks.pop(key)
+        elif action.action_type is CorporateActionType.DELISTING:
+            marks.pop(key, None)
 
     @staticmethod
     def _metadata_for(package: DatasetPackage, bar: OHLCVBar) -> InstrumentMetadata:
@@ -287,20 +359,17 @@ class DeterministicBacktester:
         )
 
     @staticmethod
-    def _build_manifest(
+    def _build_run_identity(
         package: DatasetPackage,
         plan: BacktestPlan,
         environment: RunEnvironment,
-        result: BacktestResult,
-    ) -> RunManifest:
+    ) -> BacktestRunIdentity:
         cost_version = (
             plan.equity_costs.version
             if package.manifest.asset_class.value == "equity"
             else plan.crypto_costs.version
         )
-        return RunManifest(
-            run_id=plan.run_id,
-            run_type=plan.run_type,
+        return BacktestRunIdentity(
             strategy_id=plan.strategy_id,
             strategy_version=plan.strategy_version,
             git_sha=environment.git_sha,
@@ -319,14 +388,43 @@ class DeterministicBacktester:
             ),
             universe=package.manifest.symbols,
             random_seed=plan.random_seed,
-            python_version=environment.python_version,
-            platform=environment.platform,
             dependency_lock_hash=environment.dependency_lock_hash,
             cost_model_version=cost_version,
             execution_model_version=plan.execution.version,
+        )
+
+    @staticmethod
+    def _build_manifest(
+        run_identity: BacktestRunIdentity,
+        environment: RunEnvironment,
+        result: BacktestResult,
+        *,
+        completed_at: UtcDateTime,
+    ) -> RunManifest:
+        return RunManifest(
+            run_id=result.run_id,
+            run_type=result.run_type,
+            strategy_id=run_identity.strategy_id,
+            strategy_version=run_identity.strategy_version,
+            git_sha=run_identity.git_sha,
+            dirty_worktree=run_identity.dirty_worktree,
+            config_hash=run_identity.config_hash,
+            dataset_manifests=run_identity.dataset_manifests,
+            date_range=run_identity.date_range,
+            universe=run_identity.universe,
+            random_seed=run_identity.random_seed,
+            python_version=environment.python_version,
+            platform=environment.platform,
+            dependency_lock_hash=run_identity.dependency_lock_hash,
+            cost_model_version=run_identity.cost_model_version,
+            execution_model_version=run_identity.execution_model_version,
             started_at=environment.started_at,
-            completed_at=environment.completed_at,
+            completed_at=completed_at,
             result_checksum=result.result_checksum,
             warnings=result.warnings,
             validation_failures=(),
         )
+
+
+def _utc_now() -> datetime:
+    return datetime.now(UTC)

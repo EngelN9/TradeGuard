@@ -18,7 +18,6 @@ def fixed_environment() -> RunEnvironment:
         platform="test-platform",
         dependency_lock_hash="2" * 64,
         started_at=timestamp,
-        completed_at=timestamp,
     )
 
 

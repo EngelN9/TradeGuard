@@ -88,15 +88,13 @@ def _discover_environment() -> RunEnvironment:
         raise RuntimeError("Git and uv.lock are required to build a truthful run manifest")
     git_sha = _git_output(git_executable, repository_root, ("rev-parse", "HEAD"))
     dirty = bool(_git_output(git_executable, repository_root, ("status", "--porcelain")))
-    timestamp = datetime.now(UTC)
     return RunEnvironment(
         git_sha=git_sha,
         dirty_worktree=dirty,
         python_version=platform.python_version(),
         platform=f"{sys.platform}-{platform.machine()}",
         dependency_lock_hash=hashlib.sha256(lockfile.read_bytes()).hexdigest(),
-        started_at=timestamp,
-        completed_at=timestamp,
+        started_at=datetime.now(UTC),
     )
 
 

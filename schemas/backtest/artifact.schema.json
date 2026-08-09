@@ -51,6 +51,7 @@
             ],
             "ge": 0
           },
+          "minProperties": 1,
           "propertyNames": {
             "maxLength": 512,
             "minLength": 1
@@ -81,6 +82,7 @@
           "items": {
             "$ref": "#/$defs/PnLLedgerEntry"
           },
+          "minItems": 1,
           "title": "Pnl Series",
           "type": "array"
         },
@@ -101,6 +103,9 @@
           "title": "Run Id",
           "type": "string"
         },
+        "run_identity": {
+          "$ref": "#/$defs/BacktestRunIdentity"
+        },
         "run_type": {
           "enum": [
             "backtest",
@@ -110,8 +115,8 @@
           "type": "string"
         },
         "schema_version": {
-          "const": "1.0.0",
-          "default": "1.0.0",
+          "const": "1.1.0",
+          "default": "1.1.0",
           "title": "Schema Version",
           "type": "string"
         },
@@ -128,6 +133,7 @@
       "required": [
         "run_id",
         "run_type",
+        "run_identity",
         "plan_checksum",
         "dataset_manifest_checksum",
         "orders",
@@ -142,6 +148,103 @@
         "result_checksum"
       ],
       "title": "BacktestResult",
+      "type": "object"
+    },
+    "BacktestRunIdentity": {
+      "additionalProperties": false,
+      "description": "Reproducible manifest identity bound into the deterministic result.",
+      "properties": {
+        "config_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Config Hash",
+          "type": "string"
+        },
+        "cost_model_version": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Cost Model Version",
+          "type": "string"
+        },
+        "dataset_manifests": {
+          "items": {
+            "$ref": "#/$defs/DatasetManifestReference"
+          },
+          "minItems": 1,
+          "title": "Dataset Manifests",
+          "type": "array"
+        },
+        "date_range": {
+          "$ref": "#/$defs/RunDateRange"
+        },
+        "dependency_lock_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Dependency Lock Hash",
+          "type": "string"
+        },
+        "dirty_worktree": {
+          "title": "Dirty Worktree",
+          "type": "boolean"
+        },
+        "execution_model_version": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Execution Model Version",
+          "type": "string"
+        },
+        "git_sha": {
+          "pattern": "^[0-9a-f]{40}$",
+          "title": "Git Sha",
+          "type": "string"
+        },
+        "random_seed": {
+          "minimum": 0,
+          "title": "Random Seed",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "strategy_id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Strategy Id",
+          "type": "string"
+        },
+        "strategy_version": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Strategy Version",
+          "type": "string"
+        },
+        "universe": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Universe",
+          "type": "array"
+        }
+      },
+      "required": [
+        "strategy_id",
+        "strategy_version",
+        "git_sha",
+        "dirty_worktree",
+        "config_hash",
+        "dataset_manifests",
+        "date_range",
+        "universe",
+        "random_seed",
+        "dependency_lock_hash",
+        "cost_model_version",
+        "execution_model_version"
+      ],
+      "title": "BacktestRunIdentity",
       "type": "object"
     },
     "ConservationReport": {
@@ -1005,13 +1108,25 @@
     "manifest": {
       "$ref": "#/$defs/RunManifest"
     },
+    "manifest_checksum": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Manifest Checksum",
+      "type": "string"
+    },
     "result": {
       "$ref": "#/$defs/BacktestResult"
+    },
+    "schema_version": {
+      "const": "1.1.0",
+      "default": "1.1.0",
+      "title": "Schema Version",
+      "type": "string"
     }
   },
   "required": [
     "manifest",
-    "result"
+    "result",
+    "manifest_checksum"
   ],
   "title": "BacktestArtifact",
   "type": "object"

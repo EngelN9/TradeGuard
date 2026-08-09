@@ -20,8 +20,11 @@ Coinbase-shaped fixture checksums, capability/status records, reconnect and
 sequence-gap evidence, test output, and an explicitly non-connected smoke
 result.
 
-Prompt 6 contains deterministic synthetic checksum comparisons, cash/asset
-conservation, same-close rejection, partial-fill, stock-split, and
+Prompt 6 contains deterministic synthetic checksum comparisons, ordinary and
+recomputed bound-manifest identity tamper rejection, aggregate bar-participation
+enforcement, cash/asset conservation, post-bar corporate-action finalization,
+engine-owned completion-time ordering and prefilled-time rejection, same-close
+rejection, partial-fill, stock-split, and
 crypto-maintenance rejection evidence. These artifacts are simulation results,
 not performance claims, connected observations, or promotion approval.
 

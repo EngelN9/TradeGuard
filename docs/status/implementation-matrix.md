@@ -26,10 +26,11 @@ a named human/external qualification is unmet. Future rows are not commitments.
 - `main` is the stable **R2 — Restricted market-data contracts** stop.
 - Draft PR #3 is cleanly mergeable and its five GitHub checks passed on
   2026-08-01. It is the **R3 candidate**, not promoted `main`.
-- PR #3's last recorded full local evidence is 227 offline tests passing, two
-  connected tests deselected, and 90.89% branch coverage. Fresh verification
-  for this documentation change is reported in the task handoff, not inferred
-  here.
+- The remediated R3 candidate's fresh local evidence is 236 offline tests
+  passing, two connected tests deselected, and 90.70% total coverage (93.42%
+  line coverage and 78.45% branch coverage). The
+  bundle includes direct regressions for manifest binding, aggregate
+  participation, post-bar corporate actions and completion-time ordering.
 - Both connected market-data qualifications remain unexecuted/not opted in.
 - The paper broker, worker, API, and dashboard remain bounded skeletons except
   for the offline data/backtest CLI paths described below.
@@ -49,9 +50,9 @@ a named human/external qualification is unmet. Future rows are not commitments.
 | 7 | Crypto market data | `IMPLEMENTED` | `CURRENT` | Restricted BTC-USD Coinbase REST/WebSocket offline/replay contracts, ADR 0003 | Connected use is separately `BLOCKED`; no private/user channels |
 | 8 | Data quality | `IMPLEMENTED` | `CURRENT` | Shared/equity/crypto status codes, synthetic gates, quarantine enforcement | Provider calibration/cross-source comparison deferred |
 | 9 | Dataset/version/lineage | `IMPLEMENTED` | `CURRENT` | `DatasetManifest`, acyclic transformations, local content address/tamper tests | No searchable/persistent catalog or retention service |
-| 10 | Backtester | `IMPLEMENTED` on PR #3 | `NEXT` | Five-key timeline, fixed-order backtest/replay, checksummed artifact | Human R3 promotion review required before merge or strategy work |
-| 11 | Execution/fill models | `IMPLEMENTED` on PR #3 | `NEXT` | Conservative future-bar market/limit, latency, partial/non-fill, rejection | Human assumptions/same-close review required; no order book/queue claim |
-| 12 | Portfolio ledger | `IMPLEMENTED` on PR #3 | `NEXT` | Decimal cash/long-only ledger, PnL, idempotency, corporate actions, conservation | Human conservation/split review required; single base currency only |
+| 10 | Backtester | `IMPLEMENTED` on PR #3 | `NEXT` | Five-key timeline, fixed-order backtest/replay, result-bound reproducible run identity plus complete-manifest checksum, engine-owned completion time | Human R3 promotion review required before merge or strategy work |
+| 11 | Execution/fill models | `IMPLEMENTED` on PR #3 | `NEXT` | Conservative future-bar market/limit, aggregate bar participation, latency, partial/non-fill, rejection | Human assumptions/same-close review required; no order book/queue claim |
+| 12 | Portfolio ledger | `IMPLEMENTED` on PR #3 | `NEXT` | Decimal cash/long-only ledger, PnL/action finalization, idempotency, corporate actions, conservation | Human conservation/split review required; single base currency only |
 | 13 | Strategy interface | `MISSING` | `LATER` | Domain output event types exist; no `strategies` implementation | First post-R3 slice: protocol plus one consumer, no speculative registry |
 | 14 | Baseline strategies | `MISSING` | `LATER` | None | One market/one buy-and-hold baseline first; six-strategy batch removed |
 | 15 | Strategy validation | `MISSING` | `LATER` | Data eligibility gate is not strategy validation | Begin only after one baseline: benchmark + one fixed OOS split |

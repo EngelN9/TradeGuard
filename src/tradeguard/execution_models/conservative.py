@@ -49,6 +49,7 @@ class ConservativeBarExecutionModel:
         knowledge_time_utc: UtcDateTime,
         latency_seconds: int,
         max_participation_rate: AuthorityDecimal,
+        consumed_participation_quantity: AuthorityDecimal = Decimal("0"),
         equity_costs: EquityCostModel,
         crypto_costs: CryptoCostModel,
         market_sessions: tuple[MarketSession, ...],
@@ -92,10 +93,11 @@ class ConservativeBarExecutionModel:
         increment = (
             metadata.lot_size if order.asset_class is AssetClass.EQUITY else metadata.step_size
         )
-        available = self._floor_to_increment(
-            bar.volume * max_participation_rate,
-            increment,
+        remaining_bar_capacity = max(
+            bar.volume * max_participation_rate - consumed_participation_quantity,
+            Decimal("0"),
         )
+        available = self._floor_to_increment(remaining_bar_capacity, increment)
         fill_quantity = min(remaining_quantity, available)
         fill_quantity = self._floor_to_increment(fill_quantity, increment)
         if (

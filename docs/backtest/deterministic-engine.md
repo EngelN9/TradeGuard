@@ -32,10 +32,16 @@ order:
 4. reviewed event-kind priority;
 5. canonical SHA-256 tie-breaker.
 
-The result checksum covers the plan identity, dataset manifest identity, order,
-fill, action, position and PnL ledgers, ending balances, conservation report,
-and warnings. Workstation and wall-clock fields remain in the run manifest but
-are intentionally outside this deterministic result checksum.
+The result checksum covers the plan identity, reproducible run identity,
+dataset manifest identity, order, fill, action, position and PnL ledgers,
+ending balances, conservation report, and warnings. The run identity binds the
+strategy, Git SHA, dirty-worktree state, config, complete dataset reference,
+date range, universe, seed, dependency lock, cost model and execution model.
+Workstation platform and wall-clock fields remain outside the deterministic
+result checksum. Artifact schema `1.1.0` separately checksums the complete run
+manifest and compares its reproducible identity to the result. Changing a
+manifest field without updating its checksum, or recomputing that checksum for
+a semantically inconsistent identity, fails validation.
 
 ## Ledger rules
 
@@ -49,8 +55,12 @@ are rejected at model boundaries.
 - Splits and reverse splits preserve total cost basis.
 - Cash dividends adjust cash and realized PnL in the base currency.
 - Symbol changes move the position without duplicating it.
+- Every applied corporate action produces a new immutable position/PnL
+  snapshot. Split marks are ratio-adjusted, symbol marks move with the symbol,
+  and a delisted symbol has no retained stale mark.
 - Every result exposes ending asset and currency balances.
-- Cash/equity and asset-quantity conservation must both pass or the run fails.
+- The final PnL cash must equal the ending base-currency balance. Cash/equity
+  and asset-quantity conservation must both pass or the run fails.
 
 ## Conservative fill model
 
@@ -61,8 +71,9 @@ cannot fill on that same bar.
 - Market buys use the future bar high; market sells use the future bar low.
 - Limit orders fill only when the future bar crosses the limit, exactly at the
   limit, with no assumed price improvement.
-- Bar participation is capped and rounded down to the reviewed lot/step size,
-  so partial fills and non-fills are explicit.
+- Bar participation is capped in aggregate across every order evaluated on the
+  same bar and rounded down to the reviewed lot/step size, so multiple orders
+  cannot each consume the full cap and partial/non-fills remain explicit.
 - Tick size, quantity precision, minimum quantity/notional, equity sessions,
   halts and crypto maintenance are fail-closed gates.
 - Unknown point-in-time metadata or session state rejects or blocks execution.
@@ -99,8 +110,19 @@ The artifact contains a bound `RunManifest` and `BacktestResult`, including:
 - deterministic result checksum;
 - warnings and data/model version references.
 
+CLI environment discovery records only the start time. `completed_at` is
+engine-owned: a caller-supplied value is rejected, and the engine records the
+completion after result construction. Deterministic tests may inject an
+explicit completion clock. Wall-clock fields do not enter the result checksum,
+but the complete manifest is protected by its artifact checksum.
+
 JSON contracts are committed under `schemas/backtest/`. Synthetic review
-evidence is committed under `artifacts/evidence/prompt6/`.
+evidence is committed under `artifacts/evidence/prompt6/`. The bundle includes
+direct regressions for ordinary and recomputed manifest-identity tampering,
+aggregate participation, post-bar corporate-action finalization, engine-owned
+completion-time ordering and prefilled-time rejection in addition to
+deterministic checksum, look-ahead, partial-fill, split, maintenance and
+conservation evidence.
 
 ## Known limitations and human gate
 

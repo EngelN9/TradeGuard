@@ -6,9 +6,12 @@ from decimal import Decimal
 import pytest
 from hypothesis import given
 from hypothesis import strategies as st
+from tests.backtest_factories import crypto_order, fixed_environment, plan
 
+from tradeguard.backtest.engine import DeterministicBacktester
 from tradeguard.backtest.models import FillLedgerEntry
 from tradeguard.costs.models import CostBreakdown
+from tradeguard.data.fixtures import build_fixture
 from tradeguard.domain.events import AssetClass, OrderType, Side
 from tradeguard.portfolio.ledger import PortfolioLedger
 
@@ -56,3 +59,24 @@ def test_cash_and_asset_conserve_for_any_exact_buy(price: int, quantity: int, ma
 
     assert ledger.conservation_report(pnl).conserved is True
     assert pnl.total_equity == initial_cash + pnl.total_pnl
+
+
+@pytest.mark.property
+@given(order_count=st.integers(min_value=1, max_value=8))
+def test_aggregate_bar_participation_never_exceeds_the_plan_cap(order_count: int) -> None:
+    artifact = DeterministicBacktester().run(
+        package=build_fixture("normal"),
+        plan=plan(
+            *(
+                crypto_order(order_id=f"aggregate-{index}", quantity="0.2500")
+                for index in range(order_count)
+            )
+        ),
+        environment=fixed_environment(),
+    )
+
+    aggregate_fill = sum(
+        (fill.quantity for fill in artifact.result.fills),
+        start=Decimal("0"),
+    )
+    assert aggregate_fill <= Decimal("0.25")

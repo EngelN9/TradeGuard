@@ -1,0 +1,29 @@
+{
+  "aggregate_fill_quantity": "0.25",
+  "configured_bar_cap": "0.25",
+  "orders": [
+    {
+      "filled_quantity": "0.25",
+      "order_id": "aggregate-a",
+      "reasons": [
+        "look_ahead_guard_same_bar"
+      ],
+      "remaining_quantity": "0",
+      "requested_quantity": "0.25",
+      "status": "filled"
+    },
+    {
+      "filled_quantity": "0",
+      "order_id": "aggregate-b",
+      "reasons": [
+        "look_ahead_guard_same_bar"
+      ],
+      "remaining_quantity": "0.25",
+      "requested_quantity": "0.25",
+      "status": "unfilled"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "synthetic_only": true,
+  "within_cap": true
+}

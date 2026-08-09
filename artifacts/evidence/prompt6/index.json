@@ -1,8 +1,12 @@
 {
   "artifacts": [
     {
+      "path": "aggregate-participation-cap.json",
+      "sha256": "55fc8d8341a68001fd3ec52c0b9d95294194bf078e7f513202a7e01e40671eaf"
+    },
+    {
       "path": "all-offline-tests.xml",
-      "sha256": "0e30113dff45c966ea8523e2dce0b90d86972077a2e785288e346e3afdd49117"
+      "sha256": "f0808c86ba73d46688e7d8c30fc08079fb0060f5831ecc9c4361208027b0ec6b"
     },
     {
       "path": "conservation-report.json",
@@ -14,19 +18,31 @@
     },
     {
       "path": "deterministic-checksum.json",
-      "sha256": "c27ae2490e3424a4d6900e2c3ab23dbd80474188ab709fd2148e5971144c298b"
+      "sha256": "4b2ac035b591e7cd459d965a4de167aa8ff80b903bd8a56a33956b5bd6fc44c6"
     },
     {
       "path": "lookahead-rejection.json",
       "sha256": "ea87a4153e6a801e8211f981a44623b77a9861e1c8d0bb90ce6ec05e984d76b9"
     },
     {
+      "path": "manifest-tamper-rejection.json",
+      "sha256": "9d8e501f301ea6eef7ac782c14d054d5a19629ced36713ad8babd6a091c7e830"
+    },
+    {
       "path": "partial-fill.json",
       "sha256": "b0c37766c876791a1c2094281d8b6733f3684ba94b6c9d518ae5122dc3824296"
     },
     {
+      "path": "post-bar-corporate-action.json",
+      "sha256": "e666cc5db6cc8ac0dee4af0cafb0a2897377f9b0889d65c3c307492ddeafdcfb"
+    },
+    {
       "path": "stock-split.json",
       "sha256": "fdb32161f2d685343b10afc67055e79b352ceb0161b4b5edae63f9fab775a67e"
+    },
+    {
+      "path": "truthful-completion-time.json",
+      "sha256": "88cd966697f4c11aa44b5686d8af484b211728b9c60cae48a7f2d15d865333a5"
     }
   ],
   "evidence_stage": "prompt6",

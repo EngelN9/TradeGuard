@@ -12,7 +12,12 @@ from pydantic import BaseModel, ConfigDict, Field, ValidationInfo, model_validat
 from tradeguard.costs.models import CostBreakdown, CryptoCostModel, EquityCostModel
 from tradeguard.domain.events import AssetClass, OrderType, Side
 from tradeguard.domain.serialization import AuthorityDecimal, UtcDateTime, deterministic_checksum
-from tradeguard.experiments.manifest import RunManifest, RunType
+from tradeguard.experiments.manifest import (
+    DatasetManifestReference,
+    RunDateRange,
+    RunManifest,
+    RunType,
+)
 
 Checksum = Annotated[str, Field(pattern=r"^[0-9a-f]{64}$")]
 NonEmptyText = Annotated[str, Field(min_length=1, max_length=512)]
@@ -99,13 +104,48 @@ class RunEnvironment(BacktestModel):
     platform: NonEmptyText
     dependency_lock_hash: Checksum
     started_at: UtcDateTime
-    completed_at: UtcDateTime
+    completed_at: UtcDateTime | None = None
 
     @model_validator(mode="after")
     def validate_completion(self) -> Self:
-        if self.completed_at < self.started_at:
+        if self.completed_at is not None and self.completed_at < self.started_at:
             raise ValueError("completed_at must not precede started_at")
         return self
+
+
+class BacktestRunIdentity(BacktestModel):
+    """Reproducible manifest identity bound into the deterministic result."""
+
+    schema_version: Literal["1.0.0"] = "1.0.0"
+    strategy_id: NonEmptyText
+    strategy_version: NonEmptyText
+    git_sha: Annotated[str, Field(pattern=r"^[0-9a-f]{40}$")]
+    dirty_worktree: bool
+    config_hash: Checksum
+    dataset_manifests: Annotated[tuple[DatasetManifestReference, ...], Field(min_length=1)]
+    date_range: RunDateRange
+    universe: Annotated[tuple[NonEmptyText, ...], Field(min_length=1)]
+    random_seed: Annotated[int, Field(ge=0)]
+    dependency_lock_hash: Checksum
+    cost_model_version: NonEmptyText
+    execution_model_version: NonEmptyText
+
+    @classmethod
+    def from_manifest(cls, manifest: RunManifest) -> BacktestRunIdentity:
+        return cls(
+            strategy_id=manifest.strategy_id,
+            strategy_version=manifest.strategy_version,
+            git_sha=manifest.git_sha,
+            dirty_worktree=manifest.dirty_worktree,
+            config_hash=manifest.config_hash,
+            dataset_manifests=manifest.dataset_manifests,
+            date_range=manifest.date_range,
+            universe=manifest.universe,
+            random_seed=manifest.random_seed,
+            dependency_lock_hash=manifest.dependency_lock_hash,
+            cost_model_version=manifest.cost_model_version,
+            execution_model_version=manifest.execution_model_version,
+        )
 
 
 class OrderLedgerEntry(BacktestModel):
@@ -199,21 +239,40 @@ class ConservationReport(BacktestModel):
 
 
 class BacktestResult(BacktestModel):
-    schema_version: Literal["1.0.0"] = "1.0.0"
+    schema_version: Literal["1.1.0"] = "1.1.0"
     run_id: UUID
     run_type: Literal[RunType.BACKTEST, RunType.REPLAY]
+    run_identity: BacktestRunIdentity
     plan_checksum: Checksum
     dataset_manifest_checksum: Checksum
     orders: tuple[OrderLedgerEntry, ...]
     fills: tuple[FillLedgerEntry, ...]
     corporate_actions: tuple[CorporateActionLedgerEntry, ...]
     positions: tuple[PositionLedgerEntry, ...]
-    pnl_series: tuple[PnLLedgerEntry, ...]
+    pnl_series: Annotated[tuple[PnLLedgerEntry, ...], Field(min_length=1)]
     ending_asset_balances: dict[NonEmptyText, NonNegativeDecimal]
-    ending_currency_balances: dict[NonEmptyText, NonNegativeDecimal]
+    ending_currency_balances: Annotated[dict[NonEmptyText, NonNegativeDecimal], Field(min_length=1)]
     conservation: ConservationReport
     warnings: tuple[NonEmptyText, ...]
     result_checksum: Checksum
+
+    @model_validator(mode="after")
+    def validate_final_ledger_state(self) -> Self:
+        if self.run_identity.config_hash != self.plan_checksum:
+            raise ValueError("run identity config hash does not match the backtest plan")
+        if (
+            len(self.run_identity.dataset_manifests) != 1
+            or self.run_identity.dataset_manifests[0].checksum != self.dataset_manifest_checksum
+        ):
+            raise ValueError("run identity dataset does not match the backtest result")
+        if len(self.ending_currency_balances) != 1:
+            raise ValueError("R3 requires exactly one ending base-currency balance")
+        ending_cash = next(iter(self.ending_currency_balances.values()))
+        if ending_cash != self.pnl_series[-1].cash:
+            raise ValueError("ending currency balance does not match the final PnL cash")
+        if not self.conservation.conserved:
+            raise ValueError("a backtest result must pass conservation")
+        return self
 
     @model_validator(mode="after")
     def validate_checksum(self, info: ValidationInfo) -> Self:
@@ -235,13 +294,46 @@ class BacktestResult(BacktestModel):
 
 
 class BacktestArtifact(BacktestModel):
+    schema_version: Literal["1.1.0"] = "1.1.0"
     manifest: RunManifest
     result: BacktestResult
+    manifest_checksum: Checksum
 
     @model_validator(mode="after")
-    def validate_binding(self) -> Self:
+    def validate_binding(self, info: ValidationInfo) -> Self:
         if self.manifest.run_id != self.result.run_id:
             raise ValueError("manifest and result run_id values differ")
+        if self.manifest.run_type is not self.result.run_type:
+            raise ValueError("manifest and result run_type values differ")
         if self.manifest.result_checksum != self.result.result_checksum:
             raise ValueError("manifest is not bound to the deterministic result")
+        if self.manifest.config_hash != self.result.plan_checksum:
+            raise ValueError("manifest config hash is not bound to the backtest plan")
+        if (
+            len(self.manifest.dataset_manifests) != 1
+            or self.manifest.dataset_manifests[0].checksum != self.result.dataset_manifest_checksum
+        ):
+            raise ValueError("manifest dataset identity is not bound to the result")
+        if self.manifest.warnings != self.result.warnings:
+            raise ValueError("manifest warnings differ from result warnings")
+        if not (info.context or {}).get("skip_manifest_checksum"):
+            expected = deterministic_checksum(self.manifest)
+            if self.manifest_checksum != expected:
+                raise ValueError("manifest checksum does not match the complete run manifest")
+        if BacktestRunIdentity.from_manifest(self.manifest) != self.result.run_identity:
+            raise ValueError("manifest run identity is not bound to the backtest result")
         return self
+
+    @classmethod
+    def build(cls, *, manifest: RunManifest, result: BacktestResult) -> BacktestArtifact:
+        candidate = cls.model_validate(
+            {
+                "manifest": manifest,
+                "result": result,
+                "manifest_checksum": "0" * 64,
+            },
+            context={"skip_manifest_checksum": True},
+        )
+        return candidate.model_copy(
+            update={"manifest_checksum": deterministic_checksum(candidate.manifest)}
+        )
