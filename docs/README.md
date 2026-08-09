@@ -16,6 +16,8 @@ prompt numbers are delivery references only; they do not define current scope.
 | How far may each domain expand? | [`roadmap/scope-ladder.md`](roadmap/scope-ladder.md) |
 | What are the stable release stopping points? | [`roadmap/release-ladder.md`](roadmap/release-ladder.md) |
 | How should a new Codex task be written? | [`ai/codex-task-template.md`](ai/codex-task-template.md) |
+| How should a new Claude Code task be written? | [`ai/claude-code-task-template.md`](ai/claude-code-task-template.md) |
+| How is Claude Code operated in this working copy? | [`CLAUDE.md`](../CLAUDE.md) |
 
 ## Architecture and current contracts
 
