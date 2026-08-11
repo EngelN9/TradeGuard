@@ -1,0 +1,360 @@
+{
+  "artifact_checksum": "24f76b48c7581c16202171ddfc812a26a8c9ef9022ba9013cb0e59ca0e190f85",
+  "backtest": {
+    "manifest": {
+      "completed_at": "2024-01-02T01:00:01.000000Z",
+      "config_hash": "ebc8fbdb451dedf58d6bd380550ccd6acbe713787100acb9bccb176ff974364f",
+      "cost_model_version": "crypto-spot-conservative-v1",
+      "dataset_manifests": [
+        {
+          "checksum": "559e0e669ff3ab7d6bf37aaa192c8cba69c253361e2b640209320f5ffb0da750",
+          "dataset_id": "synthetic-normal",
+          "dataset_version": "1.0.0"
+        }
+      ],
+      "date_range": {
+        "end_utc": "2024-01-02T00:05:00.000000Z",
+        "start_utc": "2024-01-02T00:03:00.000000Z"
+      },
+      "dependency_lock_hash": "82d8632d1e30e743a7ab56bcf322ab7df465f7827b0710911602e79baffcdbc0",
+      "dirty_worktree": true,
+      "execution_model_version": "conservative-bar-v1",
+      "git_sha": "0000000000000000000000000000000000000000",
+      "platform": "redacted-synthetic-runner",
+      "python_version": "3.12.0-synthetic-evidence",
+      "random_seed": 0,
+      "result_checksum": "8cdccbec9eb462fb9662bd4fd1be9860465178d308741da68e2523d0f4295920",
+      "run_id": "00000000-0000-4000-8000-000000000070",
+      "run_type": "backtest",
+      "schema_version": "1.0.0",
+      "started_at": "2024-01-02T01:00:00.000000Z",
+      "strategy_id": "buy-and-hold-btc-usd",
+      "strategy_version": "56fa87c025d421dac8ca15c162aac1d267b2d5aa3db7f29a0fb0381a1c3f5224",
+      "universe": [
+        "BTC-USD"
+      ],
+      "validation_failures": [],
+      "warnings": []
+    },
+    "manifest_checksum": "6361cfbcee6fe447763d1feede47a6b66dcccee1a9a39a88863d95487eea0e00",
+    "result": {
+      "conservation": {
+        "asset_quantity_differences": {
+          "SYNTH-CRYPTO:BTC-USD": "0"
+        },
+        "cash_equity_difference": "0",
+        "conserved": true,
+        "duplicate_fill_ids_ignored": 0
+      },
+      "corporate_actions": [],
+      "dataset_manifest_checksum": "559e0e669ff3ab7d6bf37aaa192c8cba69c253361e2b640209320f5ffb0da750",
+      "ending_asset_balances": {
+        "SYNTH-CRYPTO:BTC-USD": "0.1"
+      },
+      "ending_currency_balances": {
+        "USD": "99989.71432"
+      },
+      "fills": [
+        {
+          "asset_class": "crypto",
+          "costs": {
+            "commission": "0.0612",
+            "market_impact": "0.00816",
+            "slippage": "0.00816",
+            "spread": "0.00816",
+            "tax": "0",
+            "total": "0.08568"
+          },
+          "event_time_utc": "2024-01-02T00:05:00.000000Z",
+          "fill_id": "c38a56d08e5025e35acbc3096ce41a822ae32169a94ac2e0941bf0f85d5b9668",
+          "order_id": "4ea6e93ef6ca088c82eb32c3f1a217d38009d266c4677d9355197b46c79b79c3",
+          "order_type": "market",
+          "price": "102",
+          "quantity": "0.1",
+          "side": "buy",
+          "symbol": "BTC-USD",
+          "venue": "SYNTH-CRYPTO"
+        }
+      ],
+      "orders": [
+        {
+          "filled_quantity": "0.1",
+          "order_id": "4ea6e93ef6ca088c82eb32c3f1a217d38009d266c4677d9355197b46c79b79c3",
+          "reasons": [],
+          "remaining_quantity": "0",
+          "requested_quantity": "0.1",
+          "status": "filled"
+        }
+      ],
+      "plan_checksum": "ebc8fbdb451dedf58d6bd380550ccd6acbe713787100acb9bccb176ff974364f",
+      "pnl_series": [
+        {
+          "cash": "100000",
+          "event_time_utc": "2024-01-02T00:04:00.000000Z",
+          "market_value": "0",
+          "realized_pnl": "0",
+          "total_equity": "100000",
+          "total_pnl": "0",
+          "unrealized_pnl": "0"
+        },
+        {
+          "cash": "99989.71432",
+          "event_time_utc": "2024-01-02T00:05:00.000000Z",
+          "market_value": "10.1",
+          "realized_pnl": "0",
+          "total_equity": "99999.81432",
+          "total_pnl": "-0.18568",
+          "unrealized_pnl": "-0.18568"
+        }
+      ],
+      "positions": [
+        {
+          "asset_class": "crypto",
+          "average_cost": "102.8568",
+          "event_time_utc": "2024-01-02T00:05:00.000000Z",
+          "mark_price": "101",
+          "market_value": "10.1",
+          "quantity": "0.1",
+          "symbol": "BTC-USD",
+          "unrealized_pnl": "-0.18568",
+          "venue": "SYNTH-CRYPTO"
+        }
+      ],
+      "result_checksum": "8cdccbec9eb462fb9662bd4fd1be9860465178d308741da68e2523d0f4295920",
+      "run_id": "00000000-0000-4000-8000-000000000070",
+      "run_identity": {
+        "config_hash": "ebc8fbdb451dedf58d6bd380550ccd6acbe713787100acb9bccb176ff974364f",
+        "cost_model_version": "crypto-spot-conservative-v1",
+        "dataset_manifests": [
+          {
+            "checksum": "559e0e669ff3ab7d6bf37aaa192c8cba69c253361e2b640209320f5ffb0da750",
+            "dataset_id": "synthetic-normal",
+            "dataset_version": "1.0.0"
+          }
+        ],
+        "date_range": {
+          "end_utc": "2024-01-02T00:05:00.000000Z",
+          "start_utc": "2024-01-02T00:03:00.000000Z"
+        },
+        "dependency_lock_hash": "82d8632d1e30e743a7ab56bcf322ab7df465f7827b0710911602e79baffcdbc0",
+        "dirty_worktree": true,
+        "execution_model_version": "conservative-bar-v1",
+        "git_sha": "0000000000000000000000000000000000000000",
+        "random_seed": 0,
+        "schema_version": "1.0.0",
+        "strategy_id": "buy-and-hold-btc-usd",
+        "strategy_version": "56fa87c025d421dac8ca15c162aac1d267b2d5aa3db7f29a0fb0381a1c3f5224",
+        "universe": [
+          "BTC-USD"
+        ]
+      },
+      "run_type": "backtest",
+      "schema_version": "1.1.0",
+      "warnings": []
+    },
+    "schema_version": "1.1.0"
+  },
+  "dataset_manifest_checksum": "559e0e669ff3ab7d6bf37aaa192c8cba69c253361e2b640209320f5ffb0da750",
+  "fixture_file_sha256": "babd3917bdafbe86cb840981be2d64a2c51a498f766a0aeb385a596e70aad578",
+  "outputs": [
+    {
+      "asset_class": "crypto",
+      "causation_id": null,
+      "correlation_id": "ce0f7159-c0dc-52a5-ace4-b15538305180",
+      "direction": 1,
+      "event_id": "07b092c2-2e84-5a1e-b900-fa44f8a5a36b",
+      "event_time_utc": "2024-01-02T00:04:00.000000Z",
+      "event_type": "Signal",
+      "ingest_time_utc": "2024-01-02T00:04:00.000000Z",
+      "payload_checksum": "6cb2e1a1ca87c713baedacccf71a802d85e997874320f4ac4746eb32cdd373f9",
+      "run_id": "00000000-0000-4000-8000-000000000070",
+      "schema_version": "1.0.0",
+      "sequence_number": 11,
+      "signal_name": "buy-and-hold-entry",
+      "source": "buy-and-hold-btc-usd",
+      "strength": "1",
+      "symbol": "BTC-USD",
+      "venue": "SYNTH-CRYPTO"
+    },
+    {
+      "asset_class": "crypto",
+      "causation_id": "07b092c2-2e84-5a1e-b900-fa44f8a5a36b",
+      "correlation_id": "ce0f7159-c0dc-52a5-ace4-b15538305180",
+      "event_id": "5e49206c-20e3-5840-af7e-8e52cb77248d",
+      "event_time_utc": "2024-01-02T00:04:00.000000Z",
+      "event_type": "TargetPosition",
+      "ingest_time_utc": "2024-01-02T00:04:00.000000Z",
+      "payload_checksum": "35870a0a051deeb93a9631b9c5929861bbdfef1d4bd3a4b2ecc756e9a8052ec3",
+      "rationale": "Frozen synthetic buy-and-hold target; no risk approval implied.",
+      "run_id": "00000000-0000-4000-8000-000000000070",
+      "schema_version": "1.0.0",
+      "sequence_number": 12,
+      "source": "buy-and-hold-btc-usd",
+      "symbol": "BTC-USD",
+      "target_quantity": "0.1",
+      "venue": "SYNTH-CRYPTO"
+    },
+    {
+      "asset_class": "crypto",
+      "causation_id": "5e49206c-20e3-5840-af7e-8e52cb77248d",
+      "correlation_id": "ce0f7159-c0dc-52a5-ace4-b15538305180",
+      "event_id": "2d718a09-ae7e-5f1a-bcc7-50ed63763c9c",
+      "event_time_utc": "2024-01-02T00:04:00.000000Z",
+      "event_type": "TradeProposal",
+      "ingest_time_utc": "2024-01-02T00:04:00.000000Z",
+      "limit_price": null,
+      "order_type": "market",
+      "payload_checksum": "b901648eb087d8427a6e069550b84dd5ceaa6cfb4285c93008e17a88c14727da",
+      "quantity": "0.1",
+      "run_id": "00000000-0000-4000-8000-000000000070",
+      "schema_version": "1.0.0",
+      "sequence_number": 13,
+      "side": "buy",
+      "source": "buy-and-hold-btc-usd",
+      "symbol": "BTC-USD",
+      "venue": "SYNTH-CRYPTO"
+    }
+  ],
+  "parameters": {
+    "quantity": "0.1"
+  },
+  "plan": {
+    "base_currency": "USD",
+    "crypto_costs": {
+      "maker_fee_rate": "0.004",
+      "market_impact_bps": "8",
+      "slippage_bps": "8",
+      "spread_bps": "8",
+      "taker_fee_rate": "0.006",
+      "version": "crypto-spot-conservative-v1"
+    },
+    "equity_costs": {
+      "commission_rate": "0.001",
+      "market_impact_bps": "5",
+      "minimum_commission": "1",
+      "sell_tax_rate": "0.003",
+      "slippage_bps": "5",
+      "spread_bps": "5",
+      "version": "equity-conservative-v1"
+    },
+    "execution": {
+      "latency_seconds": 1,
+      "max_participation_rate": "0.25",
+      "version": "conservative-bar-v1"
+    },
+    "initial_cash": "100000",
+    "orders": [
+      {
+        "asset_class": "crypto",
+        "decision_event_time_utc": "2024-01-02T00:04:00.000000Z",
+        "limit_price": null,
+        "order_id": "4ea6e93ef6ca088c82eb32c3f1a217d38009d266c4677d9355197b46c79b79c3",
+        "order_type": "market",
+        "quantity": "0.1",
+        "sequence_number": 13,
+        "side": "buy",
+        "submitted_at_utc": "2024-01-02T00:04:00.000000Z",
+        "symbol": "BTC-USD",
+        "venue": "SYNTH-CRYPTO"
+      }
+    ],
+    "random_seed": 0,
+    "run_id": "00000000-0000-4000-8000-000000000070",
+    "run_type": "backtest",
+    "schema_version": "1.0.0",
+    "strategy_id": "buy-and-hold-btc-usd",
+    "strategy_version": "56fa87c025d421dac8ca15c162aac1d267b2d5aa3db7f29a0fb0381a1c3f5224"
+  },
+  "report": {
+    "backtest_result_checksum": "8cdccbec9eb462fb9662bd4fd1be9860465178d308741da68e2523d0f4295920",
+    "classification": "synthetic_research_baseline",
+    "conserved": true,
+    "dataset_manifest_checksum": "559e0e669ff3ab7d6bf37aaa192c8cba69c253361e2b640209320f5ffb0da750",
+    "fills": 1,
+    "first_decision_time_utc": "2024-01-02T00:04:00.000000Z",
+    "first_fill_time_utc": "2024-01-02T00:05:00.000000Z",
+    "holding_at_end": true,
+    "investment_advice": false,
+    "output_events": 3,
+    "planned_orders": 1,
+    "profitability_claim": false,
+    "promotion_status": "NOT_EVALUATED",
+    "report_checksum": "1a5a33880d868b67a5821089df853d86bd07a81d0c548f3697fc5968c8a39f5e",
+    "schema_version": "1.0.0",
+    "strategy_id": "buy-and-hold-btc-usd",
+    "strategy_version_hash": "56fa87c025d421dac8ca15c162aac1d267b2d5aa3db7f29a0fb0381a1c3f5224",
+    "synthetic_only": true,
+    "warning": "Synthetic offline research only; not investment advice or promotion evidence."
+  },
+  "schema_version": "1.0.0",
+  "specification": {
+    "allowed_outputs": [
+      "Signal",
+      "TargetPosition",
+      "TradeProposal"
+    ],
+    "assumptions": [
+      "The research account starts with no BTC position.",
+      "One completed synthetic bar is sufficient to submit one fixed-quantity proposal.",
+      "The position remains open through the end of the synthetic fixture."
+    ],
+    "failure_modes": [
+      "Reject unknown, changed, stale, quarantined, or undeclared market data.",
+      "Reject any output outside Signal, TargetPosition, and TradeProposal."
+    ],
+    "known_limitations": [
+      "No benchmark, validation, optimization, risk approval, liquidation, or performance claim."
+    ],
+    "parameter_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "quantity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "0.1000",
+          "gt": 0,
+          "title": "Quantity"
+        }
+      },
+      "title": "BuyAndHoldParameters",
+      "type": "object"
+    },
+    "required_data": [
+      "asset_class",
+      "venue",
+      "symbol",
+      "event_time_utc",
+      "sequence_number",
+      "close_price"
+    ],
+    "schema_version": "1.0.0",
+    "strategy_id": "buy-and-hold-btc-usd",
+    "strategy_version": "1.0.0",
+    "supported_asset_classes": [
+      "crypto"
+    ],
+    "supported_markets": [
+      {
+        "asset_class": "crypto",
+        "dataset_id": "synthetic-normal",
+        "dataset_version": "1.0.0",
+        "manifest_checksum": "559e0e669ff3ab7d6bf37aaa192c8cba69c253361e2b640209320f5ffb0da750",
+        "symbol": "BTC-USD",
+        "venue": "SYNTH-CRYPTO"
+      }
+    ],
+    "unsupported_markets": [
+      "Every asset, venue, symbol, and dataset except synthetic BTC-USD on SYNTH-CRYPTO."
+    ],
+    "warmup_bars": 1
+  },
+  "strategy_version_hash": "56fa87c025d421dac8ca15c162aac1d267b2d5aa3db7f29a0fb0381a1c3f5224",
+  "synthetic_only": true
+}

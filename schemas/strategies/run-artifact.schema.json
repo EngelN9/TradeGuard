@@ -1,0 +1,2380 @@
+{
+  "$defs": {
+    "AssetClass": {
+      "description": "Supported event asset-class labels.",
+      "enum": [
+        "equity",
+        "crypto",
+        "system"
+      ],
+      "title": "AssetClass",
+      "type": "string"
+    },
+    "BacktestArtifact": {
+      "additionalProperties": false,
+      "properties": {
+        "manifest": {
+          "$ref": "#/$defs/RunManifest"
+        },
+        "manifest_checksum": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Manifest Checksum",
+          "type": "string"
+        },
+        "result": {
+          "$ref": "#/$defs/BacktestResult"
+        },
+        "schema_version": {
+          "const": "1.1.0",
+          "default": "1.1.0",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "manifest",
+        "result",
+        "manifest_checksum"
+      ],
+      "title": "BacktestArtifact",
+      "type": "object"
+    },
+    "BacktestPlan": {
+      "additionalProperties": false,
+      "description": "Complete deterministic input independent of workstation state.",
+      "properties": {
+        "base_currency": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Base Currency",
+          "type": "string"
+        },
+        "crypto_costs": {
+          "$ref": "#/$defs/CryptoCostModel",
+          "default": {
+            "maker_fee_rate": "0.004",
+            "market_impact_bps": "8",
+            "slippage_bps": "8",
+            "spread_bps": "8",
+            "taker_fee_rate": "0.006",
+            "version": "crypto-spot-conservative-v1"
+          }
+        },
+        "equity_costs": {
+          "$ref": "#/$defs/EquityCostModel",
+          "default": {
+            "commission_rate": "0.001",
+            "market_impact_bps": "5",
+            "minimum_commission": "1",
+            "sell_tax_rate": "0.003",
+            "slippage_bps": "5",
+            "spread_bps": "5",
+            "version": "equity-conservative-v1"
+          }
+        },
+        "execution": {
+          "$ref": "#/$defs/ConservativeExecutionConfig",
+          "default": {
+            "latency_seconds": 1,
+            "max_participation_rate": "0.25",
+            "version": "conservative-bar-v1"
+          }
+        },
+        "initial_cash": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "gt": 0,
+          "title": "Initial Cash"
+        },
+        "orders": {
+          "items": {
+            "$ref": "#/$defs/PlannedOrder"
+          },
+          "title": "Orders",
+          "type": "array"
+        },
+        "random_seed": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Random Seed",
+          "type": "integer"
+        },
+        "run_id": {
+          "format": "uuid",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "run_type": {
+          "enum": [
+            "backtest",
+            "replay"
+          ],
+          "title": "Run Type",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "strategy_id": {
+          "default": "fixed-order-plan",
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Strategy Id",
+          "type": "string"
+        },
+        "strategy_version": {
+          "default": "1.0.0",
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Strategy Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_id",
+        "run_type",
+        "initial_cash",
+        "base_currency",
+        "orders"
+      ],
+      "title": "BacktestPlan",
+      "type": "object"
+    },
+    "BacktestResult": {
+      "additionalProperties": false,
+      "properties": {
+        "conservation": {
+          "$ref": "#/$defs/ConservationReport"
+        },
+        "corporate_actions": {
+          "items": {
+            "$ref": "#/$defs/CorporateActionLedgerEntry"
+          },
+          "title": "Corporate Actions",
+          "type": "array"
+        },
+        "dataset_manifest_checksum": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Dataset Manifest Checksum",
+          "type": "string"
+        },
+        "ending_asset_balances": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "ge": 0
+          },
+          "propertyNames": {
+            "maxLength": 512,
+            "minLength": 1
+          },
+          "title": "Ending Asset Balances",
+          "type": "object"
+        },
+        "ending_currency_balances": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "ge": 0
+          },
+          "minProperties": 1,
+          "propertyNames": {
+            "maxLength": 512,
+            "minLength": 1
+          },
+          "title": "Ending Currency Balances",
+          "type": "object"
+        },
+        "fills": {
+          "items": {
+            "$ref": "#/$defs/FillLedgerEntry"
+          },
+          "title": "Fills",
+          "type": "array"
+        },
+        "orders": {
+          "items": {
+            "$ref": "#/$defs/OrderLedgerEntry"
+          },
+          "title": "Orders",
+          "type": "array"
+        },
+        "plan_checksum": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Plan Checksum",
+          "type": "string"
+        },
+        "pnl_series": {
+          "items": {
+            "$ref": "#/$defs/PnLLedgerEntry"
+          },
+          "minItems": 1,
+          "title": "Pnl Series",
+          "type": "array"
+        },
+        "positions": {
+          "items": {
+            "$ref": "#/$defs/PositionLedgerEntry"
+          },
+          "title": "Positions",
+          "type": "array"
+        },
+        "result_checksum": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Result Checksum",
+          "type": "string"
+        },
+        "run_id": {
+          "format": "uuid",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "run_identity": {
+          "$ref": "#/$defs/BacktestRunIdentity"
+        },
+        "run_type": {
+          "enum": [
+            "backtest",
+            "replay"
+          ],
+          "title": "Run Type",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.1.0",
+          "default": "1.1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "warnings": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "run_id",
+        "run_type",
+        "run_identity",
+        "plan_checksum",
+        "dataset_manifest_checksum",
+        "orders",
+        "fills",
+        "corporate_actions",
+        "positions",
+        "pnl_series",
+        "ending_asset_balances",
+        "ending_currency_balances",
+        "conservation",
+        "warnings",
+        "result_checksum"
+      ],
+      "title": "BacktestResult",
+      "type": "object"
+    },
+    "BacktestRunIdentity": {
+      "additionalProperties": false,
+      "description": "Reproducible manifest identity bound into the deterministic result.",
+      "properties": {
+        "config_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Config Hash",
+          "type": "string"
+        },
+        "cost_model_version": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Cost Model Version",
+          "type": "string"
+        },
+        "dataset_manifests": {
+          "items": {
+            "$ref": "#/$defs/DatasetManifestReference"
+          },
+          "minItems": 1,
+          "title": "Dataset Manifests",
+          "type": "array"
+        },
+        "date_range": {
+          "$ref": "#/$defs/RunDateRange"
+        },
+        "dependency_lock_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Dependency Lock Hash",
+          "type": "string"
+        },
+        "dirty_worktree": {
+          "title": "Dirty Worktree",
+          "type": "boolean"
+        },
+        "execution_model_version": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Execution Model Version",
+          "type": "string"
+        },
+        "git_sha": {
+          "pattern": "^[0-9a-f]{40}$",
+          "title": "Git Sha",
+          "type": "string"
+        },
+        "random_seed": {
+          "minimum": 0,
+          "title": "Random Seed",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "strategy_id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Strategy Id",
+          "type": "string"
+        },
+        "strategy_version": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Strategy Version",
+          "type": "string"
+        },
+        "universe": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Universe",
+          "type": "array"
+        }
+      },
+      "required": [
+        "strategy_id",
+        "strategy_version",
+        "git_sha",
+        "dirty_worktree",
+        "config_hash",
+        "dataset_manifests",
+        "date_range",
+        "universe",
+        "random_seed",
+        "dependency_lock_hash",
+        "cost_model_version",
+        "execution_model_version"
+      ],
+      "title": "BacktestRunIdentity",
+      "type": "object"
+    },
+    "BuyAndHoldParameters": {
+      "additionalProperties": false,
+      "properties": {
+        "quantity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "0.1000",
+          "gt": 0,
+          "title": "Quantity"
+        }
+      },
+      "title": "BuyAndHoldParameters",
+      "type": "object"
+    },
+    "ConservationReport": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_quantity_differences": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ]
+          },
+          "title": "Asset Quantity Differences",
+          "type": "object"
+        },
+        "cash_equity_difference": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Cash Equity Difference"
+        },
+        "conserved": {
+          "title": "Conserved",
+          "type": "boolean"
+        },
+        "duplicate_fill_ids_ignored": {
+          "minimum": 0,
+          "title": "Duplicate Fill Ids Ignored",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "cash_equity_difference",
+        "asset_quantity_differences",
+        "duplicate_fill_ids_ignored",
+        "conserved"
+      ],
+      "title": "ConservationReport",
+      "type": "object"
+    },
+    "ConservativeExecutionConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "latency_seconds": {
+          "default": 1,
+          "minimum": 0,
+          "title": "Latency Seconds",
+          "type": "integer"
+        },
+        "max_participation_rate": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "0.25",
+          "gt": 0,
+          "le": 1,
+          "title": "Max Participation Rate"
+        },
+        "version": {
+          "const": "conservative-bar-v1",
+          "default": "conservative-bar-v1",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "title": "ConservativeExecutionConfig",
+      "type": "object"
+    },
+    "CorporateActionLedgerEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "action_checksum": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Action Checksum",
+          "type": "string"
+        },
+        "action_type": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Action Type",
+          "type": "string"
+        },
+        "cash_delta": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Cash Delta"
+        },
+        "effective_at": {
+          "format": "date-time",
+          "title": "Effective At",
+          "type": "string"
+        },
+        "quantity_after": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Quantity After"
+        },
+        "quantity_before": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Quantity Before"
+        },
+        "symbol_after": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Symbol After",
+          "type": "string"
+        },
+        "symbol_before": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Symbol Before",
+          "type": "string"
+        }
+      },
+      "required": [
+        "action_checksum",
+        "symbol_before",
+        "symbol_after",
+        "action_type",
+        "effective_at",
+        "quantity_before",
+        "quantity_after",
+        "cash_delta"
+      ],
+      "title": "CorporateActionLedgerEntry",
+      "type": "object"
+    },
+    "CostBreakdown": {
+      "additionalProperties": false,
+      "description": "Explicit costs charged in the account's quote currency.",
+      "properties": {
+        "commission": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Commission"
+        },
+        "market_impact": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Market Impact"
+        },
+        "slippage": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Slippage"
+        },
+        "spread": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Spread"
+        },
+        "tax": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Tax"
+        },
+        "total": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Total"
+        }
+      },
+      "required": [
+        "commission",
+        "tax",
+        "spread",
+        "slippage",
+        "market_impact",
+        "total"
+      ],
+      "title": "CostBreakdown",
+      "type": "object"
+    },
+    "CryptoCostModel": {
+      "additionalProperties": false,
+      "description": "Conservative spot-only maker/taker and execution assumptions.",
+      "properties": {
+        "maker_fee_rate": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "0.004",
+          "ge": 0,
+          "title": "Maker Fee Rate"
+        },
+        "market_impact_bps": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "8",
+          "ge": 0,
+          "title": "Market Impact Bps"
+        },
+        "slippage_bps": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "8",
+          "ge": 0,
+          "title": "Slippage Bps"
+        },
+        "spread_bps": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "8",
+          "ge": 0,
+          "title": "Spread Bps"
+        },
+        "taker_fee_rate": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "0.006",
+          "ge": 0,
+          "title": "Taker Fee Rate"
+        },
+        "version": {
+          "const": "crypto-spot-conservative-v1",
+          "default": "crypto-spot-conservative-v1",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "title": "CryptoCostModel",
+      "type": "object"
+    },
+    "DatasetManifestReference": {
+      "additionalProperties": false,
+      "properties": {
+        "checksum": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Checksum",
+          "type": "string"
+        },
+        "dataset_id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Dataset Id",
+          "type": "string"
+        },
+        "dataset_version": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Dataset Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "dataset_id",
+        "dataset_version",
+        "checksum"
+      ],
+      "title": "DatasetManifestReference",
+      "type": "object"
+    },
+    "EquityCostModel": {
+      "additionalProperties": false,
+      "description": "Conservative cash-equity commission, tax, and execution assumptions.",
+      "properties": {
+        "commission_rate": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "0.001",
+          "ge": 0,
+          "title": "Commission Rate"
+        },
+        "market_impact_bps": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "5",
+          "ge": 0,
+          "title": "Market Impact Bps"
+        },
+        "minimum_commission": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "1",
+          "ge": 0,
+          "title": "Minimum Commission"
+        },
+        "sell_tax_rate": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "0.003",
+          "ge": 0,
+          "title": "Sell Tax Rate"
+        },
+        "slippage_bps": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "5",
+          "ge": 0,
+          "title": "Slippage Bps"
+        },
+        "spread_bps": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "5",
+          "ge": 0,
+          "title": "Spread Bps"
+        },
+        "version": {
+          "const": "equity-conservative-v1",
+          "default": "equity-conservative-v1",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "title": "EquityCostModel",
+      "type": "object"
+    },
+    "FillLedgerEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_class": {
+          "enum": [
+            "equity",
+            "crypto"
+          ],
+          "title": "Asset Class",
+          "type": "string"
+        },
+        "costs": {
+          "$ref": "#/$defs/CostBreakdown"
+        },
+        "event_time_utc": {
+          "format": "date-time",
+          "title": "Event Time Utc",
+          "type": "string"
+        },
+        "fill_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Fill Id",
+          "type": "string"
+        },
+        "order_id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Order Id",
+          "type": "string"
+        },
+        "order_type": {
+          "$ref": "#/$defs/OrderType"
+        },
+        "price": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "gt": 0,
+          "title": "Price"
+        },
+        "quantity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "gt": 0,
+          "title": "Quantity"
+        },
+        "side": {
+          "$ref": "#/$defs/Side"
+        },
+        "symbol": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Symbol",
+          "type": "string"
+        },
+        "venue": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Venue",
+          "type": "string"
+        }
+      },
+      "required": [
+        "fill_id",
+        "order_id",
+        "asset_class",
+        "venue",
+        "symbol",
+        "side",
+        "order_type",
+        "event_time_utc",
+        "price",
+        "quantity",
+        "costs"
+      ],
+      "title": "FillLedgerEntry",
+      "type": "object"
+    },
+    "JsonValue": {},
+    "OrderLedgerEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "filled_quantity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Filled Quantity"
+        },
+        "order_id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Order Id",
+          "type": "string"
+        },
+        "reasons": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Reasons",
+          "type": "array"
+        },
+        "remaining_quantity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Remaining Quantity"
+        },
+        "requested_quantity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "gt": 0,
+          "title": "Requested Quantity"
+        },
+        "status": {
+          "$ref": "#/$defs/OrderStatus"
+        }
+      },
+      "required": [
+        "order_id",
+        "status",
+        "requested_quantity",
+        "filled_quantity",
+        "remaining_quantity"
+      ],
+      "title": "OrderLedgerEntry",
+      "type": "object"
+    },
+    "OrderStatus": {
+      "enum": [
+        "submitted",
+        "partially_filled",
+        "filled",
+        "rejected",
+        "unfilled",
+        "blocked"
+      ],
+      "title": "OrderStatus",
+      "type": "string"
+    },
+    "OrderType": {
+      "enum": [
+        "market",
+        "limit"
+      ],
+      "title": "OrderType",
+      "type": "string"
+    },
+    "PlannedOrder": {
+      "additionalProperties": false,
+      "description": "An explicit research order; strategy generation arrives in Prompt 7.",
+      "properties": {
+        "asset_class": {
+          "enum": [
+            "equity",
+            "crypto"
+          ],
+          "title": "Asset Class",
+          "type": "string"
+        },
+        "decision_event_time_utc": {
+          "format": "date-time",
+          "title": "Decision Event Time Utc",
+          "type": "string"
+        },
+        "limit_price": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                  "type": "string"
+                }
+              ],
+              "gt": 0
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Limit Price"
+        },
+        "order_id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Order Id",
+          "type": "string"
+        },
+        "order_type": {
+          "$ref": "#/$defs/OrderType"
+        },
+        "quantity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "gt": 0,
+          "title": "Quantity"
+        },
+        "sequence_number": {
+          "minimum": 0,
+          "title": "Sequence Number",
+          "type": "integer"
+        },
+        "side": {
+          "$ref": "#/$defs/Side"
+        },
+        "submitted_at_utc": {
+          "format": "date-time",
+          "title": "Submitted At Utc",
+          "type": "string"
+        },
+        "symbol": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Symbol",
+          "type": "string"
+        },
+        "venue": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Venue",
+          "type": "string"
+        }
+      },
+      "required": [
+        "order_id",
+        "asset_class",
+        "venue",
+        "symbol",
+        "side",
+        "order_type",
+        "quantity",
+        "decision_event_time_utc",
+        "submitted_at_utc",
+        "sequence_number"
+      ],
+      "title": "PlannedOrder",
+      "type": "object"
+    },
+    "PnLLedgerEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "cash": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Cash"
+        },
+        "event_time_utc": {
+          "format": "date-time",
+          "title": "Event Time Utc",
+          "type": "string"
+        },
+        "market_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Market Value"
+        },
+        "realized_pnl": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Realized Pnl"
+        },
+        "total_equity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Total Equity"
+        },
+        "total_pnl": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Total Pnl"
+        },
+        "unrealized_pnl": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Unrealized Pnl"
+        }
+      },
+      "required": [
+        "event_time_utc",
+        "cash",
+        "market_value",
+        "realized_pnl",
+        "unrealized_pnl",
+        "total_pnl",
+        "total_equity"
+      ],
+      "title": "PnLLedgerEntry",
+      "type": "object"
+    },
+    "PositionLedgerEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_class": {
+          "enum": [
+            "equity",
+            "crypto"
+          ],
+          "title": "Asset Class",
+          "type": "string"
+        },
+        "average_cost": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Average Cost"
+        },
+        "event_time_utc": {
+          "format": "date-time",
+          "title": "Event Time Utc",
+          "type": "string"
+        },
+        "mark_price": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Mark Price"
+        },
+        "market_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Market Value"
+        },
+        "quantity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "title": "Quantity"
+        },
+        "symbol": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Symbol",
+          "type": "string"
+        },
+        "unrealized_pnl": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Unrealized Pnl"
+        },
+        "venue": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Venue",
+          "type": "string"
+        }
+      },
+      "required": [
+        "event_time_utc",
+        "asset_class",
+        "venue",
+        "symbol",
+        "quantity",
+        "average_cost",
+        "mark_price",
+        "market_value",
+        "unrealized_pnl"
+      ],
+      "title": "PositionLedgerEntry",
+      "type": "object"
+    },
+    "RunDateRange": {
+      "additionalProperties": false,
+      "properties": {
+        "end_utc": {
+          "format": "date-time",
+          "title": "End Utc",
+          "type": "string"
+        },
+        "start_utc": {
+          "format": "date-time",
+          "title": "Start Utc",
+          "type": "string"
+        }
+      },
+      "required": [
+        "start_utc",
+        "end_utc"
+      ],
+      "title": "RunDateRange",
+      "type": "object"
+    },
+    "RunManifest": {
+      "additionalProperties": false,
+      "description": "Complete, immutable run identity and reproducibility record.",
+      "properties": {
+        "completed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Completed At"
+        },
+        "config_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Config Hash",
+          "type": "string"
+        },
+        "cost_model_version": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Cost Model Version",
+          "type": "string"
+        },
+        "dataset_manifests": {
+          "items": {
+            "$ref": "#/$defs/DatasetManifestReference"
+          },
+          "minItems": 1,
+          "title": "Dataset Manifests",
+          "type": "array"
+        },
+        "date_range": {
+          "$ref": "#/$defs/RunDateRange"
+        },
+        "dependency_lock_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Dependency Lock Hash",
+          "type": "string"
+        },
+        "dirty_worktree": {
+          "title": "Dirty Worktree",
+          "type": "boolean"
+        },
+        "execution_model_version": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Execution Model Version",
+          "type": "string"
+        },
+        "git_sha": {
+          "pattern": "^[0-9a-f]{40}$",
+          "title": "Git Sha",
+          "type": "string"
+        },
+        "platform": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Platform",
+          "type": "string"
+        },
+        "python_version": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Python Version",
+          "type": "string"
+        },
+        "random_seed": {
+          "minimum": 0,
+          "title": "Random Seed",
+          "type": "integer"
+        },
+        "result_checksum": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Result Checksum"
+        },
+        "run_id": {
+          "format": "uuid",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "run_type": {
+          "$ref": "#/$defs/RunType"
+        },
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "strategy_id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Strategy Id",
+          "type": "string"
+        },
+        "strategy_version": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Strategy Version",
+          "type": "string"
+        },
+        "universe": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Universe",
+          "type": "array"
+        },
+        "validation_failures": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Validation Failures",
+          "type": "array"
+        },
+        "warnings": {
+          "default": [],
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "run_id",
+        "run_type",
+        "strategy_id",
+        "strategy_version",
+        "git_sha",
+        "dirty_worktree",
+        "config_hash",
+        "dataset_manifests",
+        "date_range",
+        "universe",
+        "random_seed",
+        "python_version",
+        "platform",
+        "dependency_lock_hash",
+        "cost_model_version",
+        "execution_model_version",
+        "started_at"
+      ],
+      "title": "RunManifest",
+      "type": "object"
+    },
+    "RunType": {
+      "enum": [
+        "research",
+        "backtest",
+        "replay",
+        "validation",
+        "paper",
+        "shadow"
+      ],
+      "title": "RunType",
+      "type": "string"
+    },
+    "Side": {
+      "enum": [
+        "buy",
+        "sell"
+      ],
+      "title": "Side",
+      "type": "string"
+    },
+    "Signal": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_class": {
+          "$ref": "#/$defs/AssetClass"
+        },
+        "causation_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Causation Id"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "direction": {
+          "maximum": 1,
+          "minimum": -1,
+          "title": "Direction",
+          "type": "integer"
+        },
+        "event_id": {
+          "format": "uuid",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_time_utc": {
+          "format": "date-time",
+          "title": "Event Time Utc",
+          "type": "string"
+        },
+        "event_type": {
+          "const": "Signal",
+          "default": "Signal",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "ingest_time_utc": {
+          "format": "date-time",
+          "title": "Ingest Time Utc",
+          "type": "string"
+        },
+        "payload_checksum": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Payload Checksum",
+          "type": "string"
+        },
+        "run_id": {
+          "format": "uuid",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sequence_number": {
+          "minimum": 0,
+          "title": "Sequence Number",
+          "type": "integer"
+        },
+        "signal_name": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Signal Name",
+          "type": "string"
+        },
+        "source": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "strength": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "ge": 0,
+          "le": 1,
+          "title": "Strength"
+        },
+        "symbol": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Symbol",
+          "type": "string"
+        },
+        "venue": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Venue",
+          "type": "string"
+        }
+      },
+      "required": [
+        "event_id",
+        "source",
+        "asset_class",
+        "venue",
+        "symbol",
+        "event_time_utc",
+        "ingest_time_utc",
+        "sequence_number",
+        "correlation_id",
+        "run_id",
+        "payload_checksum",
+        "signal_name",
+        "direction",
+        "strength"
+      ],
+      "title": "Signal",
+      "type": "object"
+    },
+    "StrategyMarket": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_class": {
+          "enum": [
+            "equity",
+            "crypto"
+          ],
+          "title": "Asset Class",
+          "type": "string"
+        },
+        "dataset_id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Dataset Id",
+          "type": "string"
+        },
+        "dataset_version": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Dataset Version",
+          "type": "string"
+        },
+        "manifest_checksum": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Manifest Checksum",
+          "type": "string"
+        },
+        "symbol": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Symbol",
+          "type": "string"
+        },
+        "venue": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Venue",
+          "type": "string"
+        }
+      },
+      "required": [
+        "asset_class",
+        "venue",
+        "symbol",
+        "dataset_id",
+        "dataset_version",
+        "manifest_checksum"
+      ],
+      "title": "StrategyMarket",
+      "type": "object"
+    },
+    "StrategySpecification": {
+      "additionalProperties": false,
+      "properties": {
+        "allowed_outputs": {
+          "items": {
+            "enum": [
+              "Signal",
+              "TargetPosition",
+              "TradeProposal"
+            ],
+            "type": "string"
+          },
+          "title": "Allowed Outputs",
+          "type": "array"
+        },
+        "assumptions": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Assumptions",
+          "type": "array"
+        },
+        "failure_modes": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Failure Modes",
+          "type": "array"
+        },
+        "known_limitations": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Known Limitations",
+          "type": "array"
+        },
+        "parameter_schema": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Parameter Schema",
+          "type": "object"
+        },
+        "required_data": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Required Data",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "strategy_id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Strategy Id",
+          "type": "string"
+        },
+        "strategy_version": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Strategy Version",
+          "type": "string"
+        },
+        "supported_asset_classes": {
+          "items": {
+            "$ref": "#/$defs/AssetClass"
+          },
+          "minItems": 1,
+          "title": "Supported Asset Classes",
+          "type": "array"
+        },
+        "supported_markets": {
+          "items": {
+            "$ref": "#/$defs/StrategyMarket"
+          },
+          "minItems": 1,
+          "title": "Supported Markets",
+          "type": "array"
+        },
+        "unsupported_markets": {
+          "items": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Unsupported Markets",
+          "type": "array"
+        },
+        "warmup_bars": {
+          "minimum": 1,
+          "title": "Warmup Bars",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "strategy_id",
+        "strategy_version",
+        "supported_asset_classes",
+        "supported_markets",
+        "required_data",
+        "parameter_schema",
+        "warmup_bars",
+        "allowed_outputs",
+        "assumptions",
+        "unsupported_markets",
+        "known_limitations",
+        "failure_modes"
+      ],
+      "title": "StrategySpecification",
+      "type": "object"
+    },
+    "StrategySyntheticReport": {
+      "additionalProperties": false,
+      "properties": {
+        "backtest_result_checksum": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Backtest Result Checksum",
+          "type": "string"
+        },
+        "classification": {
+          "const": "synthetic_research_baseline",
+          "default": "synthetic_research_baseline",
+          "title": "Classification",
+          "type": "string"
+        },
+        "conserved": {
+          "title": "Conserved",
+          "type": "boolean"
+        },
+        "dataset_manifest_checksum": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Dataset Manifest Checksum",
+          "type": "string"
+        },
+        "fills": {
+          "minimum": 0,
+          "title": "Fills",
+          "type": "integer"
+        },
+        "first_decision_time_utc": {
+          "format": "date-time",
+          "title": "First Decision Time Utc",
+          "type": "string"
+        },
+        "first_fill_time_utc": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "First Fill Time Utc"
+        },
+        "holding_at_end": {
+          "title": "Holding At End",
+          "type": "boolean"
+        },
+        "investment_advice": {
+          "const": false,
+          "default": false,
+          "title": "Investment Advice",
+          "type": "boolean"
+        },
+        "output_events": {
+          "minimum": 0,
+          "title": "Output Events",
+          "type": "integer"
+        },
+        "planned_orders": {
+          "minimum": 0,
+          "title": "Planned Orders",
+          "type": "integer"
+        },
+        "profitability_claim": {
+          "const": false,
+          "default": false,
+          "title": "Profitability Claim",
+          "type": "boolean"
+        },
+        "promotion_status": {
+          "const": "NOT_EVALUATED",
+          "default": "NOT_EVALUATED",
+          "title": "Promotion Status",
+          "type": "string"
+        },
+        "report_checksum": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Report Checksum",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "strategy_id": {
+          "const": "buy-and-hold-btc-usd",
+          "title": "Strategy Id",
+          "type": "string"
+        },
+        "strategy_version_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Strategy Version Hash",
+          "type": "string"
+        },
+        "synthetic_only": {
+          "const": true,
+          "default": true,
+          "title": "Synthetic Only",
+          "type": "boolean"
+        },
+        "warning": {
+          "const": "Synthetic offline research only; not investment advice or promotion evidence.",
+          "default": "Synthetic offline research only; not investment advice or promotion evidence.",
+          "title": "Warning",
+          "type": "string"
+        }
+      },
+      "required": [
+        "strategy_id",
+        "strategy_version_hash",
+        "dataset_manifest_checksum",
+        "output_events",
+        "planned_orders",
+        "fills",
+        "conserved",
+        "first_decision_time_utc",
+        "first_fill_time_utc",
+        "holding_at_end",
+        "backtest_result_checksum",
+        "report_checksum"
+      ],
+      "title": "StrategySyntheticReport",
+      "type": "object"
+    },
+    "TargetPosition": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_class": {
+          "$ref": "#/$defs/AssetClass"
+        },
+        "causation_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Causation Id"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "event_id": {
+          "format": "uuid",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_time_utc": {
+          "format": "date-time",
+          "title": "Event Time Utc",
+          "type": "string"
+        },
+        "event_type": {
+          "const": "TargetPosition",
+          "default": "TargetPosition",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "ingest_time_utc": {
+          "format": "date-time",
+          "title": "Ingest Time Utc",
+          "type": "string"
+        },
+        "payload_checksum": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Payload Checksum",
+          "type": "string"
+        },
+        "rationale": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        },
+        "run_id": {
+          "format": "uuid",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sequence_number": {
+          "minimum": 0,
+          "title": "Sequence Number",
+          "type": "integer"
+        },
+        "source": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "symbol": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Symbol",
+          "type": "string"
+        },
+        "target_quantity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Target Quantity"
+        },
+        "venue": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Venue",
+          "type": "string"
+        }
+      },
+      "required": [
+        "event_id",
+        "source",
+        "asset_class",
+        "venue",
+        "symbol",
+        "event_time_utc",
+        "ingest_time_utc",
+        "sequence_number",
+        "correlation_id",
+        "run_id",
+        "payload_checksum",
+        "target_quantity",
+        "rationale"
+      ],
+      "title": "TargetPosition",
+      "type": "object"
+    },
+    "TradeProposal": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_class": {
+          "$ref": "#/$defs/AssetClass"
+        },
+        "causation_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Causation Id"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "event_id": {
+          "format": "uuid",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_time_utc": {
+          "format": "date-time",
+          "title": "Event Time Utc",
+          "type": "string"
+        },
+        "event_type": {
+          "const": "TradeProposal",
+          "default": "TradeProposal",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "ingest_time_utc": {
+          "format": "date-time",
+          "title": "Ingest Time Utc",
+          "type": "string"
+        },
+        "limit_price": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                  "type": "string"
+                }
+              ],
+              "ge": 0
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Limit Price"
+        },
+        "order_type": {
+          "$ref": "#/$defs/OrderType"
+        },
+        "payload_checksum": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Payload Checksum",
+          "type": "string"
+        },
+        "quantity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "gt": 0,
+          "title": "Quantity"
+        },
+        "run_id": {
+          "format": "uuid",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sequence_number": {
+          "minimum": 0,
+          "title": "Sequence Number",
+          "type": "integer"
+        },
+        "side": {
+          "$ref": "#/$defs/Side"
+        },
+        "source": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "symbol": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Symbol",
+          "type": "string"
+        },
+        "venue": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Venue",
+          "type": "string"
+        }
+      },
+      "required": [
+        "event_id",
+        "source",
+        "asset_class",
+        "venue",
+        "symbol",
+        "event_time_utc",
+        "ingest_time_utc",
+        "sequence_number",
+        "correlation_id",
+        "run_id",
+        "payload_checksum",
+        "side",
+        "order_type",
+        "quantity"
+      ],
+      "title": "TradeProposal",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "artifact_checksum": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Artifact Checksum",
+      "type": "string"
+    },
+    "backtest": {
+      "$ref": "#/$defs/BacktestArtifact"
+    },
+    "dataset_manifest_checksum": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Dataset Manifest Checksum",
+      "type": "string"
+    },
+    "fixture_file_sha256": {
+      "const": "babd3917bdafbe86cb840981be2d64a2c51a498f766a0aeb385a596e70aad578",
+      "title": "Fixture File Sha256",
+      "type": "string"
+    },
+    "outputs": {
+      "items": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/Signal"
+          },
+          {
+            "$ref": "#/$defs/TargetPosition"
+          },
+          {
+            "$ref": "#/$defs/TradeProposal"
+          }
+        ]
+      },
+      "title": "Outputs",
+      "type": "array"
+    },
+    "parameters": {
+      "$ref": "#/$defs/BuyAndHoldParameters"
+    },
+    "plan": {
+      "$ref": "#/$defs/BacktestPlan"
+    },
+    "report": {
+      "$ref": "#/$defs/StrategySyntheticReport"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "specification": {
+      "$ref": "#/$defs/StrategySpecification"
+    },
+    "strategy_version_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Strategy Version Hash",
+      "type": "string"
+    },
+    "synthetic_only": {
+      "const": true,
+      "default": true,
+      "title": "Synthetic Only",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "fixture_file_sha256",
+    "specification",
+    "parameters",
+    "strategy_version_hash",
+    "dataset_manifest_checksum",
+    "outputs",
+    "plan",
+    "backtest",
+    "report",
+    "artifact_checksum"
+  ],
+  "title": "StrategyRunArtifact",
+  "type": "object"
+}

@@ -20,13 +20,14 @@ TradeGuard 不以「保證獲利」為產品目標，而是提供一套更可靠
 
 ## **專案狀態**
 
-DETERMINISTIC BACKTESTER IMPLEMENTED / NOT TRADABLE
+R4 STRATEGY CANDIDATE / R3 CURRENT / NOT TRADABLE
 
 目前 GitHub 公開 `main` 的穩定停止點是 **R3 — Fixed-order deterministic
 simulation**：除 repository bootstrap、核心資料合約、離線資料基礎與受限
 股票／加密貨幣公開資料 adapter 外，亦包含純離線 deterministic
 backtest/replay、Decimal 帳本與保守成交模型。R3 人工 promotion 已於
-2026-08-11 記錄；connected qualification 與策略皆未完成。
+2026-08-11 記錄。本分支另包含等待 exact-head 人工審閱的 R4 candidate；
+connected qualification 仍未執行。
 
 * 已建立 typed Python package、FastAPI health endpoints、worker、mock market-data、deterministic paper broker skeleton 與唯讀 dashboard placeholder。
 * 已建立鎖定依賴、測試、靜態檢查、GitHub Actions、Dockerfile、Docker Compose 與 bootstrap evidence 骨架。
@@ -35,7 +36,8 @@ backtest/replay、Decimal 帳本與保守成交模型。R3 人工 promotion 已�
 * 已建立受限 Twelve Data 股票資料 adapter；connected session 仍待人工審閱，promotion 為 `BLOCKED`。
 * 已建立僅限公開、無驗證、BTC-USD spot 的 Coinbase Advanced Trade REST/WebSocket adapter；connected smoke 未 opt in，promotion 為 `BLOCKED`。
 * PR #3 已合併 fixed-order deterministic backtest/replay、Decimal cash-only/long-only 帳本、保守成交、分市場成本、公司行動、守恆檢查與 checksummed artifact；R3 promotion 為 `PASS`。
-* 尚未提供任何策略、投資建議或可供投資判斷的驗證結果。
+* R4 candidate 僅加入 trusted-local、synthetic BTC-USD buy-and-hold baseline 與離線 strategy→R3 result 路徑；狀態為 `NOT_EVALUATED`，尚未 promotion。
+* 尚未提供策略驗證、投資建議或可供投資判斷的結果。
 * 尚未連接正式券商、交易所帳戶或外部市場資料服務。
 * 執行環境只接受 `research`、`backtest`、`replay`、`paper`、`shadow`；其他值會 fail closed。
 * `shadow` 只代表允許的唯讀設計上限，不表示目前已有帳戶連線。
@@ -53,6 +55,8 @@ backtest/replay、Decimal 帳本與保守成交模型。R3 人工 promotion 已�
 * [`docs/data/data-foundation.md`](docs/data/data-foundation.md)：資料模型、manifest、lineage 與品質閘門。
 * [`docs/adapters/crypto-market-data.md`](docs/adapters/crypto-market-data.md)：公開加密貨幣 adapter、序號與重連安全規格。
 * [`docs/backtest/deterministic-engine.md`](docs/backtest/deterministic-engine.md)：R3 的排序、帳本、成交、成本與限制。
+* [`docs/strategies/strategy-contract.md`](docs/strategies/strategy-contract.md)：R4 trusted-local strategy 邊界與 fail-closed runner。
+* [`docs/strategies/buy-and-hold-btc-usd.md`](docs/strategies/buy-and-hold-btc-usd.md)：唯一 synthetic baseline 的凍結規格與限制。
 * [`docs/release/r3-promotion.md`](docs/release/r3-promotion.md)：R3 人工核准、exact head、證據、條件與 rollback 紀錄。
 * [`docs/release/connected-release-v1.md`](docs/release/connected-release-v1.md)：Connected Release v1 合約。
 * [`docs/status/implementation-matrix.md`](docs/status/implementation-matrix.md)：逐項實作狀態與缺口。
@@ -700,6 +704,8 @@ make prompt5-evidence
 
 make prompt6-evidence
 
+make r4-evidence
+
 make dev-up
 
 make dev-down
@@ -998,7 +1004,7 @@ stop 都是可以長期維持的產品邊界：
 * R1：可重現的離線資料基礎。
 * R2：受限市場資料 contracts。
 * R3：fixed-order deterministic simulation（目前公開 `main`）。
-* R4：單一策略垂直切片（唯一 `NEXT`，尚未開始）。
+* R4：單一策略垂直切片（candidate 已實作，仍等待 exact-head 人工 gate）。
 * R5：基本比較與樣本外驗證。
 * R6：最小獨立風控。
 * R7：可重現研究報告與 evidence。
@@ -1011,8 +1017,9 @@ stop 都是可以長期維持的產品邊界：
 可擴張到哪一級則以
 [`docs/roadmap/scope-ladder.md`](docs/roadmap/scope-ladder.md) 為準。
 
-目前唯一 `NEXT` 是獨立的 R4 任務：可信任的 `StrategyProtocol` 加上一個市場
-的一個透明 buy-and-hold baseline。本次 R3 promotion 不授權開始該任務。
+目前唯一立即 promotion 決策是 R4 candidate 的 exact-head 人工審閱。它只包含
+可信任的 `StrategyProtocol`、synthetic BTC-USD buy-and-hold baseline 與
+strategy→R3 result 路徑；R5、connected qualification 與 R4 promotion 均未授權。
 
 ---
 
