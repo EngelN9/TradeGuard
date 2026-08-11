@@ -10,6 +10,9 @@ Assessment base: `65d3c6f8499a189685c7c21e722c8ff6bf498cdb`
 
 Governance amendment: `2026-08-08`
 
+R3 promotion: `PASS` on `2026-08-11`; see
+[`r3-promotion.md`](r3-promotion.md).
+
 This remains the accepted aggregate contract for the later **R10 — Connected
 Research Release**. It is no longer an instruction to implement every section
 as one linear v0.1.0 batch. The normative stage caps, stable stops, and current
@@ -484,7 +487,7 @@ no-secret, fail-closed, Decimal, UTC, test, evidence, and rollback requirements.
 
 ### TG-006 — Deterministic backtester and ledger
 
-Implementation status: `IMPLEMENTED / HUMAN PROMOTION REVIEW REQUIRED`.
+Implementation status: `IMPLEMENTED / PROMOTED AS RELEASE STOP R3`.
 
 - Purpose: produce conservative reproducible simulations.
 - Scope: event loop, Decimal ledger, orders/fills, separate market costs,
@@ -498,7 +501,8 @@ Implementation status: `IMPLEMENTED / HUMAN PROMOTION REVIEW REQUIRED`.
 - Evidence: ledgers, manifests, deterministic checksums.
 - Security/rollback: conservative defaults; revert model version while retaining
   old evidence.
-- Promotion gate: Prompt 6 plus human ledger/fill/look-ahead review.
+- Promotion gate: `PASS` on 2026-08-11 after exact-head checks and human
+  ledger/fill/look-ahead review; see the R3 promotion record.
 
 ### TG-007 — Strategy protocol and trusted baselines
 
@@ -722,6 +726,6 @@ The contract exits Prompt 0 because:
   was introduced by Prompt 0.
 
 The original first issue was TG-001 and is complete. Current work must follow
-the release ladder. The only immediate `NEXT` gate is R3 human review of draft
-PR #3; the first later implementation slice, only after R3 promotion, is the R4
-strategy protocol plus one transparent baseline for one market.
+the release ladder. R3 is the current stable stop. The only immediate `NEXT`
+slice is a future, separately authorized R4 strategy protocol plus one
+transparent baseline for one market.

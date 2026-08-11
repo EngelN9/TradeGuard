@@ -28,7 +28,7 @@ prompt numbers are delivery references only; they do not define current scope.
 - [`data/data-foundation.md`](data/data-foundation.md): canonical data,
   point-in-time metadata, manifests, lineage, and quality.
 - [`backtest/deterministic-engine.md`](backtest/deterministic-engine.md):
-  fixed-order deterministic backtest/replay candidate.
+  promoted R3 fixed-order deterministic backtest/replay contract.
 - [`adapters/equity-market-data.md`](adapters/equity-market-data.md): restricted
   Twelve Data equity adapter.
 - [`adapters/crypto-market-data.md`](adapters/crypto-market-data.md): restricted
@@ -42,6 +42,8 @@ prompt numbers are delivery references only; they do not define current scope.
 - [`release/connected-release-v1.md`](release/connected-release-v1.md): approved
   aggregate connected-release contract, now governed as a later ladder stop and
   not as the next all-or-nothing implementation batch.
+- [`release/r3-promotion.md`](release/r3-promotion.md): recorded human R3
+  promotion decision, exact reviewed head, evidence, conditions, and rollback.
 - [`history/prompt-migration.md`](history/prompt-migration.md): historical
   Prompt 0–17 mapping and why the root prompt program was retired.
 

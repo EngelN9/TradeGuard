@@ -1,9 +1,8 @@
 # Deterministic backtest and replay engine
 
-Status: `IMPLEMENTED / HUMAN PROMOTION REVIEW REQUIRED`
+Status: `IMPLEMENTED / PROMOTED R3 / NOT TRADABLE`
 
-Draft PR #3 provides an offline, fixed-order simulation engine as the R3
-candidate. It is a
+Release Stop R3 provides an offline, fixed-order simulation engine. It is a
 research component, not a strategy, broker, account connector, or indication
 that any simulated result can be achieved in a real market.
 
@@ -124,18 +123,19 @@ completion-time ordering and prefilled-time rejection in addition to
 deterministic checksum, look-ahead, partial-fill, split, maintenance and
 conservation evidence.
 
-## Known limitations and human gate
+## Known limitations and promotion record
 
 - Only bar-based market and limit research fills are modeled.
 - Queue position, order-book depth, FX conversion and borrowing are absent.
 - The ledger is single-base-currency, cash-only and long-only.
-- No strategy, benchmark, performance report or promotion decision is included.
+- No strategy, benchmark, performance report, or automatic promotion logic is included.
 - A bar model cannot establish real-world fillability.
 
-Before R3 promotion, a human reviewer must inspect the ordering contract, same-close
-rejection, partial-fill behavior, cost assumptions, split accounting,
-maintenance rejection and conservation evidence. The R3 candidate remains unpromoted
-until that review is explicitly recorded.
+The required human review of ordering, same-close rejection, partial-fill
+behavior, cost assumptions, split accounting, maintenance rejection and
+conservation evidence was recorded as `PASS` on 2026-08-11. The exact reviewed
+head, evidence, conditions and rollback are in
+[`docs/release/r3-promotion.md`](../release/r3-promotion.md).
 
 Rollback is a normal revert of the R3 model version. Previously generated
 artifacts and checksums must remain available for audit and must not be rewritten.
