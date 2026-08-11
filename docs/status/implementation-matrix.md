@@ -1,16 +1,15 @@
 # TradeGuard implementation and roadmap matrix
 
-Assessment date: `2026-08-09`
+Assessment date: `2026-08-11`
 
 Public repository: `https://github.com/EngelN9/TradeGuard`
 
-Public stable base: `main@4999a300319d9f0580540fdf0a2cc8d6c9e61bfa`
+Public stable base: `main` at R3; capability promotion merge
+`b92c8e9e8f7943c063d7adb9e55c791a6108d9e0`
 
-Review candidate: Draft PR #3 on `codex/prompt-6-deterministic-backtester`;
-the reviewed head SHA and current checks are recorded by GitHub, not duplicated
-as a mutable value here.
+Promotion record: [`TG-R3-PROMOTION-2026-08-11`](../release/r3-promotion.md)
 
-Overall candidate status: `DETERMINISTIC BACKTESTER IMPLEMENTED / NOT TRADABLE`
+Overall current status: `DETERMINISTIC BACKTESTER IMPLEMENTED / NOT TRADABLE`
 
 ## How to read this matrix
 
@@ -25,11 +24,11 @@ a named human/external qualification is unmet. Future rows are not commitments.
 
 ## Repository reality
 
-- `main` is the stable **R2 — Restricted market-data contracts** stop.
-- Draft PR #3 is the **R3 candidate**, not promoted `main`. Automated checks
-  must be green at the exact reviewed head, but they are not human promotion
-  approval; current check status is maintained on the PR.
-- The remediated R3 candidate's fresh local evidence is 236 offline tests
+- `main` is the stable **R3 — Fixed-order deterministic simulation** stop.
+- PR #3 was reviewed at exact head `aee037f`, received a recorded human `PASS`,
+  and was squash-merged as `b92c8e9`. Automated checks supported but did not
+  replace that human decision.
+- The promoted R3 capability's fresh local evidence is 236 offline tests
   passing, two connected tests deselected, and 90.70% total coverage (93.42%
   line coverage and 78.45% branch coverage). The
   bundle includes direct regressions for manifest binding, aggregate
@@ -53,11 +52,11 @@ a named human/external qualification is unmet. Future rows are not commitments.
 | 7 | Crypto market data | `IMPLEMENTED` | `CURRENT` | Restricted BTC-USD Coinbase REST/WebSocket offline/replay contracts, ADR 0003 | Connected use is separately `BLOCKED`; no private/user channels |
 | 8 | Data quality | `IMPLEMENTED` | `CURRENT` | Shared/equity/crypto status codes, synthetic gates, quarantine enforcement | Provider calibration/cross-source comparison deferred |
 | 9 | Dataset/version/lineage | `IMPLEMENTED` | `CURRENT` | `DatasetManifest`, acyclic transformations, local content address/tamper tests | No searchable/persistent catalog or retention service |
-| 10 | Backtester | `IMPLEMENTED` on PR #3 | `NEXT` | Five-key timeline, fixed-order backtest/replay, result-bound reproducible run identity plus complete-manifest checksum, engine-owned completion time | Human R3 promotion review required before merge or strategy work |
-| 11 | Execution/fill models | `IMPLEMENTED` on PR #3 | `NEXT` | Conservative future-bar market/limit, aggregate bar participation, latency, partial/non-fill, rejection | Human assumptions/same-close review required; no order book/queue claim |
-| 12 | Portfolio ledger | `IMPLEMENTED` on PR #3 | `NEXT` | Decimal cash/long-only ledger, PnL/action finalization, idempotency, corporate actions, conservation | Human conservation/split review required; single base currency only |
-| 13 | Strategy interface | `MISSING` | `LATER` | Domain output event types exist; no `strategies` implementation | First post-R3 slice: protocol plus one consumer, no speculative registry |
-| 14 | Baseline strategies | `MISSING` | `LATER` | None | One market/one buy-and-hold baseline first; six-strategy batch removed |
+| 10 | Backtester | `IMPLEMENTED` | `CURRENT` | Five-key timeline, fixed-order backtest/replay, result-bound reproducible run identity plus complete-manifest checksum, engine-owned completion time | R3 bar-model limitations remain; no strategy or real-world fillability claim |
+| 11 | Execution/fill models | `IMPLEMENTED` | `CURRENT` | Conservative future-bar market/limit, aggregate bar participation, latency, partial/non-fill, rejection | No order-book/queue claim; synthetic costs require later calibration for stronger claims |
+| 12 | Portfolio ledger | `IMPLEMENTED` | `CURRENT` | Decimal cash/long-only ledger, PnL/action finalization, idempotency, corporate actions, conservation | Single base currency only; no leverage, borrowing, shorting, or custody |
+| 13 | Strategy interface | `MISSING` | `NEXT` | Domain output event types exist; no `strategies` implementation | R4: trusted-local protocol plus one immediate consumer, no speculative registry |
+| 14 | Baseline strategies | `MISSING` | `NEXT` | None | R4: one market/one transparent buy-and-hold baseline; six-strategy batch removed |
 | 15 | Strategy validation | `MISSING` | `LATER` | Data eligibility gate is not strategy validation | Begin only after one baseline: benchmark + one fixed OOS split |
 | 16 | Walk-forward/OOS | `MISSING` | `LATER` | None | Fixed split precedes rolling/expanding schedules |
 | 17 | Overfitting/leakage controls | `PARTIAL` | `LATER` | Backtest same-close/look-ahead rejection exists | Strategy/OOS contamination and multiple-testing controls await validation slice |
@@ -84,18 +83,19 @@ a named human/external qualification is unmet. Future rows are not commitments.
 
 ## Immediate `NEXT` gate
 
-Only R3 human promotion review is `NEXT`:
+Only the R4 one-strategy vertical slice is `NEXT`:
 
-1. verify event ordering and deterministic checksum scope;
-2. verify cash/asset conservation and duplicate-fill idempotency;
-3. verify same-close rejection and future-knowable bars;
-4. review market/limit, latency, partial/non-fill, precision/notional, session,
-   halt, and maintenance behavior;
-5. review separate equity/crypto costs and synthetic assumptions;
-6. review split/dividend/symbol/delisting accounting and evidence;
-7. record `PASS`, `FAIL`, or `BLOCKED` and a maintainer merge decision.
+1. select one exact market and immutable synthetic fixture in a separately
+   approved task;
+2. add a trusted-local `StrategyProtocol` with one immediate consumer and no
+   provider, credential, risk-config, mutable-evidence, or order access;
+3. add one transparent buy-and-hold baseline for that market with a frozen
+   specification and version hash;
+4. enforce declared-data and unsupported-market rejection;
+5. prove a deterministic strategy-to-order-to-R3-result path and clearly label
+   all evidence synthetic and non-promotional.
 
-Strategy code is not `NEXT` until this gate passes and the stable base changes.
+This matrix records the next slice only; it does not authorize its execution.
 
 ## Blocker register
 
@@ -103,7 +103,6 @@ Strategy code is not `NEXT` until this gate passes and the stable base changes.
 | --- | --- | --- | --- |
 | Twelve Data connected AAPL daily qualification | `BLOCKED` | Approved exact XNAS/XNGS session registry, local data-only credential, one bounded `PASS`, redacted evidence review | Data/license owner and maintainer |
 | Coinbase public connected qualification | `BLOCKED` | Terms/jurisdiction recheck, one bounded public REST/WebSocket `PASS`, redacted evidence review | Data/license owner and maintainer |
-| PR #3 R3 promotion | `NEXT` (human gate not a technical blocker) | Review checklist above and explicit decision | Maintainer/research reviewer |
 | Any account integration | `BLOCKED` | Internal paper/reconciliation contracts plus adapter/permission/terms approval | Security and risk owners |
 | Connected Research Release/tag | `BLOCKED` | R10 non-waivable gates, human GO, verified candidate, explicit exact publish authorization | Maintainer/release owner |
 
@@ -124,7 +123,7 @@ Strategy code is not `NEXT` until this gate passes and the stable base changes.
 - Synthetic data fixtures: `tests/fixtures/market_data/`
 - Adapter fixtures: `tests/fixtures/adapters/`
 - Stage evidence: `artifacts/evidence/bootstrap/`, `prompt2/`, `prompt3/`,
-  `prompt4/`, `prompt5/`, and PR #3's `prompt6/`
+  `prompt4/`, `prompt5/`, and `prompt6/`
 - Durable contracts and human gates: `docs/architecture/`, `docs/data/`,
   `docs/backtest/`, `docs/adapters/`, and `docs/adr/`
 

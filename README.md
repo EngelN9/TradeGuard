@@ -22,12 +22,11 @@ TradeGuard 不以「保證獲利」為產品目標，而是提供一套更可靠
 
 DETERMINISTIC BACKTESTER IMPLEMENTED / NOT TRADABLE
 
-目前 GitHub 公開 `main` 的穩定停止點是 **R2 — Restricted market-data
-contracts**：已完成 repository bootstrap、核心資料合約、離線資料基礎，
-以及受限股票／加密貨幣公開資料 adapter。Draft PR #3 另包含離線
-fixed-order deterministic backtest/replay，屬於 **R3 候選**；其 current head
-與自動檢查狀態以 GitHub PR 為準，且人工 promotion 尚未完成，因此不能視為
-已核准的公開穩定能力。connected qualification 與策略皆未完成。
+目前 GitHub 公開 `main` 的穩定停止點是 **R3 — Fixed-order deterministic
+simulation**：除 repository bootstrap、核心資料合約、離線資料基礎與受限
+股票／加密貨幣公開資料 adapter 外，亦包含純離線 deterministic
+backtest/replay、Decimal 帳本與保守成交模型。R3 人工 promotion 已於
+2026-08-11 記錄；connected qualification 與策略皆未完成。
 
 * 已建立 typed Python package、FastAPI health endpoints、worker、mock market-data、deterministic paper broker skeleton 與唯讀 dashboard placeholder。
 * 已建立鎖定依賴、測試、靜態檢查、GitHub Actions、Dockerfile、Docker Compose 與 bootstrap evidence 骨架。
@@ -35,7 +34,7 @@ fixed-order deterministic backtest/replay，屬於 **R3 候選**；其 current h
 * 已建立 canonical equity/crypto records、point-in-time metadata、DatasetManifest、content-addressed storage、品質閘門、synthetic fixtures、lineage 與離線 data CLI。
 * 已建立受限 Twelve Data 股票資料 adapter；connected session 仍待人工審閱，promotion 為 `BLOCKED`。
 * 已建立僅限公開、無驗證、BTC-USD spot 的 Coinbase Advanced Trade REST/WebSocket adapter；connected smoke 未 opt in，promotion 為 `BLOCKED`。
-* PR #3 已建立 fixed-order deterministic backtest/replay、Decimal cash-only/long-only 帳本、保守成交、分市場成本、公司行動、守恆檢查與 checksummed artifact；R3 promotion 仍待人工審閱與維護者合併決定。
+* PR #3 已合併 fixed-order deterministic backtest/replay、Decimal cash-only/long-only 帳本、保守成交、分市場成本、公司行動、守恆檢查與 checksummed artifact；R3 promotion 為 `PASS`。
 * 尚未提供任何策略、投資建議或可供投資判斷的驗證結果。
 * 尚未連接正式券商、交易所帳戶或外部市場資料服務。
 * 執行環境只接受 `research`、`backtest`、`replay`、`paper`、`shadow`；其他值會 fail closed。
@@ -53,7 +52,8 @@ fixed-order deterministic backtest/replay，屬於 **R3 候選**；其 current h
 * [`CONTRIBUTING.md`](CONTRIBUTING.md)：開發、測試與 Pull Request 規範。
 * [`docs/data/data-foundation.md`](docs/data/data-foundation.md)：資料模型、manifest、lineage 與品質閘門。
 * [`docs/adapters/crypto-market-data.md`](docs/adapters/crypto-market-data.md)：公開加密貨幣 adapter、序號與重連安全規格。
-* [`docs/backtest/deterministic-engine.md`](docs/backtest/deterministic-engine.md)：R3 候選的排序、帳本、成交、成本與人工審查規格。
+* [`docs/backtest/deterministic-engine.md`](docs/backtest/deterministic-engine.md)：R3 的排序、帳本、成交、成本與限制。
+* [`docs/release/r3-promotion.md`](docs/release/r3-promotion.md)：R3 人工核准、exact head、證據、條件與 rollback 紀錄。
 * [`docs/release/connected-release-v1.md`](docs/release/connected-release-v1.md)：Connected Release v1 合約。
 * [`docs/status/implementation-matrix.md`](docs/status/implementation-matrix.md)：逐項實作狀態與缺口。
 
@@ -996,9 +996,9 @@ stop 都是可以長期維持的產品邊界：
 
 * R0：治理與安全基線。
 * R1：可重現的離線資料基礎。
-* R2：受限市場資料 contracts（目前公開 `main`）。
-* R3：fixed-order deterministic simulation（目前 draft PR 候選）。
-* R4：單一策略垂直切片。
+* R2：受限市場資料 contracts。
+* R3：fixed-order deterministic simulation（目前公開 `main`）。
+* R4：單一策略垂直切片（唯一 `NEXT`，尚未開始）。
 * R5：基本比較與樣本外驗證。
 * R6：最小獨立風控。
 * R7：可重現研究報告與 evidence。
@@ -1011,16 +1011,15 @@ stop 都是可以長期維持的產品邊界：
 可擴張到哪一級則以
 [`docs/roadmap/scope-ladder.md`](docs/roadmap/scope-ladder.md) 為準。
 
-目前唯一 `NEXT` 是 R3 人工 promotion review；在通過與合併決定前，不開始
-策略實作。
+目前唯一 `NEXT` 是獨立的 R4 任務：可信任的 `StrategyProtocol` 加上一個市場
+的一個透明 buy-and-hold baseline。本次 R3 promotion 不授權開始該任務。
 
 ---
 
 ## **貢獻方式**
 
-TradeGuard 尚在早期開發階段；公開 `main` 已有資料 adapter，draft PR #3
-另有離線 deterministic backtest/replay 核心候選，但尚無策略、正式帳戶
-連線或交易能力。
+TradeGuard 尚在早期開發階段；公開 `main` 已有資料 adapter 與離線
+deterministic backtest/replay 核心，但尚無策略、正式帳戶連線或交易能力。
 
 提交變更前，請先閱讀：
 

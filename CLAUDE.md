@@ -51,7 +51,7 @@ $env:PYTHONPATH = 'src'
 $env:TG_PYTEST_TMP = "$env:TEMP\tg-pytest-tmp"
 ```
 
-Verified commands, last confirmed green on 2026-08-09
+Verified commands, last confirmed green on 2026-08-11
 (236 passed, 2 deselected, 90.70% coverage):
 
 | Purpose | Command |
@@ -68,7 +68,7 @@ Verified commands, last confirmed green on 2026-08-09
 | Web type/lint check | `npm run check --prefix web` |
 | Web tests | `npm test --prefix web` |
 | Schema export | `.venv\Scripts\python.exe scripts/export_schemas.py` |
-| R3 candidate evidence | `.venv\Scripts\python.exe scripts/collect_prompt6_evidence.py` |
+| R3 evidence | `.venv\Scripts\python.exe scripts/collect_prompt6_evidence.py` |
 
 Notes:
 

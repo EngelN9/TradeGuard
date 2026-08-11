@@ -55,12 +55,11 @@ TradeGuard 不會因開發速度、操作便利性或績效展示而降低安全
 
 DETERMINISTIC BACKTESTER IMPLEMENTED / NOT TRADABLE
 
-公開 `main` 的穩定停止點為 R2：已完成 repository bootstrap、核心資料合約、
-離線資料基礎，以及受限股票／加密貨幣市場資料 adapter 的離線 contracts。
-Draft PR #3 另包含純離線 fixed-order deterministic backtest/replay 核心；其
-current head 與自動檢查狀態以 GitHub PR 為準，但 R3 人工 promotion 尚未完成。
-兩個 connected qualification 皆未 opt in，也尚未加入策略。系統沒有正式
-下單、提款或轉帳能力。
+公開 `main` 的穩定停止點為 R3：已完成 repository bootstrap、核心資料合約、
+離線資料基礎、受限股票／加密貨幣市場資料 adapter 的離線 contracts，以及
+純離線 fixed-order deterministic backtest/replay 核心。R3 人工 promotion
+已於 2026-08-11 記錄。兩個 connected qualification 皆未 opt in，也尚未
+加入策略。系統沒有正式下單、提款或轉帳能力。
 
 在第一個正式版本發布前，安全修正原則上只會套用至預設分支：
 
