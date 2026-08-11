@@ -1,0 +1,107 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "asset_class": {
+      "enum": [
+        "equity",
+        "crypto"
+      ],
+      "title": "Asset Class",
+      "type": "string"
+    },
+    "average_cost": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "ge": 0,
+      "title": "Average Cost"
+    },
+    "event_time_utc": {
+      "format": "date-time",
+      "title": "Event Time Utc",
+      "type": "string"
+    },
+    "mark_price": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "ge": 0,
+      "title": "Mark Price"
+    },
+    "market_value": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "ge": 0,
+      "title": "Market Value"
+    },
+    "quantity": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "ge": 0,
+      "title": "Quantity"
+    },
+    "symbol": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Symbol",
+      "type": "string"
+    },
+    "unrealized_pnl": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "title": "Unrealized Pnl"
+    },
+    "venue": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Venue",
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_time_utc",
+    "asset_class",
+    "venue",
+    "symbol",
+    "quantity",
+    "average_cost",
+    "mark_price",
+    "market_value",
+    "unrealized_pnl"
+  ],
+  "title": "PositionLedgerEntry",
+  "type": "object"
+}

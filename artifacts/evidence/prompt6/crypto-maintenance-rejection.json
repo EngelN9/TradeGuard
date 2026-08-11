@@ -1,0 +1,6 @@
+{
+  "admitted_to_backtest": false,
+  "dataset_quality_status": "FAIL",
+  "rejection_reason": "FAIL datasets cannot enter validation evidence",
+  "synthetic_only": true
+}

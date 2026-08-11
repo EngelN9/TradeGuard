@@ -38,8 +38,9 @@ artifacts/evidence/prompt4/
 reports/generated/
 *.log
 
-# Editor / OS
+# Editor / OS / agent tooling
 .idea/
 .vscode/
+.claude/settings.local.json
 .DS_Store
 Thumbs.db

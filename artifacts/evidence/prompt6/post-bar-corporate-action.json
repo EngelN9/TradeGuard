@@ -1,0 +1,9 @@
+{
+  "cash_delta": "20",
+  "conserved": true,
+  "ending_cash": "99007.475",
+  "final_pnl_cash": "99007.475",
+  "finalized": true,
+  "schema_version": "1.0.0",
+  "synthetic_only": true
+}

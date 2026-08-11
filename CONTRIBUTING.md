@@ -5,8 +5,9 @@ security, risk controls, and the non-live v0.1.0 boundary.
 
 ## Before changing code
 
-1. Read `AGENTS.md`, `README.md`, `SECURITY.md`, the relevant ADRs, and any
-   narrower `AGENTS.md`.
+1. Read `AGENTS.md`, `docs/README.md`, the current implementation/scope/release
+   ladders, `README.md`, `SECURITY.md`, the relevant ADRs, and any narrower
+   `AGENTS.md`.
 2. Work on a branch; do not commit directly to `main`.
 3. State the objective, assumptions, expected files, validation, risk impact,
    and rollback.
@@ -45,6 +46,34 @@ npm run check --prefix web
 npm test --prefix web
 npm run build --prefix web
 ```
+
+Without Make **and** without `uv`, call the project virtualenv directly. This
+assumes `.venv` already exists and has the project installed in editable mode.
+These commands are equivalent for validation, but they do not write the JUnit
+and coverage evidence that the Make targets produce under `artifacts/evidence/`:
+
+```powershell
+.venv\Scripts\ruff.exe format --check .
+.venv\Scripts\ruff.exe check .
+.venv\Scripts\mypy.exe
+.venv\Scripts\pytest.exe -m "not connected" --cov=tradeguard --cov-report=term-missing
+.venv\Scripts\python.exe scripts/validate_workflows.py
+.venv\Scripts\python.exe scripts/scan_secrets.py
+npm run check --prefix web
+npm test --prefix web
+```
+
+The historical Prompt 6 / current R3-candidate deterministic backtest evidence can be regenerated with
+`make prompt6-evidence` (or `uv run python scripts/collect_prompt6_evidence.py`).
+It must remain synthetic-only and must not be described as strategy performance
+or connected-market evidence.
+
+Historical Prompt numbers are delivery references, not automatic authority for
+the next change. Use `docs/ai/codex-task-template.md` (Codex) or
+`docs/ai/claude-code-task-template.md` (Claude Code) to define one bounded
+increment. Both bind the change to a domain stage cap in
+`docs/roadmap/scope-ladder.md` and a stable stop in
+`docs/roadmap/release-ladder.md`.
 
 Connected tests are never part of default CI. They require an explicit
 `TRADEGUARD_RUN_CONNECTED_TESTS=1`, the applicable accepted ADR, a reviewed

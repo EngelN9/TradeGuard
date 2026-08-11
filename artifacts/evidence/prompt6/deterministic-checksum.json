@@ -1,0 +1,9 @@
+{
+  "dataset_manifest_checksum": "559e0e669ff3ab7d6bf37aaa192c8cba69c253361e2b640209320f5ffb0da750",
+  "first_result_checksum": "1057128316b0a63c458483c728d47796ddabdfeb4cca03a34f588ae3a1c62099",
+  "identical": true,
+  "plan_checksum": "33aa6c64c22759e07b73423b9a9fe38586a74b705a9b7c68fcb0e1dcf2b0b919",
+  "schema_version": "1.0.0",
+  "second_result_checksum": "1057128316b0a63c458483c728d47796ddabdfeb4cca03a34f588ae3a1c62099",
+  "synthetic_only": true
+}
