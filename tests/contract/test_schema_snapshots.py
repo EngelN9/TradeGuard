@@ -150,3 +150,40 @@ def test_prompt6_schemas_expose_plan_artifact_and_ledgers() -> None:
     assert {"manifest", "result", "manifest_checksum"} <= set(artifact["properties"])
     result_schema = artifact["$defs"]["BacktestResult"]
     assert "run_identity" in result_schema["properties"]
+
+
+@pytest.mark.contract
+def test_r4_schemas_expose_bounded_strategy_contracts() -> None:
+    documents = schema_documents()
+
+    assert {
+        "strategies/specification.schema.json",
+        "strategies/buy-and-hold-parameters.schema.json",
+        "strategies/run-request.schema.json",
+        "strategies/synthetic-report.schema.json",
+        "strategies/run-artifact.schema.json",
+    } <= set(documents)
+    specification = documents["strategies/specification.schema.json"]
+    assert isinstance(specification, dict)
+    assert {
+        "strategy_id",
+        "strategy_version",
+        "supported_asset_classes",
+        "supported_markets",
+        "required_data",
+        "parameter_schema",
+        "warmup_bars",
+        "allowed_outputs",
+    } <= set(specification["properties"])
+    artifact = documents["strategies/run-artifact.schema.json"]
+    assert isinstance(artifact, dict)
+    assert {
+        "synthetic_only",
+        "specification",
+        "strategy_version_hash",
+        "outputs",
+        "plan",
+        "backtest",
+        "report",
+        "artifact_checksum",
+    } <= set(artifact["properties"])

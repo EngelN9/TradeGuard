@@ -1,0 +1,82 @@
+{
+  "$defs": {
+    "BuyAndHoldParameters": {
+      "additionalProperties": false,
+      "properties": {
+        "quantity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "0.1000",
+          "gt": 0,
+          "title": "Quantity"
+        }
+      },
+      "title": "BuyAndHoldParameters",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "base_currency": {
+      "const": "USD",
+      "default": "USD",
+      "title": "Base Currency",
+      "type": "string"
+    },
+    "initial_cash": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "default": "100000",
+      "gt": 0,
+      "title": "Initial Cash"
+    },
+    "parameters": {
+      "$ref": "#/$defs/BuyAndHoldParameters",
+      "default": {
+        "quantity": "0.1000"
+      }
+    },
+    "random_seed": {
+      "const": 0,
+      "default": 0,
+      "title": "Random Seed",
+      "type": "integer"
+    },
+    "run_id": {
+      "format": "uuid",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "strategy_id": {
+      "const": "buy-and-hold-btc-usd",
+      "default": "buy-and-hold-btc-usd",
+      "title": "Strategy Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "run_id"
+  ],
+  "title": "StrategyRunRequest",
+  "type": "object"
+}
