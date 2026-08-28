@@ -51,8 +51,8 @@ $env:PYTHONPATH = 'src'
 $env:TG_PYTEST_TMP = "$env:TEMP\tg-pytest-tmp"
 ```
 
-Verified commands, last confirmed green on 2026-08-11
-(236 passed, 2 deselected, 90.70% coverage):
+Verified commands, last confirmed green on 2026-08-20
+(253 passed, 2 deselected, 90.10% coverage):
 
 | Purpose | Command |
 | --- | --- |
