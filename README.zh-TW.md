@@ -53,8 +53,10 @@ uv run tradeguard data validate tests/fixtures/market_data/normal.json
 ```json
 {
   "dataset_id": "synthetic-normal",
+  "evaluated_at": "2024-01-02T00:06:00.000000Z",
   "issues": [],
   "manifest_checksum": "559e0e669ff3ab7d6bf37aaa192c8cba69c253361e2b640209320f5ffb0da750",
+  "schema_version": "1.0.0",
   "status": "PASS"
 }
 ```
