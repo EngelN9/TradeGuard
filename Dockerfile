@@ -7,7 +7,13 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     UV_LINK_MODE=copy \
     PATH="/app/.venv/bin:$PATH"
 
-RUN python -m pip install --no-cache-dir "uv==${UV_VERSION}" \
+RUN apt-get update \
+    && apt-get install --yes --no-install-recommends --only-upgrade \
+        libssl3t64 \
+        openssl \
+        openssl-provider-legacy \
+    && rm -rf /var/lib/apt/lists/* \
+    && python -m pip install --no-cache-dir "uv==${UV_VERSION}" \
     && groupadd --gid 10001 tradeguard \
     && useradd --uid 10001 --gid tradeguard --no-create-home --shell /usr/sbin/nologin tradeguard
 
