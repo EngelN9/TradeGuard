@@ -5,3 +5,24 @@
 *.yaml text eol=lf
 Dockerfile text eol=lf
 Makefile text eol=lf
+
+# Checksum-bound content must be byte-identical in every working tree.
+#
+# These paths are hashed with sha256 and compared against values committed in
+# evidence indexes, dataset manifests, and run manifests. Under the `* text=auto`
+# rule above, a checkout on Windows rewrites LF to CRLF, the bytes change, and
+# the recorded checksum no longer matches. That makes
+# `tests/contract/test_r4_evidence.py` and `tests/contract/test_prompt6_evidence.py`
+# fail on any fresh Windows clone while passing in Linux CI, and it makes a
+# regenerated evidence bundle record a `dependency_lock_hash` that no other
+# platform can reproduce.
+#
+# `-text` disables end-of-line conversion in both directions, so the working
+# tree stays byte-identical to the committed blob. These rules come last so
+# they override `* text=auto`.
+
+artifacts/evidence/** -text
+schemas/** -text
+tests/fixtures/** -text
+uv.lock -text
+web/package-lock.json -text
