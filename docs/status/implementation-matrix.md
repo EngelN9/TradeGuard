@@ -75,8 +75,8 @@ a named human/external qualification is unmet. Future rows are not commitments.
 | 30 | Alerting | `MISSING` | `LATER` | Severity/event concepts only | Local alert list first; no outbound channel |
 | 31 | Security | `PARTIAL` | `CURRENT` | `SECURITY.md`, private reporting, secret/workflow/dependency/container checks | Threat model for implemented surfaces remains a later bounded task |
 | 32 | Observability | `PARTIAL` | `LATER` | Liveness/readiness only | Structured logs/correlation/freshness first; no tracing platform |
-| 33 | Deployment | `PARTIAL` | `CURRENT` | Secure local Compose skeleton, non-root/read-only/cap-drop app containers | Local research stack only; persistence/backup deployment not qualified |
-| 34 | Release engineering | `PARTIAL` | `LATER` | Package/web/container build and checksums; no candidate/tag/release | Offline candidate precedes connected candidate; publication human-only |
+| 33 | Deployment | `PARTIAL` | `CURRENT` | Secure local Compose skeleton, non-root/read-only/cap-drop app containers | Local research stack only; persistence/backup deployment not qualified; base images are tag-pinned, not digest-pinned (Stage 2 `pinned artifacts`) |
+| 34 | Release engineering | `PARTIAL` | `LATER` | Package/web/container build and checksums; no candidate/tag/release | Offline candidate precedes connected candidate; publication human-only; no SBOM is generated |
 | 35 | Freqtrade integration | `MISSING` | `OPTIONAL` | A pre-existing external Docker image on the workstation is not TradeGuard capability | First allowed slice is one offline export importer after a fixture/use case |
 | 36 | Hummingbot integration | `MISSING` | `OPTIONAL` | None | Same: offline import precedes paper/read-only monitoring |
 | 37 | External strategy integrations | `MISSING` | `OPTIONAL` | None | No arbitrary packages; versioned offline import or trusted local adapter first |

@@ -1,6 +1,6 @@
 UV ?= uv
 
-.PHONY: setup format lint typecheck test test-unit test-property test-integration
+.PHONY: setup format lint typecheck audit test test-unit test-property test-integration
 .PHONY: test-contract test-replay test-e2e test-connected evidence dev-up dev-down
 .PHONY: api worker web build schemas data-fixtures prompt3-evidence prompt4-evidence
 .PHONY: prompt5-evidence prompt6-evidence test-coinbase-connected
@@ -21,6 +21,15 @@ lint:
 typecheck:
 	$(UV) run mypy
 	npm run check --prefix web
+
+# Mirrors the Dependency scans job in .github/workflows/security.yml.
+# Both steps reach the network. A network failure is BLOCKED, not a finding.
+# The container scan is CI-only; there is no local equivalent target.
+# `uv run` resolves from uv.lock, so this audits what the lockfile pins.
+# Calling .venv/Scripts/pip-audit directly does not; see CONTRIBUTING.md.
+audit:
+	$(UV) run pip-audit --skip-editable
+	npm audit --prefix web --omit=dev --audit-level=high
 
 test:
 	$(UV) run pytest -m "not connected" --cov=tradeguard --cov-report=term-missing --cov-report=xml:artifacts/evidence/bootstrap/tests/coverage.xml --junitxml=artifacts/evidence/bootstrap/tests/all.xml

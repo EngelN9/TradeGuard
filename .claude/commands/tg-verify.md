@@ -20,9 +20,28 @@ $env:TG_PYTEST_TMP = "$env:TEMP\tg-pytest-tmp"
 6. `.venv\Scripts\python.exe scripts/scan_secrets.py`
 7. `npm run check --prefix web`
 8. `npm test --prefix web`
+9. `.venv\Scripts\pip-audit.exe --skip-editable`
+10. `npm audit --prefix web --omit=dev --audit-level=high`
 
-Expected baseline as of 2026-08-09: 236 passed, 2 deselected, 90.70% coverage,
-2 web tests passing. A drop below that is a regression, not a new baseline.
+Expected baseline as of 2026-08-30 on `main` (R3): 236 passed, 2 deselected,
+90.70% coverage, 2 web tests passing. On the R4 candidate branch the same gate
+is 253 passed, 2 deselected, 90.10% coverage. Compare against the baseline for
+the branch under test; a drop below it is a regression, not a new baseline.
+
+Steps 9 and 10 mirror the `Dependency scans` CI job. Both reach the network:
+`pip-audit` queries PyPI and `npm audit` queries the npm registry. A network
+failure is `BLOCKED`, never `FAIL` and never `PASS` — it is not a vulnerability
+finding. The `Container scan` CI job (Trivy) has no local equivalent here;
+report it as `SKIP: CI-only`, never `PASS`.
+
+Step 9 is weaker than the CI check and must not be reported as equivalent. CI
+runs `uv sync --locked` first, so it audits exactly what `uv.lock` pins. Calling
+`.venv\Scripts\pip-audit.exe` directly audits whatever is currently installed in
+`.venv`, which can drift from `uv.lock` because `uv` is not on PATH in this
+working copy (§3.1). A green step 9 therefore means "the installed environment
+has no known vulnerability", not "the lockfile is clean". Only the CI job, or
+`make audit` where `uv` is available, proves the latter. When step 9 is green
+but `uv.lock` was changed in the same task, say so explicitly.
 
 If step 4 fails with `ModuleNotFoundError: No module named 'tradeguard'` or a
 `PermissionError` on `.pytest-tmp`, that is a known working-copy defect listed
