@@ -31,6 +31,7 @@ make setup
 make lint
 make typecheck
 make test
+make audit
 ```
 
 Without Make:
@@ -45,6 +46,8 @@ npm ci --prefix web
 npm run check --prefix web
 npm test --prefix web
 npm run build --prefix web
+uv run pip-audit --skip-editable
+npm audit --prefix web --omit=dev --audit-level=high
 ```
 
 Without Make **and** without `uv`, call the project virtualenv directly. This
@@ -61,7 +64,21 @@ and coverage evidence that the Make targets produce under `artifacts/evidence/`:
 .venv\Scripts\python.exe scripts/scan_secrets.py
 npm run check --prefix web
 npm test --prefix web
+.venv\Scripts\pip-audit.exe --skip-editable
+npm audit --prefix web --omit=dev --audit-level=high
 ```
+
+The two audit commands mirror the `Dependency scans` CI job and both reach the
+network. A network failure is `BLOCKED`, not a vulnerability finding. The
+`Container scan` CI job (Trivy on the built image) has no local equivalent in
+any of the three lists above; it runs in CI only.
+
+The `make` and `uv` forms run `uv run pip-audit`, which resolves the environment
+from `uv.lock` and therefore audits exactly what the lockfile pins. The third
+form calls `.venv\Scripts\pip-audit.exe` directly and audits whatever is
+installed in `.venv`, which can differ from `uv.lock`. If you use the third form
+and your change touches `uv.lock`, treat the result as indicative only; the CI
+`Dependency scans` job is the authority.
 
 The historical Prompt 6 / current R3-candidate deterministic backtest evidence can be regenerated with
 `make prompt6-evidence` (or `uv run python scripts/collect_prompt6_evidence.py`).

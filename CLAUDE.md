@@ -65,6 +65,8 @@ Verified commands, last confirmed green on 2026-08-11
 | Single marker | append `-m unit` (also `property`, `integration`, `contract`, `replay`) |
 | Workflow policy scan | `.venv\Scripts\python.exe scripts/validate_workflows.py` |
 | Secret scan | `.venv\Scripts\python.exe scripts/scan_secrets.py` |
+| Python dependency audit | `.venv\Scripts\pip-audit.exe --skip-editable` |
+| Dashboard dependency audit | `npm audit --prefix web --omit=dev --audit-level=high` |
 | Web type/lint check | `npm run check --prefix web` |
 | Web tests | `npm test --prefix web` |
 | Schema export | `.venv\Scripts\python.exe scripts/export_schemas.py` |
@@ -77,6 +79,13 @@ Notes:
   preferred, because they also write JUnit/coverage evidence under
   `artifacts/evidence/`.
 - Run `/tg-verify` to execute the full gate sequence in order.
+- `.venv\Scripts\pip-audit.exe` audits the **installed** `.venv`, not `uv.lock`.
+  Because `uv` is not on PATH here (§3.1), the two can drift, and a green result
+  does not prove the lockfile is clean. CI runs `uv sync --locked` first and does
+  prove it. Never report the local result as equivalent to the CI job.
+- The two dependency audits mirror the `Dependency scans` CI job and both reach
+  the network. A network failure is `BLOCKED`, not a vulnerability finding. The
+  `Container scan` CI job (Trivy) has no local equivalent; report it `SKIP`.
 - Report the exact observed result of every command. A command that was not run
   is `SKIP`, never `PASS`.
 

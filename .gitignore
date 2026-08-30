@@ -42,5 +42,7 @@ reports/generated/
 .idea/
 .vscode/
 .claude/settings.local.json
+# Machine-migrated copies of .claude/commands; the .claude files are the source.
+.agents/
 .DS_Store
 Thumbs.db
