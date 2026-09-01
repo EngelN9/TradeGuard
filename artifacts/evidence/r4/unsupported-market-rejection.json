@@ -1,0 +1,7 @@
+{
+  "accepted": false,
+  "candidate_market": "SYNTH-XNYS:ACME",
+  "rejection_code": "unsupported_market",
+  "schema_version": "1.0.0",
+  "synthetic_only": true
+}

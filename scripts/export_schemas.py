@@ -40,6 +40,13 @@ from tradeguard.experiments.manifest import (
     RunManifest,
     RunType,
 )
+from tradeguard.strategies.models import (
+    BuyAndHoldParameters,
+    StrategyRunArtifact,
+    StrategyRunRequest,
+    StrategySpecification,
+    StrategySyntheticReport,
+)
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_ROOT = REPOSITORY_ROOT / "schemas"
@@ -101,6 +108,13 @@ def schema_documents() -> dict[str, object]:
         "backtest/fill-ledger-entry.schema.json": FillLedgerEntry.model_json_schema(),
         "backtest/position-ledger-entry.schema.json": PositionLedgerEntry.model_json_schema(),
         "backtest/pnl-ledger-entry.schema.json": PnLLedgerEntry.model_json_schema(),
+        "strategies/specification.schema.json": StrategySpecification.model_json_schema(),
+        "strategies/buy-and-hold-parameters.schema.json": (
+            BuyAndHoldParameters.model_json_schema()
+        ),
+        "strategies/run-request.schema.json": StrategyRunRequest.model_json_schema(),
+        "strategies/synthetic-report.schema.json": StrategySyntheticReport.model_json_schema(),
+        "strategies/run-artifact.schema.json": StrategyRunArtifact.model_json_schema(),
         "adapters/equity-capabilities.schema.json": (EquityAdapterCapabilities.model_json_schema()),
         "adapters/equity-historical-bars-request.schema.json": (
             HistoricalBarsRequest.model_json_schema()

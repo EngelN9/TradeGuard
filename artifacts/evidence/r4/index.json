@@ -1,0 +1,32 @@
+{
+  "artifacts": [
+    {
+      "path": "determinism.json",
+      "sha256": "52ea3cef202a3f5af3c4ae096a26c5c5d93774faa7eba30c0e8c11b82291507d"
+    },
+    {
+      "path": "strategy-contract.json",
+      "sha256": "58917c76b0d7996cdd514fec59dabcce2650e389a30d280e9d53176a225a1573"
+    },
+    {
+      "path": "synthetic-run.json",
+      "sha256": "ca3313b743af04bee552658b14e9e350fc5515c4533e531d5b9e24abdaa69209"
+    },
+    {
+      "path": "tamper-rejection.json",
+      "sha256": "a2ebd68211e53c938c9f0c3d4561c33f9b9677d890760a6ad95de1f504e63cc6"
+    },
+    {
+      "path": "undeclared-data-rejection.json",
+      "sha256": "880422b473af3ce052bee28d5ed4ad267271490df8e8fd5d94cd6c1183fc1cf2"
+    },
+    {
+      "path": "unsupported-market-rejection.json",
+      "sha256": "ec21c18a2fb63c63d1a47d7409e54da5f38de5d53055363244fcf1ba77b88795"
+    }
+  ],
+  "evidence_stage": "r4-strategy-candidate",
+  "promotion_status": "NOT_EVALUATED",
+  "schema_version": "1.0.0",
+  "synthetic_only": true
+}

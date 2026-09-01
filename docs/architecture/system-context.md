@@ -216,7 +216,7 @@ deleting historical research or hiding an unfavorable result.
 ## Current implementation status
 
 The diagram is the maximum modular-monolith context, not a claim that every box
-exists. As of 2026-08-11:
+exists. As of 2026-08-12:
 
 - public `main` is Release Stop R3, promoted through merge `b92c8e9`, with
   domain/config/data foundations, restricted offline equity/crypto adapter
@@ -225,9 +225,12 @@ exists. As of 2026-08-11:
   security remediation;
 - the human R3 `PASS` decision, exact reviewed head, evidence, conditions, and
   rollback are recorded in `docs/release/r3-promotion.md`;
-- strategy, independent validation/risk, experiments/reports, paper state
+- the R4 candidate adds one trusted-local synthetic BTC-USD strategy protocol,
+  a frozen buy-and-hold baseline, and a mechanically compiled research-only
+  path into the unchanged R3 simulator; it has not received human promotion;
+- independent validation/risk, general experiments/reports, paper state
   machine, monitoring/reconciliation/drift, and their full API/dashboard paths
-  are target boxes only;
+  remain target boxes only;
 - connected qualifications are blocked/not opted in; no account or order path
   exists.
 

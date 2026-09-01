@@ -1,0 +1,194 @@
+{
+  "$defs": {
+    "AssetClass": {
+      "description": "Supported event asset-class labels.",
+      "enum": [
+        "equity",
+        "crypto",
+        "system"
+      ],
+      "title": "AssetClass",
+      "type": "string"
+    },
+    "JsonValue": {},
+    "StrategyMarket": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_class": {
+          "enum": [
+            "equity",
+            "crypto"
+          ],
+          "title": "Asset Class",
+          "type": "string"
+        },
+        "dataset_id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Dataset Id",
+          "type": "string"
+        },
+        "dataset_version": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Dataset Version",
+          "type": "string"
+        },
+        "manifest_checksum": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Manifest Checksum",
+          "type": "string"
+        },
+        "symbol": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Symbol",
+          "type": "string"
+        },
+        "venue": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Venue",
+          "type": "string"
+        }
+      },
+      "required": [
+        "asset_class",
+        "venue",
+        "symbol",
+        "dataset_id",
+        "dataset_version",
+        "manifest_checksum"
+      ],
+      "title": "StrategyMarket",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "allowed_outputs": {
+      "items": {
+        "enum": [
+          "Signal",
+          "TargetPosition",
+          "TradeProposal"
+        ],
+        "type": "string"
+      },
+      "title": "Allowed Outputs",
+      "type": "array"
+    },
+    "assumptions": {
+      "items": {
+        "maxLength": 512,
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Assumptions",
+      "type": "array"
+    },
+    "failure_modes": {
+      "items": {
+        "maxLength": 512,
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Failure Modes",
+      "type": "array"
+    },
+    "known_limitations": {
+      "items": {
+        "maxLength": 512,
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Known Limitations",
+      "type": "array"
+    },
+    "parameter_schema": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Parameter Schema",
+      "type": "object"
+    },
+    "required_data": {
+      "items": {
+        "maxLength": 512,
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Required Data",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "strategy_id": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Strategy Id",
+      "type": "string"
+    },
+    "strategy_version": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Strategy Version",
+      "type": "string"
+    },
+    "supported_asset_classes": {
+      "items": {
+        "$ref": "#/$defs/AssetClass"
+      },
+      "minItems": 1,
+      "title": "Supported Asset Classes",
+      "type": "array"
+    },
+    "supported_markets": {
+      "items": {
+        "$ref": "#/$defs/StrategyMarket"
+      },
+      "minItems": 1,
+      "title": "Supported Markets",
+      "type": "array"
+    },
+    "unsupported_markets": {
+      "items": {
+        "maxLength": 512,
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Unsupported Markets",
+      "type": "array"
+    },
+    "warmup_bars": {
+      "minimum": 1,
+      "title": "Warmup Bars",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "strategy_id",
+    "strategy_version",
+    "supported_asset_classes",
+    "supported_markets",
+    "required_data",
+    "parameter_schema",
+    "warmup_bars",
+    "allowed_outputs",
+    "assumptions",
+    "unsupported_markets",
+    "known_limitations",
+    "failure_modes"
+  ],
+  "title": "StrategySpecification",
+  "type": "object"
+}

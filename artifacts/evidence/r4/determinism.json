@@ -1,0 +1,12 @@
+{
+  "first_artifact_checksum": "e5f669544ab968087f062c9ff3250ff7033912da18d61f11d1a2f9aab43e2171",
+  "first_report_checksum": "fa8cf651aab4abc516312fffde5e0b1fc8de2c5219bc8fad125f259b11e05741",
+  "first_result_checksum": "2a785b039ab252fe1902fc89656489b83256430a4ee16f9cde7df739ac51c437",
+  "identical": true,
+  "schema_version": "1.0.0",
+  "second_artifact_checksum": "e5f669544ab968087f062c9ff3250ff7033912da18d61f11d1a2f9aab43e2171",
+  "second_report_checksum": "fa8cf651aab4abc516312fffde5e0b1fc8de2c5219bc8fad125f259b11e05741",
+  "second_result_checksum": "2a785b039ab252fe1902fc89656489b83256430a4ee16f9cde7df739ac51c437",
+  "strategy_version_hash": "56fa87c025d421dac8ca15c162aac1d267b2d5aa3db7f29a0fb0381a1c3f5224",
+  "synthetic_only": true
+}
