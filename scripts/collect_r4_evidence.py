@@ -127,6 +127,54 @@ def _collect_rejections() -> None:
     )
 
 
+def _collect_adverse_result(artifact: StrategyRunArtifact) -> None:
+    """Record the unfavourable baseline example required by scope-ladder domain 14.
+
+    The declining bar is an in-memory variant of the reviewed fixture; the runner
+    still accepts the frozen fixture checksum alone. This is a loss example, not
+    a performance measurement, benchmark, or profitability claim.
+    """
+
+    package = load_dataset_package(FIXTURE_PATH)
+    declining = dict(package.records[-1])
+    declining.update(high_price="100.50", low_price="98.00", close_price="98.50")
+    records = (*package.records[:-1], declining)
+    manifest = package.manifest.model_copy(
+        update={
+            "checksums": {
+                **package.manifest.checksums,
+                "canonical_records_sha256": deterministic_checksum(records),
+            }
+        }
+    )
+    adverse = DeterministicBacktester(
+        completion_clock=lambda: datetime(2024, 1, 2, 1, 0, 1, tzinfo=UTC)
+    ).run(
+        package=package.model_copy(update={"manifest": manifest, "records": records}),
+        plan=artifact.plan,
+        environment=_environment(),
+    )
+    adverse_pnl = adverse.result.pnl_series[-1].total_pnl
+    if adverse_pnl >= 0:
+        raise RuntimeError("the adverse fixture did not produce an unfavourable result")
+    _write(
+        "adverse-result.json",
+        {
+            "schema_version": "1.0.0",
+            "synthetic_only": True,
+            "performance_claim": False,
+            "benchmark_claim": False,
+            "input": "reviewed fixture with a declining final bar (close 101 -> 98.50)",
+            "fill_price": adverse.result.fills[0].price,
+            "final_mark": declining["close_price"],
+            "total_pnl": adverse_pnl,
+            "reviewed_total_pnl": artifact.backtest.result.pnl_series[-1].total_pnl,
+            "conserved": adverse.result.conservation.conserved,
+            "result_checksum": adverse.result.result_checksum,
+        },
+    )
+
+
 def _collect_tamper_rejection(artifact: StrategyRunArtifact) -> None:
     direct = artifact.model_dump(mode="python")
     direct["artifact_checksum"] = "f" * 64
@@ -206,6 +254,7 @@ def main() -> int:
         },
     )
     _collect_rejections()
+    _collect_adverse_result(first)
     _collect_tamper_rejection(first)
     entries = [
         {"path": path.name, "sha256": _sha256(path)}

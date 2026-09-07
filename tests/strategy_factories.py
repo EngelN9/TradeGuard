@@ -7,7 +7,8 @@ from uuid import UUID
 
 from tradeguard.backtest.engine import DeterministicBacktester
 from tradeguard.backtest.models import RunEnvironment
-from tradeguard.data.package import load_dataset_package
+from tradeguard.data.package import DatasetPackage, load_dataset_package
+from tradeguard.domain.serialization import deterministic_checksum
 from tradeguard.strategies.models import StrategyRunArtifact, StrategyRunRequest
 from tradeguard.strategies.runner import StrategyRunner
 
@@ -29,6 +30,29 @@ def strategy_environment() -> RunEnvironment:
         dependency_lock_hash="2" * 64,
         started_at=datetime(2024, 1, 2, 1, 0, tzinfo=UTC),
     )
+
+
+def adverse_package() -> DatasetPackage:
+    """Return the reviewed fixture with a declining final bar.
+
+    The baseline holds to the end of the fixture, so a lower final close is the
+    smallest input that produces an unfavourable result. It is an in-memory
+    variant only: the runner still accepts the frozen fixture checksum alone.
+    """
+
+    package = load_dataset_package(NORMAL_FIXTURE)
+    declining = dict(package.records[-1])
+    declining.update(high_price="100.50", low_price="98.00", close_price="98.50")
+    records = (*package.records[:-1], declining)
+    manifest = package.manifest.model_copy(
+        update={
+            "checksums": {
+                **package.manifest.checksums,
+                "canonical_records_sha256": deterministic_checksum(records),
+            }
+        }
+    )
+    return package.model_copy(update={"manifest": manifest, "records": records})
 
 
 def strategy_artifact() -> StrategyRunArtifact:

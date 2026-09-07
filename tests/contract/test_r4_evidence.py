@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+from decimal import Decimal
 from pathlib import Path
 
 import pytest
@@ -24,6 +25,7 @@ def test_r4_evidence_is_synthetic_deterministic_and_non_promotional() -> None:
         (EVIDENCE_ROOT / "undeclared-data-rejection.json").read_text(encoding="utf-8")
     )
     tamper = json.loads((EVIDENCE_ROOT / "tamper-rejection.json").read_text(encoding="utf-8"))
+    adverse = json.loads((EVIDENCE_ROOT / "adverse-result.json").read_text(encoding="utf-8"))
 
     assert artifact.synthetic_only is True
     assert artifact.report.promotion_status == "NOT_EVALUATED"
@@ -43,6 +45,12 @@ def test_r4_evidence_is_synthetic_deterministic_and_non_promotional() -> None:
     assert undeclared["rejection_code"] == "undeclared_data"
     assert tamper["direct_checksum_tamper_accepted"] is False
     assert tamper["recomputed_checksum_semantic_tamper_accepted"] is False
+    assert adverse["synthetic_only"] is True
+    assert adverse["performance_claim"] is False
+    assert adverse["benchmark_claim"] is False
+    assert adverse["conserved"] is True
+    assert Decimal(adverse["total_pnl"]) < 0
+    assert Decimal(adverse["total_pnl"]) < Decimal(adverse["reviewed_total_pnl"])
 
 
 @pytest.mark.contract
@@ -56,6 +64,7 @@ def test_r4_evidence_index_matches_files_and_contains_no_local_paths() -> None:
         "unsupported-market-rejection.json",
         "undeclared-data-rejection.json",
         "tamper-rejection.json",
+        "adverse-result.json",
     }
 
     assert index["synthetic_only"] is True

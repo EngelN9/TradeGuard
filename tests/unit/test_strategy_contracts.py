@@ -7,7 +7,9 @@ from uuid import UUID
 
 import pytest
 from tests.strategy_factories import (
+    FIXED_COMPLETION,
     NORMAL_FIXTURE,
+    adverse_package,
     strategy_artifact,
     strategy_environment,
     strategy_request,
@@ -76,10 +78,16 @@ def test_strategy_receives_only_the_declared_bar_projection() -> None:
 
 def test_builtin_strategy_has_no_dynamic_loader_or_external_client_imports() -> None:
     root = Path(__file__).resolve().parents[2] / "src" / "tradeguard" / "strategies"
-    public_sources = "\n".join(
-        (root / name).read_text(encoding="utf-8")
-        for name in ("buy_and_hold.py", "protocol.py", "cli.py")
-    )
+    modules = sorted(root.glob("*.py"))
+    assert {path.name for path in modules} == {
+        "__init__.py",
+        "buy_and_hold.py",
+        "cli.py",
+        "models.py",
+        "protocol.py",
+        "runner.py",
+    }
+    public_sources = "\n".join(path.read_text(encoding="utf-8") for path in modules)
     for forbidden in (
         "importlib",
         "entry_points",
@@ -104,6 +112,27 @@ def test_buy_and_hold_emits_once_and_holds() -> None:
     assert artifact.report.holding_at_end is True
     assert artifact.report.investment_advice is False
     assert artifact.report.profitability_claim is False
+
+
+def test_buy_and_hold_records_an_adverse_result_on_a_declining_path() -> None:
+    """Scope-ladder domain 14 requires a retained unfavourable baseline example."""
+
+    artifact = strategy_artifact()
+    adverse = DeterministicBacktester(completion_clock=lambda: FIXED_COMPLETION).run(
+        package=adverse_package(),
+        plan=artifact.plan,
+        environment=strategy_environment(),
+    )
+
+    reviewed_pnl = artifact.backtest.result.pnl_series[-1].total_pnl
+    adverse_pnl = adverse.result.pnl_series[-1].total_pnl
+
+    # Conservative market buys fill at the fill bar's high and mark at its close.
+    assert adverse.result.fills[0].price == Decimal("100.50")
+    assert adverse_pnl < 0
+    assert adverse_pnl < reviewed_pnl
+    assert adverse.result.conservation.conserved
+    assert adverse.result.result_checksum != artifact.backtest.result.result_checksum
 
 
 def test_buy_and_hold_lifecycle_and_market_guard_fail_closed() -> None:

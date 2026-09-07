@@ -1,6 +1,10 @@
 {
   "artifacts": [
     {
+      "path": "adverse-result.json",
+      "sha256": "27340f06dadb0cf5bdd56a822d9d3363de40d49d20354332607a40aed36155a2"
+    },
+    {
       "path": "determinism.json",
       "sha256": "52ea3cef202a3f5af3c4ae096a26c5c5d93774faa7eba30c0e8c11b82291507d"
     },
