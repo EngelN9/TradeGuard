@@ -104,10 +104,14 @@ def test_public_status_documents_share_the_current_non_tradable_stage() -> None:
     expected_status = "R4 STRATEGY CANDIDATE / R3 CURRENT / NOT TRADABLE"
     readme = (REPOSITORY_ROOT / "README.md").read_text(encoding="utf-8")
     security = (REPOSITORY_ROOT / "SECURITY.md").read_text(encoding="utf-8")
+    roadmap = (REPOSITORY_ROOT / "ROADMAP.md").read_text(encoding="utf-8")
 
     assert expected_status in readme
     assert expected_status in security
+    assert expected_status in roadmap
     assert "CORE CONTRACTS / NOT TRADABLE" not in readme
     assert "CORE CONTRACTS / NOT TRADABLE" not in security
+    assert "CORE CONTRACTS / NOT TRADABLE" not in roadmap
     assert "DATA FOUNDATION / NOT TRADABLE" not in readme
     assert "DATA FOUNDATION / NOT TRADABLE" not in security
+    assert "DATA FOUNDATION / NOT TRADABLE" not in roadmap

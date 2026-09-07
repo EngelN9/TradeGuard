@@ -7,7 +7,8 @@ prompt numbers are delivery references only; they do not define current scope.
 
 | Question | Authority |
 | --- | --- |
-| What does the public project do now? | [`README.md`](../README.md) |
+| What does the public project do now? | [`README.md`](../README.md) (zh-TW: [`README.zh-TW.md`](../README.zh-TW.md)) |
+| Where is the project going next? | [`ROADMAP.md`](../ROADMAP.md) |
 | What may an AI coding agent do? | [`AGENTS.md`](../AGENTS.md) |
 | What product and safety boundaries never move implicitly? | [`governance/product-safety.md`](governance/product-safety.md) |
 | What engineering and evidence rules apply? | [`governance/engineering-standards.md`](governance/engineering-standards.md) |
@@ -38,11 +39,21 @@ prompt numbers are delivery references only; they do not define current scope.
 - [`adapters/crypto-market-data.md`](adapters/crypto-market-data.md): restricted
   Coinbase public REST/WebSocket adapter.
 
+## Status snapshots
+
+- [`status/session-handoff-2026-09-07.md`](status/session-handoff-2026-09-07.md):
+  non-normative local transition snapshot; reverify GitHub and working-tree
+  state before acting on it.
+
 ## Decisions and releases
 
 - [`adr/0001-connected-release-scope.md`](adr/0001-connected-release-scope.md)
 - [`adr/0002-twelve-data-equity-adapter.md`](adr/0002-twelve-data-equity-adapter.md)
 - [`adr/0003-coinbase-public-crypto-adapter.md`](adr/0003-coinbase-public-crypto-adapter.md)
+- [`adr/0004-first-named-user-and-mvp-designation.md`](adr/0004-first-named-user-and-mvp-designation.md): first named user and
+  the R5/R7 minimum-viable designation.
+- [`adr/0005-external-recommendation-triage.md`](adr/0005-external-recommendation-triage.md): disposition of an
+  external recommendation set against the scope and release ladders.
 - [`release/connected-release-v1.md`](release/connected-release-v1.md): approved
   aggregate connected-release contract, now governed as a later ladder stop and
   not as the next all-or-nothing implementation batch.
