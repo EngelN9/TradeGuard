@@ -39,6 +39,12 @@ prompt numbers are delivery references only; they do not define current scope.
 - [`adapters/crypto-market-data.md`](adapters/crypto-market-data.md): restricted
   Coinbase public REST/WebSocket adapter.
 
+## Status snapshots
+
+- [`status/session-handoff-2026-09-07.md`](status/session-handoff-2026-09-07.md):
+  non-normative local transition snapshot; reverify GitHub and working-tree
+  state before acting on it.
+
 ## Decisions and releases
 
 - [`adr/0001-connected-release-scope.md`](adr/0001-connected-release-scope.md)
@@ -46,6 +52,8 @@ prompt numbers are delivery references only; they do not define current scope.
 - [`adr/0003-coinbase-public-crypto-adapter.md`](adr/0003-coinbase-public-crypto-adapter.md)
 - [`adr/0004-first-named-user-and-mvp-designation.md`](adr/0004-first-named-user-and-mvp-designation.md): first named user and
   the R5/R7 minimum-viable designation.
+- [`adr/0005-external-recommendation-triage.md`](adr/0005-external-recommendation-triage.md): disposition of an
+  external recommendation set against the scope and release ladders.
 - [`release/connected-release-v1.md`](release/connected-release-v1.md): approved
   aggregate connected-release contract, now governed as a later ladder stop and
   not as the next all-or-nothing implementation batch.
