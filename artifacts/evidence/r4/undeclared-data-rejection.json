@@ -1,0 +1,15 @@
+{
+  "accepted": false,
+  "allowed_strategy_bar_fields": [
+    "asset_class",
+    "close_price",
+    "event_time_utc",
+    "sequence_number",
+    "symbol",
+    "venue"
+  ],
+  "rejection_code": "undeclared_data",
+  "requested_field": "volume",
+  "schema_version": "1.0.0",
+  "synthetic_only": true
+}

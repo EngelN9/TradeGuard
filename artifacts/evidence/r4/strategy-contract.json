@@ -1,0 +1,89 @@
+{
+  "credential_access_supported": false,
+  "dynamic_loading_supported": false,
+  "external_order_supported": false,
+  "parameters": {
+    "quantity": "0.1"
+  },
+  "provider_access_supported": false,
+  "risk_approval_implied": false,
+  "schema_version": "1.0.0",
+  "specification": {
+    "allowed_outputs": [
+      "Signal",
+      "TargetPosition",
+      "TradeProposal"
+    ],
+    "assumptions": [
+      "The research account starts with no BTC position.",
+      "One completed synthetic bar is sufficient to submit one fixed-quantity proposal.",
+      "The position remains open through the end of the synthetic fixture."
+    ],
+    "failure_modes": [
+      "Reject unknown, changed, stale, quarantined, or undeclared market data.",
+      "Reject any output outside Signal, TargetPosition, and TradeProposal."
+    ],
+    "known_limitations": [
+      "No benchmark, validation, optimization, risk approval, liquidation, or performance claim."
+    ],
+    "parameter_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "quantity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "default": "0.1000",
+          "gt": 0,
+          "title": "Quantity"
+        }
+      },
+      "title": "BuyAndHoldParameters",
+      "type": "object"
+    },
+    "required_data": [
+      "asset_class",
+      "venue",
+      "symbol",
+      "event_time_utc",
+      "sequence_number",
+      "close_price"
+    ],
+    "schema_version": "1.0.0",
+    "strategy_id": "buy-and-hold-btc-usd",
+    "strategy_version": "1.0.0",
+    "supported_asset_classes": [
+      "crypto"
+    ],
+    "supported_markets": [
+      {
+        "asset_class": "crypto",
+        "dataset_id": "synthetic-normal",
+        "dataset_version": "1.0.0",
+        "manifest_checksum": "559e0e669ff3ab7d6bf37aaa192c8cba69c253361e2b640209320f5ffb0da750",
+        "symbol": "BTC-USD",
+        "venue": "SYNTH-CRYPTO"
+      }
+    ],
+    "unsupported_markets": [
+      "Every asset, venue, symbol, and dataset except synthetic BTC-USD on SYNTH-CRYPTO."
+    ],
+    "warmup_bars": 1
+  },
+  "strategy_bar_fields": [
+    "asset_class",
+    "close_price",
+    "event_time_utc",
+    "sequence_number",
+    "symbol",
+    "venue"
+  ],
+  "strategy_version_hash": "56fa87c025d421dac8ca15c162aac1d267b2d5aa3db7f29a0fb0381a1c3f5224",
+  "synthetic_only": true
+}

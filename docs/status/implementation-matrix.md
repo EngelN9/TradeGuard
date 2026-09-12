@@ -1,6 +1,6 @@
 # TradeGuard implementation and roadmap matrix
 
-Assessment date: `2026-08-11`
+Assessment date: `2026-08-12`
 
 Public repository: `https://github.com/EngelN9/TradeGuard`
 
@@ -9,7 +9,7 @@ Public stable base: `main` at R3; capability promotion merge
 
 Promotion record: [`TG-R3-PROMOTION-2026-08-11`](../release/r3-promotion.md)
 
-Overall current status: `DETERMINISTIC BACKTESTER IMPLEMENTED / NOT TRADABLE`
+Overall current status: `R4 STRATEGY CANDIDATE / R3 CURRENT / NOT TRADABLE`
 
 ## How to read this matrix
 
@@ -33,11 +33,15 @@ a named human/external qualification is unmet. Future rows are not commitments.
   line coverage and 78.45% branch coverage). The
   bundle includes direct regressions for manifest binding, aggregate
   participation, post-bar corporate actions and completion-time ordering.
+- The R4 candidate binds one trusted-local buy-and-hold implementation to the
+  exact synthetic BTC-USD fixture and the unchanged R3 engine. Its report is
+  `NOT_EVALUATED`; it is not promoted or strategy-validation evidence.
 - Both connected market-data qualifications remain unexecuted/not opted in.
 - The paper broker, worker, API, and dashboard remain bounded skeletons except
   for the offline data/backtest CLI paths described below.
-- No strategy, investment result, risk engine, account integration, external
-  order route, `canary`, `live`, withdrawal, or transfer capability exists.
+- No validated/promoted strategy, investment result, risk engine, account
+  integration, external order route, `canary`, `live`, withdrawal, or transfer
+  capability exists.
 
 ## Domain matrix
 
@@ -52,17 +56,17 @@ a named human/external qualification is unmet. Future rows are not commitments.
 | 7 | Crypto market data | `IMPLEMENTED` | `CURRENT` | Restricted BTC-USD Coinbase REST/WebSocket offline/replay contracts, ADR 0003 | Connected use is separately `BLOCKED`; no private/user channels |
 | 8 | Data quality | `IMPLEMENTED` | `CURRENT` | Shared/equity/crypto status codes, synthetic gates, quarantine enforcement | Provider calibration/cross-source comparison deferred |
 | 9 | Dataset/version/lineage | `IMPLEMENTED` | `CURRENT` | `DatasetManifest`, acyclic transformations, local content address/tamper tests | No searchable/persistent catalog or retention service |
-| 10 | Backtester | `IMPLEMENTED` | `CURRENT` | Five-key timeline, fixed-order backtest/replay, result-bound reproducible run identity plus complete-manifest checksum, engine-owned completion time | R3 bar-model limitations remain; no strategy or real-world fillability claim |
+| 10 | Backtester | `IMPLEMENTED` | `CURRENT` | Five-key timeline, fixed-order backtest/replay, result-bound reproducible run identity plus complete-manifest checksum, engine-owned completion time | R3 engine remains unchanged; R4 calls it through a research-only compiler; no real-world fillability claim |
 | 11 | Execution/fill models | `IMPLEMENTED` | `CURRENT` | Conservative future-bar market/limit, aggregate bar participation, latency, partial/non-fill, rejection | No order-book/queue claim; synthetic costs require later calibration for stronger claims |
 | 12 | Portfolio ledger | `IMPLEMENTED` | `CURRENT` | Decimal cash/long-only ledger, PnL/action finalization, idempotency, corporate actions, conservation | Single base currency only; no leverage, borrowing, shorting, or custody |
-| 13 | Strategy interface | `MISSING` | `NEXT` | Domain output event types exist; no `strategies` implementation | R4: trusted-local protocol plus one immediate consumer, no speculative registry |
-| 14 | Baseline strategies | `MISSING` | `NEXT` | None | R4: one market/one transparent buy-and-hold baseline; six-strategy batch removed |
+| 13 | Strategy interface | `IMPLEMENTED` | `NEXT` | Frozen `StrategyProtocol`, narrow `StrategyBar`, fail-closed runner/compiler, schemas and CLI | R4 candidate only; no dynamic loading, sandbox claim, provider/credential/risk/order access or registry framework |
+| 14 | Baseline strategies | `IMPLEMENTED` | `NEXT` | One synthetic BTC-USD buy-and-hold with canonical version hash and R4 evidence | Candidate `NOT_EVALUATED`; no second market, optimization, benchmark, validation, or profitability claim |
 | 15 | Strategy validation | `MISSING` | `LATER` | Data eligibility gate is not strategy validation | Begin only after one baseline: benchmark + one fixed OOS split |
 | 16 | Walk-forward/OOS | `MISSING` | `LATER` | None | Fixed split precedes rolling/expanding schedules |
 | 17 | Overfitting/leakage controls | `PARTIAL` | `LATER` | Backtest same-close/look-ahead rejection exists | Strategy/OOS contamination and multiple-testing controls await validation slice |
 | 18 | Risk engine | `MISSING` | `LATER` | `RiskDecision` event/config schema only; no evaluator | Minimal stale/session/exposure gate after basic validation |
 | 19 | Experiment tracking | `PARTIAL` | `LATER` | Run manifest and stage-specific artifacts only | No experiment model/catalog/finalization workflow |
-| 20 | Reporting | `MISSING` | `LATER` | Safe CLI inspection/evidence summaries are not research reports | One balanced report only after a baseline and validation evidence |
+| 20 | Reporting | `PARTIAL` | `LATER` | R4 includes one checksum-bound synthetic candidate summary only | Balanced research/performance reporting waits for validation evidence |
 | 21 | Evidence pipeline | `PARTIAL` | `LATER` | Stage-specific checksum indexes and redacted synthetic bundles | Generic collect/verify/index and tamper workflow remains later |
 | 22 | Paper broker | `PARTIAL` | `LATER` | Capability-only FastAPI skeleton; no submit/order route | Internal deterministic market-order state machine is first paper slice |
 | 23 | External paper/sandbox adapters | `MISSING` | `LATER` | Coinbase static sandbox selected historically; no adapter implementation | Wait for internal paper stability; connected environment review required |
@@ -83,7 +87,8 @@ a named human/external qualification is unmet. Future rows are not commitments.
 
 ## Immediate `NEXT` gate
 
-Only the R4 one-strategy vertical slice is `NEXT`:
+Only exact-head human review of the R4 one-strategy candidate is `NEXT`. The
+candidate implements:
 
 1. select one exact market and immutable synthetic fixture in a separately
    approved task;
@@ -95,7 +100,8 @@ Only the R4 one-strategy vertical slice is `NEXT`:
 5. prove a deterministic strategy-to-order-to-R3-result path and clearly label
    all evidence synthetic and non-promotional.
 
-This matrix records the next slice only; it does not authorize its execution.
+The implementation remains a candidate. Automated evidence does not authorize
+R4 promotion, merge, R5 work, connected qualification, tag, or release.
 
 ## Blocker register
 
@@ -123,7 +129,7 @@ This matrix records the next slice only; it does not authorize its execution.
 - Synthetic data fixtures: `tests/fixtures/market_data/`
 - Adapter fixtures: `tests/fixtures/adapters/`
 - Stage evidence: `artifacts/evidence/bootstrap/`, `prompt2/`, `prompt3/`,
-  `prompt4/`, `prompt5/`, and `prompt6/`
+  `prompt4/`, `prompt5/`, `prompt6/`, and `r4/`
 - Durable contracts and human gates: `docs/architecture/`, `docs/data/`,
   `docs/backtest/`, `docs/adapters/`, and `docs/adr/`
 

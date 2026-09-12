@@ -16,9 +16,10 @@ The engine accepts only:
 - recorded runtime metadata for the `RunManifest`.
 
 The engine has no network client, credential input, account state, external
-order endpoint, `canary`, or `live` mode. Strategy generation is deliberately
-deferred to Release Stop R4. A `FAIL` or `QUARANTINED` dataset is rejected before any
-simulation result is produced.
+order endpoint, `canary`, or `live` mode. The R4 candidate keeps strategy
+generation outside this engine and mechanically compiles one bounded proposal
+into the existing `BacktestPlan`. A `FAIL` or `QUARANTINED` dataset is rejected
+before any simulation result is produced.
 
 ## Deterministic ordering
 
@@ -128,7 +129,9 @@ conservation evidence.
 - Only bar-based market and limit research fills are modeled.
 - Queue position, order-book depth, FX conversion and borrowing are absent.
 - The ledger is single-base-currency, cash-only and long-only.
-- No strategy, benchmark, performance report, or automatic promotion logic is included.
+- The R3 engine itself contains no strategy, benchmark, performance report, or
+  automatic promotion logic; the R4 candidate is an external research-only
+  caller of this unchanged contract.
 - A bar model cannot establish real-world fillability.
 
 The required human review of ordering, same-close rejection, partial-fill

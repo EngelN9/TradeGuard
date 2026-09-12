@@ -1,0 +1,21 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "quantity": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        }
+      ],
+      "default": "0.1000",
+      "gt": 0,
+      "title": "Quantity"
+    }
+  },
+  "title": "BuyAndHoldParameters",
+  "type": "object"
+}

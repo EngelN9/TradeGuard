@@ -1,0 +1,128 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "backtest_result_checksum": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Backtest Result Checksum",
+      "type": "string"
+    },
+    "classification": {
+      "const": "synthetic_research_baseline",
+      "default": "synthetic_research_baseline",
+      "title": "Classification",
+      "type": "string"
+    },
+    "conserved": {
+      "title": "Conserved",
+      "type": "boolean"
+    },
+    "dataset_manifest_checksum": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Dataset Manifest Checksum",
+      "type": "string"
+    },
+    "fills": {
+      "minimum": 0,
+      "title": "Fills",
+      "type": "integer"
+    },
+    "first_decision_time_utc": {
+      "format": "date-time",
+      "title": "First Decision Time Utc",
+      "type": "string"
+    },
+    "first_fill_time_utc": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "First Fill Time Utc"
+    },
+    "holding_at_end": {
+      "title": "Holding At End",
+      "type": "boolean"
+    },
+    "investment_advice": {
+      "const": false,
+      "default": false,
+      "title": "Investment Advice",
+      "type": "boolean"
+    },
+    "output_events": {
+      "minimum": 0,
+      "title": "Output Events",
+      "type": "integer"
+    },
+    "planned_orders": {
+      "minimum": 0,
+      "title": "Planned Orders",
+      "type": "integer"
+    },
+    "profitability_claim": {
+      "const": false,
+      "default": false,
+      "title": "Profitability Claim",
+      "type": "boolean"
+    },
+    "promotion_status": {
+      "const": "NOT_EVALUATED",
+      "default": "NOT_EVALUATED",
+      "title": "Promotion Status",
+      "type": "string"
+    },
+    "report_checksum": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Report Checksum",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "strategy_id": {
+      "const": "buy-and-hold-btc-usd",
+      "title": "Strategy Id",
+      "type": "string"
+    },
+    "strategy_version_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Strategy Version Hash",
+      "type": "string"
+    },
+    "synthetic_only": {
+      "const": true,
+      "default": true,
+      "title": "Synthetic Only",
+      "type": "boolean"
+    },
+    "warning": {
+      "const": "Synthetic offline research only; not investment advice or promotion evidence.",
+      "default": "Synthetic offline research only; not investment advice or promotion evidence.",
+      "title": "Warning",
+      "type": "string"
+    }
+  },
+  "required": [
+    "strategy_id",
+    "strategy_version_hash",
+    "dataset_manifest_checksum",
+    "output_events",
+    "planned_orders",
+    "fills",
+    "conserved",
+    "first_decision_time_utc",
+    "first_fill_time_utc",
+    "holding_at_end",
+    "backtest_result_checksum",
+    "report_checksum"
+  ],
+  "title": "StrategySyntheticReport",
+  "type": "object"
+}
