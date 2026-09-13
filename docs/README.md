@@ -54,6 +54,8 @@ prompt numbers are delivery references only; they do not define current scope.
   the R5/R7 minimum-viable designation.
 - [`adr/0005-external-recommendation-triage.md`](adr/0005-external-recommendation-triage.md): disposition of an
   external recommendation set against the scope and release ladders.
+- [`adr/0006-llm-finance-ecosystem-boundary.md`](adr/0006-llm-finance-ecosystem-boundary.md): what the
+  project declines to build because the surrounding ecosystem already supplies it.
 - [`release/connected-release-v1.md`](release/connected-release-v1.md): approved
   aggregate connected-release contract, now governed as a later ladder stop and
   not as the next all-or-nothing implementation batch.

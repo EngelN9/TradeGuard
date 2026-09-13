@@ -24,6 +24,31 @@ shadow, and real-world results. TradeGuard must never use claims such as
 "guaranteed profit", "risk free", "sure win", or imply that a high win rate or
 successful backtest ensures future returns.
 
+## Ecosystem boundary
+
+A capability that an established market-data vendor, broker, or maintained
+open-source project already supplies is declined by default. It is adopted only
+when an accepted ADR shows that the cost of depending on the external supplier
+exceeds the verification value lost by not holding the capability in-tree.
+
+Declined on this basis: order submission and brokerage connectivity;
+point-in-time universes, corporate-action histories, and cross-vendor price
+consensus; order-book realism and backtest-to-live execution parity;
+walk-forward machinery and large parameter sweeps; end-to-end
+research-to-deployment platforms; and narrative or spreadsheet-based research
+reporting.
+
+Retained as the product: pre-deployment evidence that a strategy was actually
+validated — an immutable split declared before results, a reproducible run
+manifest, retained adverse results, and a recorded human promotion decision.
+
+That a reasonable system would plausibly have a capability is not an argument
+for building it. The argument must be that TradeGuard cannot answer whether a
+strategy is worth trusting without it. Naming an external supplier is a
+statement about where a capability already exists, never an endorsement or a
+commitment to integrate. The dated evidence is in
+`docs/adr/0006-llm-finance-ecosystem-boundary.md`.
+
 ## Environment and action boundary
 
 The default environment is `research`. The only permitted first-generation
