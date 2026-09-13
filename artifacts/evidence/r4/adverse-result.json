@@ -5,7 +5,7 @@
   "final_mark": "98.50",
   "input": "reviewed fixture with a declining final bar (close 101 -> 98.50)",
   "performance_claim": false,
-  "result_checksum": "429b30d2fca1246b00ea9a8594a65b3cb5087f14220e355909a9c1e64eef8349",
+  "result_checksum": "b7b68d750610a306510414dd0e8f472e9a0ab24973ef76243576c0f45f0e6956",
   "reviewed_total_pnl": "-0.18568",
   "schema_version": "1.0.0",
   "synthetic_only": true,

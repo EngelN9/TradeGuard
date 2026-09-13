@@ -1,5 +1,5 @@
 {
-  "artifact_checksum": "e5f669544ab968087f062c9ff3250ff7033912da18d61f11d1a2f9aab43e2171",
+  "artifact_checksum": "a3dbd1a2c76a3c77976a50df76224c168c8a0fe3d3bc194937f47d83851e8f2f",
   "backtest": {
     "manifest": {
       "completed_at": "2024-01-02T01:00:01.000000Z",
@@ -16,14 +16,14 @@
         "end_utc": "2024-01-02T00:05:00.000000Z",
         "start_utc": "2024-01-02T00:03:00.000000Z"
       },
-      "dependency_lock_hash": "1798c092d3d88b911c33bcd947c4336e15cb297198c843ed230fae41421d248b",
+      "dependency_lock_hash": "de980b07f627008ab17b94e5ac323fb7b2ed9cde0fea7a9cfe385ab850238491",
       "dirty_worktree": true,
       "execution_model_version": "conservative-bar-v1",
       "git_sha": "0000000000000000000000000000000000000000",
       "platform": "redacted-synthetic-runner",
       "python_version": "3.12.0-synthetic-evidence",
       "random_seed": 0,
-      "result_checksum": "2a785b039ab252fe1902fc89656489b83256430a4ee16f9cde7df739ac51c437",
+      "result_checksum": "663cb5cb7fe4fc3a2d4e6c543d390a260bacbdf489c51428d3051cd66261b5e6",
       "run_id": "00000000-0000-4000-8000-000000000070",
       "run_type": "backtest",
       "schema_version": "1.0.0",
@@ -36,7 +36,7 @@
       "validation_failures": [],
       "warnings": []
     },
-    "manifest_checksum": "08fbcbc9e0dd1dab4ab52e9e55783e121b95c8832ca1904b73610dfe3da73d91",
+    "manifest_checksum": "1449d27c1b03e9928d3faa7d3ce267dc082aaafe9f8880c733d2d5ca309c0daf",
     "result": {
       "conservation": {
         "asset_quantity_differences": {
@@ -120,7 +120,7 @@
           "venue": "SYNTH-CRYPTO"
         }
       ],
-      "result_checksum": "2a785b039ab252fe1902fc89656489b83256430a4ee16f9cde7df739ac51c437",
+      "result_checksum": "663cb5cb7fe4fc3a2d4e6c543d390a260bacbdf489c51428d3051cd66261b5e6",
       "run_id": "00000000-0000-4000-8000-000000000070",
       "run_identity": {
         "config_hash": "ebc8fbdb451dedf58d6bd380550ccd6acbe713787100acb9bccb176ff974364f",
@@ -136,7 +136,7 @@
           "end_utc": "2024-01-02T00:05:00.000000Z",
           "start_utc": "2024-01-02T00:03:00.000000Z"
         },
-        "dependency_lock_hash": "1798c092d3d88b911c33bcd947c4336e15cb297198c843ed230fae41421d248b",
+        "dependency_lock_hash": "de980b07f627008ab17b94e5ac323fb7b2ed9cde0fea7a9cfe385ab850238491",
         "dirty_worktree": true,
         "execution_model_version": "conservative-bar-v1",
         "git_sha": "0000000000000000000000000000000000000000",
@@ -266,7 +266,7 @@
     "strategy_version": "56fa87c025d421dac8ca15c162aac1d267b2d5aa3db7f29a0fb0381a1c3f5224"
   },
   "report": {
-    "backtest_result_checksum": "2a785b039ab252fe1902fc89656489b83256430a4ee16f9cde7df739ac51c437",
+    "backtest_result_checksum": "663cb5cb7fe4fc3a2d4e6c543d390a260bacbdf489c51428d3051cd66261b5e6",
     "classification": "synthetic_research_baseline",
     "conserved": true,
     "dataset_manifest_checksum": "559e0e669ff3ab7d6bf37aaa192c8cba69c253361e2b640209320f5ffb0da750",
@@ -279,7 +279,7 @@
     "planned_orders": 1,
     "profitability_claim": false,
     "promotion_status": "NOT_EVALUATED",
-    "report_checksum": "fa8cf651aab4abc516312fffde5e0b1fc8de2c5219bc8fad125f259b11e05741",
+    "report_checksum": "ae6fbab00081202d0dbb152b5f66be430456d4e9a1fedea4083e78d858127083",
     "schema_version": "1.0.0",
     "strategy_id": "buy-and-hold-btc-usd",
     "strategy_version_hash": "56fa87c025d421dac8ca15c162aac1d267b2d5aa3db7f29a0fb0381a1c3f5224",

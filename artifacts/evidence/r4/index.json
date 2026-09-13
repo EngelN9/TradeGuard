@@ -2,11 +2,11 @@
   "artifacts": [
     {
       "path": "adverse-result.json",
-      "sha256": "27340f06dadb0cf5bdd56a822d9d3363de40d49d20354332607a40aed36155a2"
+      "sha256": "1e7079d0f23923a1127bdf0ad948e8c436de8733fb6025549e0a67bd40352056"
     },
     {
       "path": "determinism.json",
-      "sha256": "52ea3cef202a3f5af3c4ae096a26c5c5d93774faa7eba30c0e8c11b82291507d"
+      "sha256": "a6a368057ae2a7f3813ec9c1f28dfbf58c917d375f82474fb26c7d001c518801"
     },
     {
       "path": "strategy-contract.json",
@@ -14,7 +14,7 @@
     },
     {
       "path": "synthetic-run.json",
-      "sha256": "ca3313b743af04bee552658b14e9e350fc5515c4533e531d5b9e24abdaa69209"
+      "sha256": "33ed8fae2a0e4282d9faf72de98e441e2607cb4bc90e22eea6ab481d9c8fb208"
     },
     {
       "path": "tamper-rejection.json",
