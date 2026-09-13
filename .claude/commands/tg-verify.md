@@ -25,7 +25,7 @@ $env:TG_PYTEST_TMP = "$env:TEMP\tg-pytest-tmp"
 
 Expected baseline as of 2026-08-30 on `main` (R3): 236 passed, 2 deselected,
 90.70% coverage, 2 web tests passing. On the R4 candidate branch the same gate
-is 253 passed, 2 deselected, 90.10% coverage. Compare against the baseline for
+is 254 passed, 2 deselected, 90.10% coverage. Compare against the baseline for
 the branch under test; a drop below it is a regression, not a new baseline.
 
 Steps 9 and 10 mirror the `Dependency scans` CI job. Both reach the network:
