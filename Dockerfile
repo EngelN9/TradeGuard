@@ -9,9 +9,13 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends --only-upgrade \
+        gzip \
+        libpcre2-8-0 \
+        libsqlite3-0 \
         libssl3t64 \
         openssl \
         openssl-provider-legacy \
+        perl-base \
     && rm -rf /var/lib/apt/lists/* \
     && python -m pip install --no-cache-dir "uv==${UV_VERSION}" \
     && groupadd --gid 10001 tradeguard \
