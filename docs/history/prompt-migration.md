@@ -27,7 +27,7 @@ Normative scope is now defined by:
 | 4 | Twelve Data equity adapter | Offline implementation completed; connected promotion remains `BLOCKED`; ADR 0002 is authority |
 | 5 | Coinbase REST/WebSocket adapter | Offline implementation completed; connected promotion remains `BLOCKED`; ADR 0003 is authority |
 | 6 | Backtester, ledger, fills, costs | Implemented, human-reviewed `PASS`, and promoted to stable R3 on `main`; durable decision in `docs/release/r3-promotion.md` |
-| 7 | Protocol plus six baselines and registry | R4 `NEXT` is only 7A protocol + one baseline; 7B second-market baseline and 7C registry refinement remain `LATER`; extra baselines remain `OPTIONAL` |
+| 7 | Protocol plus six baselines and registry | Only 7A is implemented as the R4 candidate: trusted protocol plus one synthetic BTC-USD baseline; exact-head promotion review remains `NEXT`; 7B second-market baseline and 7C registry refinement remain `LATER`; extra baselines remain `OPTIONAL` |
 | 8 | Splits, walk-forward, sensitivities, bootstrap, overfitting | Split: fixed split/OOS; benchmark; cost sensitivity; walk-forward; then optional advanced statistics |
 | 9 | Full independent risk engine | Split: fail-closed single-symbol/stale/session gates; portfolio limits; stresses; advanced models optional |
 | 10 | Experiment store, reports, evidence | Split into three domains; local content-addressed implementation precedes persistence or release evidence |

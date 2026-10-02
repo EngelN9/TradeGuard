@@ -1,0 +1,11 @@
+{
+  "base_currency": "USD",
+  "initial_cash": "100000",
+  "parameters": {
+    "quantity": "0.1000"
+  },
+  "random_seed": 0,
+  "run_id": "00000000-0000-4000-8000-000000000070",
+  "schema_version": "1.0.0",
+  "strategy_id": "buy-and-hold-btc-usd"
+}

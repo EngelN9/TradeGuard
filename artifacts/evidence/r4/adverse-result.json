@@ -1,0 +1,13 @@
+{
+  "benchmark_claim": false,
+  "conserved": true,
+  "fill_price": "100.5",
+  "final_mark": "98.50",
+  "input": "reviewed fixture with a declining final bar (close 101 -> 98.50)",
+  "performance_claim": false,
+  "result_checksum": "b7b68d750610a306510414dd0e8f472e9a0ab24973ef76243576c0f45f0e6956",
+  "reviewed_total_pnl": "-0.18568",
+  "schema_version": "1.0.0",
+  "synthetic_only": true,
+  "total_pnl": "-0.28442"
+}

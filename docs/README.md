@@ -29,6 +29,10 @@ prompt numbers are delivery references only; they do not define current scope.
   point-in-time metadata, manifests, lineage, and quality.
 - [`backtest/deterministic-engine.md`](backtest/deterministic-engine.md):
   promoted R3 fixed-order deterministic backtest/replay contract.
+- [`strategies/strategy-contract.md`](strategies/strategy-contract.md): bounded
+  trusted-local R4 candidate protocol, runner, and security boundary.
+- [`strategies/buy-and-hold-btc-usd.md`](strategies/buy-and-hold-btc-usd.md):
+  frozen synthetic BTC-USD baseline specification and limitations.
 - [`adapters/equity-market-data.md`](adapters/equity-market-data.md): restricted
   Twelve Data equity adapter.
 - [`adapters/crypto-market-data.md`](adapters/crypto-market-data.md): restricted
